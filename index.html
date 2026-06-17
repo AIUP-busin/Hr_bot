@@ -2,144 +2,1067 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f0f0f">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ai Up — HR Boshqaruv</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #ea580c;
+    --primary-light: #fb923c;
+    --primary-dark: #c2410c;
+    --bg: #0f0f0f;
+    --bg2: #1a1a1a;
+    --bg3: #242424;
+    --bg4: #2e2e2e;
+    --text: #f5f5f5;
+    --text2: #a3a3a3;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --border: #333;
+    --radius: 12px;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; background: var(--bg2); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 20px 0; position: fixed; height: 100vh; z-index: 100;
+  }
+  .logo { padding: 0 20px 24px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .logo-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: white; }
+  .logo-text { font-weight: 700; font-size: 16px; }
+  .logo-sub { font-size: 11px; color: var(--text2); }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 20px; cursor: pointer; color: var(--text2); font-size: 14px; transition: all 0.2s; border-left: 3px solid transparent; }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: var(--bg3); color: var(--primary); border-left-color: var(--primary); }
+  .nav-icon { font-size: 18px; width: 20px; text-align: center; }
+  .sidebar-bottom { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); }
+  .version-badge { background: var(--bg3); border-radius: 8px; padding: 10px; font-size: 12px; text-align:center; color: var(--text2); }
+
+  /* MAIN */
+  .main { margin-left: 220px; flex: 1; padding: 24px; min-height: 100vh; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HEADER */
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .page-title { font-size: 22px; font-weight: 700; }
+  .page-sub { font-size: 13px; color: var(--text2); margin-top: 2px; }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .card { background: var(--bg2); border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); }
+  .card-label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .card-value { font-size: 32px; font-weight: 800; }
+  .card-value.green { color: var(--green); }
+  .card-value.yellow { color: var(--yellow); }
+  .card-value.red { color: var(--red); }
+  .card-value.blue { color: var(--blue); }
+  .card-footer { font-size: 12px; color: var(--text2); margin-top: 6px; }
+
+  /* MONITORING */
+  .monitoring-bar { background: var(--bg2); border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); margin-bottom: 24px; }
+  .monitoring-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .monitoring-title { font-size: 15px; font-weight: 600; }
+  .monitoring-time { margin-left: auto; font-size: 13px; color: var(--text2); }
+  .davomat-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--bg4); gap: 2px; }
+  .davomat-bar .seg { transition: width 0.5s; }
+  .seg.g { background: var(--green); }
+  .seg.y { background: var(--yellow); }
+  .seg.r { background: var(--red); }
+  .seg.b { background: var(--blue); }
+  .davomat-label { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--text2); }
+
+  /* BTN */
+  .btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--bg4); }
+  .btn-danger { background: #7f1d1d; color: #fca5a5; }
+  .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+  /* TABLE */
+  .table-wrap { background: var(--bg2); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+  .table-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .table-title { font-size: 15px; font-weight: 600; }
+  .search-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; color: var(--text); font-size: 13px; width: 220px; outline: none; }
+  .search-box:focus { border-color: var(--primary); }
+  table { width: 100%; border-collapse: collapse; }
+  th { padding: 12px 20px; text-align: left; font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+  td { padding: 14px 20px; font-size: 14px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg3); }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text2); }
+  .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-text { font-size: 15px; margin-bottom: 16px; }
+
+  /* BADGE */
+  .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+  .badge-green { background: #14532d; color: #86efac; }
+  .badge-yellow { background: #713f12; color: #fde68a; }
+  .badge-red { background: #7f1d1d; color: #fca5a5; }
+  .badge-blue { background: #1e3a5f; color: #93c5fd; }
+  .badge-gray { background: var(--bg4); color: var(--text2); }
+
+  /* AVATAR */
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: white; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg2); border-radius: 16px; border: 1px solid var(--border); padding: 28px; width: 440px; max-width: 95vw; }
+  .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 13px; color: var(--text2); margin-bottom: 6px; display: block; }
+  .form-input { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 14px; outline: none; }
+  .form-input:focus { border-color: var(--primary); }
+  .form-select { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 14px; outline: none; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* HISOBOT */
+  .report-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+  .report-option { background: var(--bg2); border: 2px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: all 0.2s; }
+  .report-option.selected { border-color: var(--primary); background: #1c0d00; }
+  .report-option-icon { font-size: 24px; margin-bottom: 8px; }
+  .report-option-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .report-option-sub { font-size: 12px; color: var(--text2); }
+
+  /* SOZLAMALAR */
+  .settings-section { background: var(--bg2); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; }
+  .settings-title { font-size: 13px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+  .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .setting-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .setting-label { font-size: 14px; }
+  .setting-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .color-preview { width: 32px; height: 32px; border-radius: 6px; border: 2px solid var(--border); cursor: pointer; }
+  .toggle { width: 44px; height: 24px; background: var(--bg4); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s; }
+  .toggle.on { background: var(--primary); }
+  .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: left 0.2s; }
+  .toggle.on::after { left: 23px; }
+  .notif-time { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* CHARTS */
+  .chart-wrap { background: var(--bg2); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; }
+  .chart-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar { width: 100%; background: var(--primary); border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.5s; }
+  .bar-label { font-size: 10px; color: var(--text2); }
+
+  /* NOTIFICATION TIMES */
+  .time-input { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 14px; outline: none; width: 100%; }
+  .time-input:focus { border-color: var(--primary); }
+
+  /* RESPONSIVE */
+  @media(max-width: 768px) {
+    .sidebar { width: 60px; }
+    .sidebar .logo-text, .sidebar .logo-sub, .nav-item span { display: none; }
+    .main { margin-left: 60px; padding: 16px; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
 </head>
 <body>
-<header class="mobile-header">
-  <div class="mh-left"><div class="mh-icon">AU</div><div class="mh-title">HR Boshqaruv</div></div>
-  <div class="mh-time" id="mh-time"></div>
-</header>
+
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="logo">
     <div class="logo-icon">AU</div>
-    <div><div class="logo-text">Ai Up</div><div class="logo-sub">HR Boshqaruv</div></div>
+    <div>
+      <div class="logo-text">Ai Up</div>
+      <div class="logo-sub">HR Boshqaruv</div>
+    </div>
   </div>
   <nav>
-    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">🏠</span><span>Bosh sahifa</span></div>
-    <div class="nav-item" onclick="showPage('xodimlar',this)"><span class="nav-icon">👥</span><span>Xodimlar</span></div>
-    <div class="nav-item" onclick="showPage('filiallar',this)"><span class="nav-icon">📍</span><span>Filiallar</span></div>
-    <div class="nav-item" onclick="showPage('hisobotlar',this)"><span class="nav-icon">📊</span><span>Hisobotlar</span></div>
-    <div class="nav-item" onclick="showPage('sozlamalar',this)"><span class="nav-icon">⚙️</span><span>Sozlamalar</span></div>
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <span class="nav-icon">🏠</span><span>Kompaniya</span>
+    </div>
+    <div class="nav-item" onclick="showPage('xodimlar')">
+      <span class="nav-icon">👥</span><span>Xodimlar</span>
+    </div>
+    <div class="nav-item" onclick="showPage('filiallar')">
+      <span class="nav-icon">📍</span><span>Filiallar</span>
+    </div>
+    <div class="nav-item" onclick="showPage('hisobotlar')">
+      <span class="nav-icon">📊</span><span>Hisobotlar</span>
+    </div>
+    <div class="nav-item" onclick="showPage('sozlamalar')">
+      <span class="nav-icon">⚙️</span><span>Sozlamalar</span>
+    </div>
   </nav>
-  <div class="sidebar-footer">v2.0</div>
+  <div class="sidebar-bottom">
+    <div class="version-badge">HR Boshqaruv v2.0</div>
+  </div>
 </aside>
+
+<!-- MAIN -->
 <main class="main">
+
+  <!-- DASHBOARD -->
   <div id="page-dashboard" class="page active">
     <div class="page-header">
-      <div><h1 class="page-title">Boshqaruv paneli</h1><p class="page-sub" id="today-date"></p></div>
-      <button class="btn-icon" onclick="refreshStats()">🔄</button>
-    </div>
-    <div class="stat-cards">
-      <div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-val" id="stat-keldi">0</div><div class="stat-lbl">Keldi</div></div>
-      <div class="stat-card yellow"><div class="stat-icon">⏰</div><div class="stat-val" id="stat-kechikdi">0</div><div class="stat-lbl">Kechikdi</div></div>
-      <div class="stat-card red"><div class="stat-icon">❌</div><div class="stat-val" id="stat-kelmadi">0</div><div class="stat-lbl">Kelmadi</div></div>
-      <div class="stat-card blue"><div class="stat-icon">🏖</div><div class="stat-val" id="stat-tatil">0</div><div class="stat-lbl">Ta'til</div></div>
-    </div>
-    <div class="monitor-card">
-      <div class="monitor-top"><div class="live-dot"></div><span class="monitor-label">Jonli monitoring</span><span class="monitor-time" id="live-time"></span></div>
-      <div class="progress-bar">
-        <div class="progress-seg green-seg" id="bar-g" style="width:0%"></div>
-        <div class="progress-seg yellow-seg" id="bar-y" style="width:0%"></div>
-        <div class="progress-seg red-seg" id="bar-r" style="width:0%"></div>
-        <div class="progress-seg blue-seg" id="bar-b" style="width:0%"></div>
+      <div>
+        <div class="page-title">Boshqaruv paneli</div>
+        <div class="page-sub" id="today-date"></div>
       </div>
-      <div class="progress-info"><span>Davomat: <b id="davomat-pct">0%</b></span><span id="total-xodim">0 xodim</span></div>
+      <button class="btn btn-secondary" onclick="refreshStats()">🔄 Yangilash</button>
     </div>
-    <div class="section-title">Bugungi holat</div>
-    <div class="table-wrap desktop-only"><table><thead><tr><th>Xodim</th><th>Lavozim</th><th>Filial</th><th>Vaqt</th><th>Holat</th><th>Amal</th></tr></thead><tbody id="dash-table"></tbody></table></div>
-    <div class="card-list mobile-only" id="dash-cards"></div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">✅ Keldi</div>
+        <div class="card-value green" id="stat-keldi">0</div>
+        <div class="card-footer">Bugun ishga kelgan</div>
+      </div>
+      <div class="card">
+        <div class="card-label">⏰ Kechikdi</div>
+        <div class="card-value yellow" id="stat-kechikdi">0</div>
+        <div class="card-footer">Kechikib kelgan</div>
+      </div>
+      <div class="card">
+        <div class="card-label">❌ Kelmadi</div>
+        <div class="card-value red" id="stat-kelmadi">0</div>
+        <div class="card-footer">Ishga kelmagan</div>
+      </div>
+      <div class="card">
+        <div class="card-label">🏖 Ta'tilda</div>
+        <div class="card-value blue" id="stat-tatil">0</div>
+        <div class="card-footer">Ta'tilda yoki kasal</div>
+      </div>
+    </div>
+
+    <div class="monitoring-bar">
+      <div class="monitoring-header">
+        <div class="dot"></div>
+        <div class="monitoring-title">Jonli monitoring</div>
+        <div class="monitoring-time" id="live-time"></div>
+      </div>
+      <div class="davomat-bar">
+        <div class="seg g" id="bar-g" style="width:0%"></div>
+        <div class="seg y" id="bar-y" style="width:0%"></div>
+        <div class="seg r" id="bar-r" style="width:0%"></div>
+        <div class="seg b" id="bar-b" style="width:0%"></div>
+      </div>
+      <div class="davomat-label">
+        <span>Davomat darajasi: <strong id="davomat-pct">0%</strong></span>
+        <span id="total-xodim">Jami 0 xodim</span>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Bugungi holat</div>
+        <button class="btn btn-primary btn-sm" onclick="showPage('xodimlar')">+ Xodim qo'shish</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Xodim</th>
+            <th>Lavozim</th>
+            <th>Filial</th>
+            <th>Kelish vaqti</th>
+            <th>Holat</th>
+            <th>Amal</th>
+          </tr>
+        </thead>
+        <tbody id="dashboard-table">
+          <tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👤</div><div class="empty-text">Hali xodim yo'q. Birinchi xodimni qo'shing.</div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- XODIMLAR -->
   <div id="page-xodimlar" class="page">
     <div class="page-header">
-      <div><h1 class="page-title">Xodimlar</h1><p class="page-sub" id="xodim-count"></p></div>
-      <button class="btn-primary" onclick="openModal('modal-xodim')">+ Qo'shish</button>
+      <div>
+        <div class="page-title">Xodimlar</div>
+        <div class="page-sub" id="xodim-count-label">0 xodim</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('xodim-modal')">+ Yangi xodim</button>
     </div>
-    <input class="search-input" type="text" placeholder="🔍 Qidirish..." oninput="filterXodimlar(this.value)">
-    <div class="table-wrap desktop-only"><table><thead><tr><th>Xodim</th><th>Lavozim</th><th>Filial</th><th>Holat</th><th>Amal</th></tr></thead><tbody id="xodim-table"></tbody></table></div>
-    <div class="card-list mobile-only" id="xodim-cards"></div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Xodimlar ro'yxati</div>
+        <input class="search-box" type="text" placeholder="🔍 Ism, lavozim yoki filial" oninput="filterXodimlar(this.value)">
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Xodim</th>
+            <th>Lavozim</th>
+            <th>Filial</th>
+            <th>Telefon</th>
+            <th>Holat</th>
+            <th>Amal</th>
+          </tr>
+        </thead>
+        <tbody id="xodimlar-table"></tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- FILIALLAR -->
   <div id="page-filiallar" class="page">
     <div class="page-header">
-      <div><h1 class="page-title">Filiallar</h1><p class="page-sub" id="filial-count"></p></div>
-      <button class="btn-primary" onclick="openModal('modal-filial')">+ Qo'shish</button>
+      <div>
+        <div class="page-title">Filiallar</div>
+        <div class="page-sub" id="filial-count-label">0 filial</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('filial-modal')">+ Yangi filial</button>
     </div>
-    <div class="table-wrap desktop-only"><table><thead><tr><th>Filial</th><th>Manzil</th><th>Xodimlar</th><th>Ish vaqti</th><th>Amal</th></tr></thead><tbody id="filial-table"></tbody></table></div>
-    <div class="card-list mobile-only" id="filial-cards"></div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Filiallar ro'yxati</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Filial nomi</th>
+            <th>Manzil</th>
+            <th>Xodimlar</th>
+            <th>Ish vaqti</th>
+            <th>Amal</th>
+          </tr>
+        </thead>
+        <tbody id="filiallar-table"></tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- HISOBOTLAR -->
   <div id="page-hisobotlar" class="page">
-    <div class="page-header"><h1 class="page-title">Hisobotlar</h1></div>
-    <div class="period-tabs">
-      <button class="period-tab active" onclick="selectPeriod(this,'bugun')">Bugun</button>
-      <button class="period-tab" onclick="selectPeriod(this,'hafta')">7 kun</button>
-      <button class="period-tab" onclick="selectPeriod(this,'oy')">Oy</button>
-      <button class="period-tab" onclick="selectPeriod(this,'hammasi')">Hammasi</button>
+    <div class="page-header">
+      <div class="page-title">Hisobotlar</div>
     </div>
-    <div class="chart-wrap"><div class="chart-title">Davomat grafigi (Iyun 2026)</div><div class="bar-chart" id="bar-chart"></div></div>
-    <div class="table-wrap desktop-only">
-      <div class="table-header-row"><span class="section-title" style="margin:0">Batafsil</span><button class="btn-secondary" onclick="exportCSV()">⬇ CSV</button></div>
-      <table><thead><tr><th>Xodim</th><th>Keldi</th><th>Kechikdi</th><th>Kelmadi</th><th>Ta'til</th><th>%</th></tr></thead><tbody id="hisobot-table"></tbody></table>
+    <div class="report-options">
+      <div class="report-option selected" onclick="selectReport(this,'bugun')">
+        <div class="report-option-icon">📅</div>
+        <div class="report-option-title">Bugun</div>
+        <div class="report-option-sub">Bugungi kun</div>
+      </div>
+      <div class="report-option" onclick="selectReport(this,'hafta')">
+        <div class="report-option-icon">🗓</div>
+        <div class="report-option-title">So'nggi 7 kun</div>
+        <div class="report-option-sub">Oxirgi 7 kun</div>
+      </div>
+      <div class="report-option" onclick="selectReport(this,'oy')">
+        <div class="report-option-icon">📈</div>
+        <div class="report-option-title">Joriy oy</div>
+        <div class="report-option-sub">Joriy oy</div>
+      </div>
+      <div class="report-option" onclick="selectReport(this,'maxsus')">
+        <div class="report-option-icon">⚙️</div>
+        <div class="report-option-title">Maxsus sana</div>
+        <div class="report-option-sub">Sanani tanlash</div>
+      </div>
     </div>
-    <div class="card-list mobile-only" id="hisobot-cards"></div>
+    <div id="maxsus-date" style="display:none;margin-bottom:16px;display:none">
+      <input type="date" class="form-input" style="max-width:200px;margin-right:10px" id="report-from">
+      <input type="date" class="form-input" style="max-width:200px" id="report-to">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Davomat grafigi</div>
+      <div class="bar-chart" id="bar-chart"></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Batafsil hisobot</div>
+        <button class="btn btn-secondary btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Xodim</th><th>Keldi</th><th>Kechikdi</th><th>Kelmadi</th><th>Ta'til</th><th>Davomat %</th></tr>
+        </thead>
+        <tbody id="hisobot-table"></tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- SOZLAMALAR -->
   <div id="page-sozlamalar" class="page">
-    <div class="page-header"><h1 class="page-title">Sozlamalar</h1></div>
-    <div class="settings-block">
-      <div class="settings-block-title">Kompaniya</div>
-      <div class="form-row"><label class="form-label">Nomi</label><input class="form-input" id="set-company" value="Ai Up"></div>
-      <div class="form-row"><label class="form-label">Rang</label><div style="display:flex;align-items:center;gap:10px"><input type="color" id="set-color" value="#ea580c" onchange="updateColor(this.value)" style="width:36px;height:36px;border:none;border-radius:6px;cursor:pointer"><span id="color-hex">#ea580c</span></div></div>
-      <button class="btn-primary btn-full" onclick="saveBrand()">💾 Saqlash</button>
+    <div class="page-header">
+      <div class="page-title">Sozlamalar</div>
     </div>
-    <div class="settings-block">
-      <div class="settings-block-title">Bildirishnoma vaqtlari</div>
-      <div class="form-row"><label class="form-label">Davomat boshlash</label><input type="time" class="form-input" value="08:30" id="t1"></div>
-      <div class="form-row"><label class="form-label">Kechikish chegarasi</label><input type="time" class="form-input" value="09:30" id="t2"></div>
-      <div class="form-row"><label class="form-label">Kelmaganlik</label><input type="time" class="form-input" value="10:00" id="t3"></div>
-      <div class="form-row"><label class="form-label">Kunlik hisobot</label><input type="time" class="form-input" value="18:00" id="t4"></div>
-      <button class="btn-primary btn-full" onclick="saveNotif()">💾 Saqlash</button>
+
+    <div class="settings-section">
+      <div class="settings-title">Brend</div>
+      <div class="form-group">
+        <label class="form-label">Kompaniya nomi</label>
+        <input class="form-input" id="set-company" value="Ai Up" oninput="updateLogo()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Asosiy rang</label>
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="color" value="#ea580c" id="set-color" onchange="updateColor(this.value)" style="width:40px;height:40px;border:none;background:none;cursor:pointer;border-radius:6px">
+          <span id="color-hex">#ea580c</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveBrand()">💾 Brendni saqlash</button>
     </div>
+
+    <div class="settings-section">
+      <div class="settings-title">Regional</div>
+      <div class="setting-row">
+        <div><div class="setting-label">Vaqt zonasi</div><div class="setting-sub">UTC offset</div></div>
+        <select class="form-select" style="width:120px" id="set-tz">
+          <option value="5" selected>UTC+5</option>
+          <option value="3">UTC+3</option>
+          <option value="6">UTC+6</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Til</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" id="lang-uz" onclick="setLang('uz')">O'zbek</button>
+          <button class="btn btn-secondary btn-sm" id="lang-ru" onclick="setLang('ru')">Русский</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-title">Avtomatik bildirishnomalar vaqti</div>
+      <div class="notif-time">
+        <div class="form-group">
+          <label class="form-label">📋 Davomat eslatma</label>
+          <input type="time" class="time-input" value="08:30" id="t1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">⏰ Kechikish tekshiruvi</label>
+          <input type="time" class="time-input" value="09:30" id="t2">
+        </div>
+        <div class="form-group">
+          <label class="form-label">❌ Kelmaganlik tekshiruvi</label>
+          <input type="time" class="time-input" value="10:00" id="t3">
+        </div>
+        <div class="form-group">
+          <label class="form-label">📊 Kunlik hisobot</label>
+          <input type="time" class="time-input" value="18:00" id="t4">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveNotifTimes()">💾 Vaqtlarni saqlash</button>
+    </div>
+
   </div>
+
 </main>
-<nav class="bottom-nav">
-  <div class="bn-item active" id="bn-dashboard" onclick="showPage('dashboard',null,'bn-dashboard')"><span>🏠</span><span>Bosh</span></div>
-  <div class="bn-item" id="bn-xodimlar" onclick="showPage('xodimlar',null,'bn-xodimlar')"><span>👥</span><span>Xodimlar</span></div>
-  <div class="bn-item" id="bn-filiallar" onclick="showPage('filiallar',null,'bn-filiallar')"><span>📍</span><span>Filiallar</span></div>
-  <div class="bn-item" id="bn-hisobotlar" onclick="showPage('hisobotlar',null,'bn-hisobotlar')"><span>📊</span><span>Hisobot</span></div>
-  <div class="bn-item" id="bn-sozlamalar" onclick="showPage('sozlamalar',null,'bn-sozlamalar')"><span>⚙️</span><span>Sozlama</span></div>
-</nav>
-<div class="modal-overlay" id="modal-xodim">
-  <div class="modal"><div class="modal-handle"></div><div class="modal-title">Yangi xodim</div>
-    <div class="form-row"><label class="form-label">Ism Familiya *</label><input class="form-input" id="x-ism" placeholder="Ali Karimov"></div>
-    <div class="form-row"><label class="form-label">Lavozim *</label><input class="form-input" id="x-lavozim" placeholder="Dasturchi"></div>
-    <div class="form-row"><label class="form-label">Telefon</label><input class="form-input" id="x-tel" placeholder="+998901234567" type="tel"></div>
-    <div class="form-row"><label class="form-label">Filial</label><select class="form-input" id="x-filial"><option value="">Tanlang</option></select></div>
-    <div class="modal-actions"><button class="btn-primary btn-full" onclick="addXodim()">✅ Saqlash</button><button class="btn-secondary btn-full" onclick="closeModal('modal-xodim')">Bekor</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="modal-filial">
-  <div class="modal"><div class="modal-handle"></div><div class="modal-title">Yangi filial</div>
-    <div class="form-row"><label class="form-label">Filial nomi *</label><input class="form-input" id="f-nom" placeholder="Markaziy ofis"></div>
-    <div class="form-row"><label class="form-label">Manzil</label><input class="form-input" id="f-manzil" placeholder="Toshkent"></div>
-    <div class="form-row"><label class="form-label">Boshlanish</label><input type="time" class="form-input" id="f-bosh" value="09:00"></div>
-    <div class="form-row"><label class="form-label">Tugash</label><input type="time" class="form-input" id="f-tug" value="18:00"></div>
-    <div class="modal-actions"><button class="btn-primary btn-full" onclick="addFilial()">✅ Saqlash</button><button class="btn-secondary btn-full" onclick="closeModal('modal-filial')">Bekor</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="modal-checkin">
-  <div class="modal"><div class="modal-handle"></div><div class="modal-title">Davomat belgilash</div>
-    <input type="hidden" id="ci-id">
-    <div class="form-row"><label class="form-label">Xodim: <b id="ci-name"></b></label></div>
-    <div class="form-row"><label class="form-label">Holat</label>
-      <select class="form-input" id="ci-holat"><option value="keldi">✅ Keldi</option><option value="kechikdi">⏰ Kechikdi</option><option value="kelmadi">❌ Kelmadi</option><option value="tatil">🏖 Ta'tilda</option></select>
+
+<!-- XODIM MODAL -->
+<div class="modal-overlay" id="xodim-modal">
+  <div class="modal">
+    <div class="modal-title">Yangi xodim qo'shish</div>
+    <div class="form-group">
+      <label class="form-label">Ism Familiya *</label>
+      <input class="form-input" id="x-ism" placeholder="Masalan: Ali Karimov">
     </div>
-    <div class="form-row"><label class="form-label">Vaqt</label><input type="time" class="form-input" id="ci-vaqt"></div>
-    <div class="modal-actions"><button class="btn-primary btn-full" onclick="saveCheckin()">✅ Saqlash</button><button class="btn-secondary btn-full" onclick="closeModal('modal-checkin')">Bekor</button></div>
+    <div class="form-group">
+      <label class="form-label">Lavozim *</label>
+      <input class="form-input" id="x-lavozim" placeholder="Masalan: Dasturchi">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Telefon</label>
+      <input class="form-input" id="x-tel" placeholder="+998 90 123 45 67">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Filial</label>
+      <select class="form-select" id="x-filial"><option value="">— Tanlang —</option></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Holat</label>
+      <select class="form-select" id="x-holat">
+        <option value="faol">Faol</option>
+        <option value="tatil">Ta'tilda</option>
+        <option value="kasal">Kasal</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('xodim-modal')">Bekor</button>
+      <button class="btn btn-primary" onclick="addXodim()">✅ Saqlash</button>
+    </div>
   </div>
 </div>
-<div class="toast" id="toast"></div>
-<script src="app.js"></script>
+
+<!-- FILIAL MODAL -->
+<div class="modal-overlay" id="filial-modal">
+  <div class="modal">
+    <div class="modal-title">Yangi filial qo'shish</div>
+    <div class="form-group">
+      <label class="form-label">Filial nomi *</label>
+      <input class="form-input" id="f-nom" placeholder="Masalan: Markaziy ofis">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Manzil</label>
+      <input class="form-input" id="f-manzil" placeholder="Masalan: Toshkent, Chilonzor">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Ish boshlanish vaqti</label>
+      <input type="time" class="form-input" id="f-bosh" value="09:00">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Ish tugash vaqti</label>
+      <input type="time" class="form-input" id="f-tug" value="18:00">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('filial-modal')">Bekor</button>
+      <button class="btn btn-primary" onclick="addFilial()">✅ Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECK-IN MODAL -->
+<div class="modal-overlay" id="checkin-modal">
+  <div class="modal">
+    <div class="modal-title">Davomat belgilash</div>
+    <input type="hidden" id="checkin-id">
+    <div class="form-group">
+      <label class="form-label">Xodim: <strong id="checkin-name"></strong></label>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Holat</label>
+      <select class="form-select" id="checkin-holat">
+        <option value="keldi">✅ Keldi</option>
+        <option value="kechikdi">⏰ Kechikdi</option>
+        <option value="kelmadi">❌ Kelmadi</option>
+        <option value="tatil">🏖 Ta'tilda</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kelish vaqti</label>
+      <input type="time" class="form-input" id="checkin-vaqt">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('checkin-modal')">Bekor</button>
+      <button class="btn btn-primary" onclick="saveCheckin()">✅ Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+const defaultData = {
+  filiallar: [
+    { id: 1, nom: 'Nukus',      manzil: 'Nukus sh.', bosh: '07:30', tug: '00:00' },
+    { id: 2, nom: 'Parus',      manzil: 'Parus',     bosh: '07:30', tug: '00:00' },
+    { id: 3, nom: 'Tashkent.c', manzil: 'Toshkent',  bosh: '09:00', tug: '18:00' },
+    { id: 4, nom: 'Centr1',     manzil: 'Toshkent',  bosh: '09:00', tug: '18:00' },
+  ],
+  xodimlar: [
+    // PARUS
+    { id: 101, ism: 'Muhammad Amin', lavozim: 'Xodim', tel: '', filial: 'Parus', holat: 'faol' },
+    { id: 102, ism: 'Ibrohim',       lavozim: 'Xodim', tel: '', filial: 'Parus', holat: 'faol' },
+    { id: 103, ism: 'Ibrohim Stajor',lavozim: 'Stajor',tel: '', filial: 'Parus', holat: 'faol' },
+    { id: 104, ism: 'Zoxida',        lavozim: 'Xodim', tel: '', filial: 'Parus', holat: 'faol' },
+    { id: 105, ism: 'Ilxom',         lavozim: 'Xodim', tel: '', filial: 'Parus', holat: 'faol' },
+    { id: 106, ism: 'Kamola',        lavozim: 'Xodim', tel: '', filial: 'Parus', holat: 'faol' },
+    // NUKUS
+    { id: 201, ism: 'Xurshid Soyibjonov', lavozim: 'Xodim', tel: '', filial: 'Nukus', holat: 'faol' },
+    { id: 202, ism: 'Dadaxon Yulchiyev',  lavozim: 'Xodim', tel: '', filial: 'Nukus', holat: 'faol' },
+    { id: 203, ism: 'Mohichehra',         lavozim: 'Xodim', tel: '', filial: 'Nukus', holat: 'faol' },
+    { id: 204, ism: 'Aziza',              lavozim: 'Xodim', tel: '', filial: 'Nukus', holat: 'faol' },
+    { id: 205, ism: 'Aliakbar',           lavozim: 'Xodim', tel: '', filial: 'Nukus', holat: 'faol' },
+    { id: 206, ism: 'Abrorbek',           lavozim: 'Xodim', tel: '', filial: 'Nukus', holat: 'faol' },
+    { id: 207, ism: 'Maryam',             lavozim: 'Xodim', tel: '', filial: 'Nukus', holat: 'faol' },
+  ],
+  davomat: {
+    // ═══════════════ PARUS ═══════════════
+    '2026-06-01': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'09:00'},
+      103: {holat:'keldi',   vaqt:'16:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+    },
+    '2026-06-02': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'09:00'},
+      103: {holat:'keldi',   vaqt:'16:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+    },
+    '2026-06-03': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'09:00'},
+      103: {holat:'keldi',   vaqt:'16:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+    },
+    '2026-06-04': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'09:00'},
+      103: {holat:'tatil',   vaqt:''},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+    },
+    '2026-06-05': {
+      101: {holat:'keldi',   vaqt:'16:00'},
+      102: {holat:'tatil',   vaqt:''},
+      103: {holat:'keldi',   vaqt:'07:30'},
+      104: {holat:'keldi',   vaqt:'07:30'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+    },
+    '2026-06-06': {
+      101: {holat:'keldi',   vaqt:'16:00'},
+      102: {holat:'tatil',   vaqt:''},
+      103: {holat:'keldi',   vaqt:'07:30'},
+      104: {holat:'keldi',   vaqt:'07:30'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+    },
+    '2026-06-07': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'09:00'},
+      103: {holat:'keldi',   vaqt:'16:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+    },
+    '2026-06-08': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'08:00'},
+      104: {holat:'tatil',   vaqt:''},
+      105: {holat:'keldi',   vaqt:'14:00'},
+      106: {holat:'keldi',   vaqt:'16:00'},
+    },
+    '2026-06-09': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'08:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+      106: {holat:'tatil',   vaqt:''},
+    },
+    '2026-06-10': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'10:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+      106: {holat:'keldi',   vaqt:'07:30'},
+    },
+    '2026-06-11': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'10:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+      106: {holat:'keldi',   vaqt:'07:30'},
+    },
+    '2026-06-12': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'keldi',   vaqt:'08:00'},
+      104: {holat:'keldi',   vaqt:'12:00'},
+      105: {holat:'tatil',   vaqt:''},
+      106: {holat:'keldi',   vaqt:'12:00'},
+    },
+    '2026-06-13': {
+      101: {holat:'tatil',   vaqt:''},
+      102: {holat:'keldi',   vaqt:'07:00'},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+      106: {holat:'keldi',   vaqt:'07:30'},
+    },
+    '2026-06-14': {
+      101: {holat:'keldi',   vaqt:'07:30'},
+      102: {holat:'tatil',   vaqt:''},
+      104: {holat:'keldi',   vaqt:'16:00'},
+      105: {holat:'keldi',   vaqt:'14:00'},
+      106: {holat:'keldi',   vaqt:'07:30'},
+    },
+    // ═══════════════ NUKUS ═══════════════ (merged with Parus days above)
+  }
+};
+
+// Nukus davomatini qo'shish (Parus bilan birlashtirish)
+const nukusDav = {
+  '2026-06-01': { 201:{holat:'keldi',vaqt:'15:00'}, 202:{holat:'keldi',vaqt:'17:00'}, 203:{holat:'tatil',vaqt:''}, 204:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'10:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-02': { 201:{holat:'keldi',vaqt:'14:00'}, 202:{holat:'tatil',vaqt:''},      203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'12:00'}, 207:{holat:'keldi',vaqt:'18:00'} },
+  '2026-06-03': { 201:{holat:'keldi',vaqt:'15:00'}, 202:{holat:'keldi',vaqt:'17:00'}, 203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'tatil',vaqt:''},      206:{holat:'keldi',vaqt:'10:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-04': { 201:{holat:'keldi',vaqt:'14:00'}, 202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'keldi',vaqt:'10:00'}, 206:{holat:'tatil',vaqt:''},      207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-05': { 201:{holat:'keldi',vaqt:'15:00'}, 202:{holat:'keldi',vaqt:'17:00'}, 203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'12:00'}, 207:{holat:'keldi',vaqt:'18:00'} },
+  '2026-06-06': { 201:{holat:'keldi',vaqt:'14:00'}, 202:{holat:'keldi',vaqt:'17:00'}, 203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'keldi',vaqt:'10:00'}, 206:{holat:'keldi',vaqt:'12:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-07': { 201:{holat:'tatil',vaqt:''},      202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'keldi',vaqt:'10:00'}, 206:{holat:'keldi',vaqt:'14:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-08': { 201:{holat:'keldi',vaqt:'17:00'}, 202:{holat:'tatil',vaqt:''},      203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'tatil',vaqt:''},      205:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'13:00'}, 207:{holat:'keldi',vaqt:'16:00'} },
+  '2026-06-09': { 201:{holat:'keldi',vaqt:'14:00'}, 202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'tatil',vaqt:''},      204:{holat:'tatil',vaqt:''},      205:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'11:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-10': { 201:{holat:'keldi',vaqt:'17:00'}, 202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'keldi',vaqt:'09:00'}, 204:{holat:'tatil',vaqt:''},      205:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'tatil',vaqt:''},      207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-11': { 201:{holat:'keldi',vaqt:'14:00'}, 202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'keldi',vaqt:'07:30'}, 204:{holat:'tatil',vaqt:''},      205:{holat:'tatil',vaqt:''},      206:{holat:'keldi',vaqt:'11:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-12': { 201:{holat:'tatil',vaqt:''},      202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'keldi',vaqt:'09:00'}, 204:{holat:'tatil',vaqt:''},      205:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'13:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+  '2026-06-13': { 201:{holat:'keldi',vaqt:'14:00'}, 202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'keldi',vaqt:'09:00'}, 204:{holat:'tatil',vaqt:''},      205:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'13:00'}, 207:{holat:'keldi',vaqt:'18:00'} },
+  '2026-06-14': { 201:{holat:'keldi',vaqt:'14:00'}, 202:{holat:'keldi',vaqt:'16:00'}, 203:{holat:'keldi',vaqt:'09:00'}, 204:{holat:'tatil',vaqt:''},      205:{holat:'keldi',vaqt:'07:30'}, 206:{holat:'keldi',vaqt:'13:00'}, 207:{holat:'keldi',vaqt:'07:30'} },
+};
+Object.keys(nukusDav).forEach(date => {
+  if (!defaultData.davomat[date]) defaultData.davomat[date] = {};
+  Object.assign(defaultData.davomat[date], nukusDav[date]);
+});
+
+let data = JSON.parse(localStorage.getItem('hr_data') || 'null');
+if (!data || !data.xodimlar || data.xodimlar.length === 0) {
+  data = JSON.parse(JSON.stringify(defaultData));
+  localStorage.setItem('hr_data', JSON.stringify(data));
+}
+
+function save() { localStorage.setItem('hr_data', JSON.stringify(data)); }
+
+// ─── NAVIGATION ─────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'xodimlar') renderXodimlar();
+  if (id === 'filiallar') renderFiliallar();
+  if (id === 'hisobotlar') renderHisobot();
+}
+
+// ─── MODAL ──────────────────────────────────────────────
+function openModal(id) {
+  if (id === 'xodim-modal') populateFilialSelect();
+  if (id === 'checkin-modal') {
+    const now = new Date();
+    document.getElementById('checkin-vaqt').value = now.toTimeString().slice(0,5);
+  }
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target === m) m.classList.remove('open'); });
+});
+
+// ─── XODIMLAR ───────────────────────────────────────────
+function addXodim() {
+  const ism = document.getElementById('x-ism').value.trim();
+  const lav = document.getElementById('x-lavozim').value.trim();
+  if (!ism || !lav) { alert('Ism va lavozim majburiy!'); return; }
+  data.xodimlar.push({
+    id: Date.now(),
+    ism, lavozim: lav,
+    tel: document.getElementById('x-tel').value,
+    filial: document.getElementById('x-filial').value,
+    holat: document.getElementById('x-holat').value,
+    qoshilgan: new Date().toISOString()
+  });
+  save();
+  closeModal('xodim-modal');
+  ['x-ism','x-lavozim','x-tel'].forEach(id => document.getElementById(id).value = '');
+  renderXodimlar();
+  renderDashboard();
+}
+
+function deleteXodim(id) {
+  if (!confirm('Xodimni o\'chirmoqchimisiz?')) return;
+  data.xodimlar = data.xodimlar.filter(x => x.id !== id);
+  save(); renderXodimlar(); renderDashboard();
+}
+
+function renderXodimlar(filter = '') {
+  const tbody = document.getElementById('xodimlar-table');
+  const list = data.xodimlar.filter(x =>
+    x.ism.toLowerCase().includes(filter.toLowerCase()) ||
+    x.lavozim.toLowerCase().includes(filter.toLowerCase()) ||
+    (x.filial || '').toLowerCase().includes(filter.toLowerCase())
+  );
+  document.getElementById('xodim-count-label').textContent = data.xodimlar.length + ' xodim';
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👤</div><div class="empty-text">Hali xodim yo'q. Birinchi xodimni qo'shing.</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map(x => {
+    const today = todayKey();
+    const dav = (data.davomat[today] || {})[x.id] || {};
+    const holat = dav.holat || 'belgilanmagan';
+    const badge = holatBadge(holat);
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div class="avatar">${x.ism[0]}</div>
+        <div><div style="font-weight:600">${x.ism}</div></div>
+      </div></td>
+      <td>${x.lavozim}</td>
+      <td>${x.filial || '—'}</td>
+      <td>${x.tel || '—'}</td>
+      <td><span class="badge ${badge.cls}">${badge.label}</span></td>
+      <td>
+        <button class="btn btn-secondary btn-sm" onclick="openCheckin(${x.id},'${x.ism}')">📋 Davomat</button>
+        <button class="btn btn-danger btn-sm" style="margin-left:6px" onclick="deleteXodim(${x.id})">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterXodimlar(v) { renderXodimlar(v); }
+
+// ─── FILIALLAR ───────────────────────────────────────────
+function addFilial() {
+  const nom = document.getElementById('f-nom').value.trim();
+  if (!nom) { alert('Filial nomi majburiy!'); return; }
+  data.filiallar.push({
+    id: Date.now(),
+    nom,
+    manzil: document.getElementById('f-manzil').value,
+    bosh: document.getElementById('f-bosh').value,
+    tug: document.getElementById('f-tug').value
+  });
+  save(); closeModal('filial-modal'); renderFiliallar();
+}
+
+function deleteFilial(id) {
+  if (!confirm('Filialni o\'chirmoqchimisiz?')) return;
+  data.filiallar = data.filiallar.filter(f => f.id !== id);
+  save(); renderFiliallar();
+}
+
+function renderFiliallar() {
+  const tbody = document.getElementById('filiallar-table');
+  document.getElementById('filial-count-label').textContent = data.filiallar.length + ' filial';
+  if (!data.filiallar.length) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📍</div><div class="empty-text">Hali filial yo'q. Birinchi filialni qo'shing.</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.filiallar.map(f => {
+    const xodimCount = data.xodimlar.filter(x => x.filial === f.nom).length;
+    return `<tr>
+      <td><strong>${f.nom}</strong></td>
+      <td>${f.manzil || '—'}</td>
+      <td>${xodimCount} xodim</td>
+      <td>${f.bosh} — ${f.tug}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteFilial(${f.id})">🗑 O'chirish</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function populateFilialSelect() {
+  const sel = document.getElementById('x-filial');
+  sel.innerHTML = '<option value="">— Tanlang —</option>' +
+    data.filiallar.map(f => `<option value="${f.nom}">${f.nom}</option>`).join('');
+}
+
+// ─── DAVOMAT (CHECK-IN) ──────────────────────────────────
+function todayKey() { return new Date().toISOString().slice(0,10); }
+
+function openCheckin(id, ism) {
+  document.getElementById('checkin-id').value = id;
+  document.getElementById('checkin-name').textContent = ism;
+  const today = todayKey();
+  const existing = (data.davomat[today] || {})[id];
+  if (existing) {
+    document.getElementById('checkin-holat').value = existing.holat;
+    document.getElementById('checkin-vaqt').value = existing.vaqt || '';
+  }
+  openModal('checkin-modal');
+}
+
+function saveCheckin() {
+  const id = parseInt(document.getElementById('checkin-id').value);
+  const holat = document.getElementById('checkin-holat').value;
+  const vaqt = document.getElementById('checkin-vaqt').value;
+  const today = todayKey();
+  if (!data.davomat[today]) data.davomat[today] = {};
+  data.davomat[today][id] = { holat, vaqt };
+  save(); closeModal('checkin-modal'); renderDashboard(); renderXodimlar();
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────
+function renderDashboard() {
+  const today = todayKey();
+  const dav = data.davomat[today] || {};
+  let keldi=0, kechikdi=0, kelmadi=0, tatil=0;
+  data.xodimlar.forEach(x => {
+    const h = (dav[x.id] || {}).holat;
+    if (h === 'keldi') keldi++;
+    else if (h === 'kechikdi') kechikdi++;
+    else if (h === 'kelmadi') kelmadi++;
+    else if (h === 'tatil') tatil++;
+  });
+  const total = data.xodimlar.length;
+  document.getElementById('stat-keldi').textContent = keldi;
+  document.getElementById('stat-kechikdi').textContent = kechikdi;
+  document.getElementById('stat-kelmadi').textContent = kelmadi;
+  document.getElementById('stat-tatil').textContent = tatil;
+  const pct = total ? Math.round((keldi/total)*100) : 0;
+  document.getElementById('davomat-pct').textContent = pct + '%';
+  document.getElementById('total-xodim').textContent = 'Jami ' + total + ' xodim';
+  const toW = v => total ? (v/total*100).toFixed(1)+'%' : '0%';
+  document.getElementById('bar-g').style.width = toW(keldi);
+  document.getElementById('bar-y').style.width = toW(kechikdi);
+  document.getElementById('bar-r').style.width = toW(kelmadi);
+  document.getElementById('bar-b').style.width = toW(tatil);
+
+  const tbody = document.getElementById('dashboard-table');
+  if (!data.xodimlar.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">👤</div><div class="empty-text">Hali xodim yo'q.</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.xodimlar.map(x => {
+    const d = dav[x.id] || {};
+    const badge = holatBadge(d.holat || 'belgilanmagan');
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div class="avatar">${x.ism[0]}</div><strong>${x.ism}</strong>
+      </div></td>
+      <td>${x.lavozim}</td>
+      <td>${x.filial || '—'}</td>
+      <td>${d.vaqt || '—'}</td>
+      <td><span class="badge ${badge.cls}">${badge.label}</span></td>
+      <td><button class="btn btn-secondary btn-sm" onclick="openCheckin(${x.id},'${x.ism}')">📋</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function holatBadge(holat) {
+  const map = {
+    'keldi': {cls:'badge-green', label:'✅ Keldi'},
+    'kechikdi': {cls:'badge-yellow', label:'⏰ Kechikdi'},
+    'kelmadi': {cls:'badge-red', label:'❌ Kelmadi'},
+    'tatil': {cls:'badge-blue', label:'🏖 Ta\'tilda'},
+    'belgilanmagan': {cls:'badge-gray', label:'— Belgilanmagan'},
+    'faol': {cls:'badge-green', label:'Faol'},
+    'kasal': {cls:'badge-yellow', label:'Kasal'},
+  };
+  return map[holat] || {cls:'badge-gray', label:holat};
+}
+
+function refreshStats() { renderDashboard(); }
+
+// ─── HISOBOT ─────────────────────────────────────────────
+let selectedReport = 'bugun';
+function selectReport(el, type) {
+  document.querySelectorAll('.report-option').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedReport = type;
+  const maxs = document.getElementById('maxsus-date');
+  maxs.style.display = type === 'maxsus' ? 'flex' : 'none';
+  renderHisobot();
+}
+
+function getDates() {
+  const today = new Date();
+  const fmt = d => d.toISOString().slice(0,10);
+  if (selectedReport === 'bugun') return [fmt(today)];
+  if (selectedReport === 'hafta') {
+    return Array.from({length:7}, (_,i) => {
+      const d = new Date(today); d.setDate(d.getDate()-i); return fmt(d);
+    });
+  }
+  if (selectedReport === 'oy') {
+    const days = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
+    return Array.from({length:days}, (_,i) => {
+      const d = new Date(today.getFullYear(), today.getMonth(), i+1); return fmt(d);
+    });
+  }
+  return [fmt(today)];
+}
+
+function renderHisobot() {
+  const dates = getDates();
+  const tbody = document.getElementById('hisobot-table');
+  const chart = document.getElementById('bar-chart');
+
+  // Chart
+  const chartDates = dates.slice(0,7);
+  chart.innerHTML = chartDates.map(date => {
+    const dav = data.davomat[date] || {};
+    const keldi = data.xodimlar.filter(x => (dav[x.id]||{}).holat === 'keldi').length;
+    const total = data.xodimlar.length || 1;
+    const h = Math.max(4, Math.round((keldi/total)*100));
+    return `<div class="bar-col">
+      <div class="bar" style="height:${h}px"></div>
+      <div class="bar-label">${date.slice(5)}</div>
+    </div>`;
+  }).join('');
+
+  if (!data.xodimlar.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">Hali xodim yo'q.</div></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.xodimlar.map(x => {
+    let k=0, ke=0, km=0, t=0;
+    dates.forEach(date => {
+      const h = (data.davomat[date]||{})[x.id];
+      if (!h) return;
+      if (h.holat === 'keldi') k++;
+      else if (h.holat === 'kechikdi') ke++;
+      else if (h.holat === 'kelmadi') km++;
+      else if (h.holat === 'tatil') t++;
+    });
+    const total = dates.length;
+    const pct = total ? Math.round((k/total)*100) : 0;
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar">${x.ism[0]}</div>${x.ism}</div></td>
+      <td><span class="badge badge-green">${k}</span></td>
+      <td><span class="badge badge-yellow">${ke}</span></td>
+      <td><span class="badge badge-red">${km}</span></td>
+      <td><span class="badge badge-blue">${t}</span></td>
+      <td><strong>${pct}%</strong></td>
+    </tr>`;
+  }).join('');
+}
+
+function exportCSV() {
+  const dates = getDates();
+  let csv = 'Xodim,Lavozim,Keldi,Kechikdi,Kelmadi,Tatil,Davomat%\n';
+  data.xodimlar.forEach(x => {
+    let k=0,ke=0,km=0,t=0;
+    dates.forEach(date => {
+      const h = (data.davomat[date]||{})[x.id];
+      if (!h) return;
+      if (h.holat==='keldi') k++;
+      else if (h.holat==='kechikdi') ke++;
+      else if (h.holat==='kelmadi') km++;
+      else if (h.holat==='tatil') t++;
+    });
+    const pct = dates.length ? Math.round((k/dates.length)*100) : 0;
+    csv += `${x.ism},${x.lavozim},${k},${ke},${km},${t},${pct}%\n`;
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'hisobot.csv';
+  a.click();
+}
+
+// ─── SOZLAMALAR ──────────────────────────────────────────
+function updateColor(val) {
+  document.getElementById('color-hex').textContent = val;
+  document.documentElement.style.setProperty('--primary', val);
+}
+function updateLogo() {
+  const v = document.getElementById('set-company').value;
+  document.querySelector('.logo-text').textContent = v;
+  document.querySelector('.logo-icon').textContent = (v[0]||'A') + (v[1]||'');
+  document.title = v + ' — HR Boshqaruv';
+}
+function saveBrand() {
+  updateLogo();
+  updateColor(document.getElementById('set-color').value);
+  showToast('Brend saqlandi ✅');
+}
+function saveNotifTimes() { showToast('Vaqtlar saqlandi ✅'); }
+function setLang(l) {
+  ['uz','ru'].forEach(x => {
+    document.getElementById('lang-'+x).className = 'btn btn-' + (x===l?'primary':'secondary') + ' btn-sm';
+  });
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid #333;color:#f5f5f5;padding:12px 20px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.5)';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// ─── CLOCK ───────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  document.getElementById('live-time').textContent = timeStr;
+  const dateEl = document.getElementById('today-date');
+  if (dateEl) dateEl.textContent = now.toLocaleDateString('uz-UZ', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+setInterval(updateClock, 1000); updateClock();
+
+// ─── INIT ────────────────────────────────────────────────
+renderDashboard();
+</script>
 </body>
 </html>
