@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ai Up — HR Boshqaruv</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">AU</div>
+    <div>
+      <div class="logo-text">Ai Up</div>
+      <div class="logo-sub">HR Boshqaruv</div>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <span class="nav-icon">🏠</span><span>Kompaniya</span>
+    </div>
+    <div class="nav-item" onclick="showPage('xodimlar')">
+      <span class="nav-icon">👥</span><span>Xodimlar</span>
+    </div>
+    <div class="nav-item" onclick="showPage('filiallar')">
+      <span class="nav-icon">📍</span><span>Filiallar</span>
+    </div>
+    <div class="nav-item" onclick="showPage('hisobotlar')">
+      <span class="nav-icon">📊</span><span>Hisobotlar</span>
+    </div>
+    <div class="nav-item" onclick="showPage('sozlamalar')">
+      <span class="nav-icon">⚙️</span><span>Sozlamalar</span>
+    </div>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="version-badge">HR Boshqaruv v2.0</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Boshqaruv paneli</div>
+        <div class="page-sub" id="today-date"></div>
+      </div>
+      <button class="btn btn-secondary" onclick="refreshStats()">🔄 Yangilash</button>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">✅ Keldi</div>
+        <div class="card-value green" id="stat-keldi">0</div>
+        <div class="card-footer">Bugun ishga kelgan</div>
+      </div>
+      <div class="card">
+        <div class="card-label">⏰ Kechikdi</div>
+        <div class="card-value yellow" id="stat-kechikdi">0</div>
+        <div class="card-footer">Kechikib kelgan</div>
+      </div>
+      <div class="card">
+        <div class="card-label">❌ Kelmadi</div>
+        <div class="card-value red" id="stat-kelmadi">0</div>
+        <div class="card-footer">Ishga kelmagan</div>
+      </div>
+      <div class="card">
+        <div class="card-label">🏖 Ta'tilda</div>
+        <div class="card-value blue" id="stat-tatil">0</div>
+        <div class="card-footer">Ta'tilda yoki kasal</div>
+      </div>
+    </div>
+    <div class="monitoring-bar">
+      <div class="monitoring-header">
+        <div class="dot"></div>
+        <div class="monitoring-title">Jonli monitoring</div>
+        <div class="monitoring-time" id="live-time"></div>
+      </div>
+      <div class="davomat-bar">
+        <div class="seg g" id="bar-g" style="width:0%"></div>
+        <div class="seg y" id="bar-y" style="width:0%"></div>
+        <div class="seg r" id="bar-r" style="width:0%"></div>
+        <div class="seg b" id="bar-b" style="width:0%"></div>
+      </div>
+      <div class="davomat-label">
+        <span>Davomat darajasi: <strong id="davomat-pct">0%</strong></span>
+        <span id="total-xodim">Jami 0 xodim</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Bugungi holat</div>
+        <button class="btn btn-primary btn-sm" onclick="showPage('xodimlar')">+ Xodim qo'shish</button>
+      </div>
+      <table>
+        <thead><tr><th>Xodim</th><th>Lavozim</th><th>Filial</th><th>Kelish vaqti</th><th>Holat</th><th>Amal</th></tr></thead>
+        <tbody id="dashboard-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- XODIMLAR -->
+  <div id="page-xodimlar" class="page">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Xodimlar</div>
+        <div class="page-sub" id="xodim-count-label">0 xodim</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('xodim-modal')">+ Yangi xodim</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Xodimlar ro'yxati</div>
+        <input class="search-box" type="text" placeholder="🔍 Ism, lavozim yoki filial" oninput="filterXodimlar(this.value)">
+      </div>
+      <table>
+        <thead><tr><th>Xodim</th><th>Lavozim</th><th>Filial</th><th>Telefon</th><th>Holat</th><th>Amal</th></tr></thead>
+        <tbody id="xodimlar-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FILIALLAR -->
+  <div id="page-filiallar" class="page">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Filiallar</div>
+        <div class="page-sub" id="filial-count-label">0 filial</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('filial-modal')">+ Yangi filial</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header"><div class="table-title">Filiallar ro'yxati</div></div>
+      <table>
+        <thead><tr><th>Filial nomi</th><th>Manzil</th><th>Xodimlar</th><th>Ish vaqti</th><th>Amal</th></tr></thead>
+        <tbody id="filiallar-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HISOBOTLAR -->
+  <div id="page-hisobotlar" class="page">
+    <div class="page-header"><div class="page-title">Hisobotlar</div></div>
+    <div class="report-options">
+      <div class="report-option selected" onclick="selectReport(this,'bugun')">
+        <div class="report-option-icon">📅</div>
+        <div class="report-option-title">Bugun</div>
+        <div class="report-option-sub">Bugungi kun</div>
+      </div>
+      <div class="report-option" onclick="selectReport(this,'hafta')">
+        <div class="report-option-icon">🗓</div>
+        <div class="report-option-title">So'nggi 7 kun</div>
+        <div class="report-option-sub">Oxirgi 7 kun</div>
+      </div>
+      <div class="report-option" onclick="selectReport(this,'oy')">
+        <div class="report-option-icon">📈</div>
+        <div class="report-option-title">Joriy oy</div>
+        <div class="report-option-sub">Joriy oy</div>
+      </div>
+      <div class="report-option" onclick="selectReport(this,'maxsus')">
+        <div class="report-option-icon">⚙️</div>
+        <div class="report-option-title">Maxsus sana</div>
+        <div class="report-option-sub">Sanani tanlash</div>
+      </div>
+    </div>
+    <div id="maxsus-date" style="display:none;margin-bottom:16px">
+      <input type="date" class="form-input" style="max-width:200px;margin-right:10px" id="report-from">
+      <input type="date" class="form-input" style="max-width:200px" id="report-to">
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Davomat grafigi</div>
+      <div class="bar-chart" id="bar-chart"></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Batafsil hisobot</div>
+        <button class="btn btn-secondary btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
+      </div>
+      <table>
+        <thead><tr><th>Xodim</th><th>Keldi</th><th>Kechikdi</th><th>Kelmadi</th><th>Ta'til</th><th>Davomat %</th></tr></thead>
+        <tbody id="hisobot-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SOZLAMALAR -->
+  <div id="page-sozlamalar" class="page">
+    <div class="page-header"><div class="page-title">Sozlamalar</div></div>
+    <div class="settings-section">
+      <div class="settings-title">Brend</div>
+      <div class="form-group">
+        <label class="form-label">Kompaniya nomi</label>
+        <input class="form-input" id="set-company" value="Ai Up" oninput="updateLogo()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Asosiy rang</label>
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="color" value="#ea580c" id="set-color" onchange="updateColor(this.value)" style="width:40px;height:40px;border:none;background:none;cursor:pointer;border-radius:6px">
+          <span id="color-hex">#ea580c</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveBrand()">💾 Brendni saqlash</button>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Regional</div>
+      <div class="setting-row">
+        <div><div class="setting-label">Vaqt zonasi</div><div class="setting-sub">UTC offset</div></div>
+        <select class="form-select" style="width:120px" id="set-tz">
+          <option value="5" selected>UTC+5</option>
+          <option value="3">UTC+3</option>
+          <option value="6">UTC+6</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Til</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" id="lang-uz" onclick="setLang('uz')">O'zbek</button>
+          <button class="btn btn-secondary btn-sm" id="lang-ru" onclick="setLang('ru')">Русский</button>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Avtomatik bildirishnomalar vaqti</div>
+      <div class="notif-time">
+        <div class="form-group"><label class="form-label">📋 Davomat eslatma</label><input type="time" class="time-input" value="08:30" id="t1"></div>
+        <div class="form-group"><label class="form-label">⏰ Kechikish tekshiruvi</label><input type="time" class="time-input" value="09:30" id="t2"></div>
+        <div class="form-group"><label class="form-label">❌ Kelmaganlik tekshiruvi</label><input type="time" class="time-input" value="10:00" id="t3"></div>
+        <div class="form-group"><label class="form-label">📊 Kunlik hisobot</label><input type="time" class="time-input" value="18:00" id="t4"></div>
+      </div>
+      <button class="btn btn-primary" onclick="saveNotifTimes()">💾 Vaqtlarni saqlash</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- XODIM MODAL -->
+<div class="modal-overlay" id="xodim-modal">
+  <div class="modal">
+    <div class="modal-title">Yangi xodim qo'shish</div>
+    <div class="form-group"><label class="form-label">Ism Familiya *</label><input class="form-input" id="x-ism" placeholder="Masalan: Ali Karimov"></div>
+    <div class="form-group"><label class="form-label">Lavozim *</label><input class="form-input" id="x-lavozim" placeholder="Masalan: Dasturchi"></div>
+    <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="x-tel" placeholder="+998 90 123 45 67"></div>
+    <div class="form-group"><label class="form-label">Filial</label><select class="form-select" id="x-filial"><option value="">— Tanlang —</option></select></div>
+    <div class="form-group"><label class="form-label">Holat</label>
+      <select class="form-select" id="x-holat">
+        <option value="faol">Faol</option>
+        <option value="tatil">Ta'tilda</option>
+        <option value="kasal">Kasal</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('xodim-modal')">Bekor</button>
+      <button class="btn btn-primary" onclick="addXodim()">✅ Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- FILIAL MODAL -->
+<div class="modal-overlay" id="filial-modal">
+  <div class="modal">
+    <div class="modal-title">Yangi filial qo'shish</div>
+    <div class="form-group"><label class="form-label">Filial nomi *</label><input class="form-input" id="f-nom" placeholder="Masalan: Markaziy ofis"></div>
+    <div class="form-group"><label class="form-label">Manzil</label><input class="form-input" id="f-manzil" placeholder="Masalan: Toshkent, Chilonzor"></div>
+    <div class="form-group"><label class="form-label">Ish boshlanish vaqti</label><input type="time" class="form-input" id="f-bosh" value="09:00"></div>
+    <div class="form-group"><label class="form-label">Ish tugash vaqti</label><input type="time" class="form-input" id="f-tug" value="18:00"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('filial-modal')">Bekor</button>
+      <button class="btn btn-primary" onclick="addFilial()">✅ Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECK-IN MODAL -->
+<div class="modal-overlay" id="checkin-modal">
+  <div class="modal">
+    <div class="modal-title">Davomat belgilash</div>
+    <input type="hidden" id="checkin-id">
+    <div class="form-group"><label class="form-label">Xodim: <strong id="checkin-name"></strong></label></div>
+    <div class="form-group"><label class="form-label">Holat</label>
+      <select class="form-select" id="checkin-holat">
+        <option value="keldi">✅ Keldi</option>
+        <option value="kechikdi">⏰ Kechikdi</option>
+        <option value="kelmadi">❌ Kelmadi</option>
+        <option value="tatil">🏖 Ta'tilda</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Kelish vaqti</label><input type="time" class="form-input" id="checkin-vaqt"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('checkin-modal')">Bekor</button>
+      <button class="btn btn-primary" onclick="saveCheckin()">✅ Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
