@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f0f0f">
+<title>Ai Up — HR Boshqaruv</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- MOBILE HEADER -->
+<header class="mobile-header">
+  <div class="mh-left">
+    <div class="mh-icon">AU</div>
+    <div class="mh-title">HR Boshqaruv</div>
+  </div>
+  <div class="mh-time" id="mh-time"></div>
+</header>
+
+<!-- DESKTOP SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">AU</div>
+    <div>
+      <div class="logo-text">Ai Up</div>
+      <div class="logo-sub">HR Boshqaruv</div>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">🏠</span><span>Bosh sahifa</span></div>
+    <div class="nav-item" onclick="showPage('xodimlar',this)"><span class="nav-icon">👥</span><span>Xodimlar</span></div>
+    <div class="nav-item" onclick="showPage('filiallar',this)"><span class="nav-icon">📍</span><span>Filiallar</span></div>
+    <div class="nav-item" onclick="showPage('hisobotlar',this)"><span class="nav-icon">📊</span><span>Hisobotlar</span></div>
+    <div class="nav-item" onclick="showPage('sozlamalar',this)"><span class="nav-icon">⚙️</span><span>Sozlamalar</span></div>
+  </nav>
+  <div class="sidebar-footer">v2.0</div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Boshqaruv paneli</h1>
+        <p class="page-sub" id="today-date"></p>
+      </div>
+      <button class="btn-icon" onclick="refreshStats()" title="Yangilash">🔄</button>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card green">
+        <div class="stat-icon">✅</div>
+        <div class="stat-val" id="stat-keldi">0</div>
+        <div class="stat-lbl">Keldi</div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-icon">⏰</div>
+        <div class="stat-val" id="stat-kechikdi">0</div>
+        <div class="stat-lbl">Kechikdi</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-icon">❌</div>
+        <div class="stat-val" id="stat-kelmadi">0</div>
+        <div class="stat-lbl">Kelmadi</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon">🏖</div>
+        <div class="stat-val" id="stat-tatil">0</div>
+        <div class="stat-lbl">Ta'til</div>
+      </div>
+    </div>
+
+    <div class="monitor-card">
+      <div class="monitor-top">
+        <div class="live-dot"></div>
+        <span class="monitor-label">Jonli monitoring</span>
+        <span class="monitor-time" id="live-time"></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-seg green-seg" id="bar-g" style="width:0%"></div>
+        <div class="progress-seg yellow-seg" id="bar-y" style="width:0%"></div>
+        <div class="progress-seg red-seg" id="bar-r" style="width:0%"></div>
+        <div class="progress-seg blue-seg" id="bar-b" style="width:0%"></div>
+      </div>
+      <div class="progress-info">
+        <span>Davomat: <b id="davomat-pct">0%</b></span>
+        <span id="total-xodim">0 xodim</span>
+      </div>
+    </div>
+
+    <div class="section-title">Bugungi holat</div>
+    <!-- Desktop -->
+    <div class="table-wrap desktop-only">
+      <table>
+        <thead><tr><th>Xodim</th><th>Lavozim</th><th>Filial</th><th>Vaqt</th><th>Holat</th><th>Amal</th></tr></thead>
+        <tbody id="dash-table"></tbody>
+      </table>
+    </div>
+    <!-- Mobile -->
+    <div class="card-list mobile-only" id="dash-cards"></div>
+  </div>
+
+  <!-- XODIMLAR -->
+  <div id="page-xodimlar" class="page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Xodimlar</h1>
+        <p class="page-sub" id="xodim-count"></p>
+      </div>
+      <button class="btn-primary" onclick="openModal('modal-xodim')">+ Qo'shish</button>
+    </div>
+    <input class="search-input" type="text" placeholder="🔍 Qidirish..." oninput="filterXodimlar(this.value)">
+    <div class="table-wrap desktop-only">
+      <table>
+        <thead><tr><th>Xodim</th><th>Lavozim</th><th>Filial</th><th>Holat</th><th>Amal</th></tr></thead>
+        <tbody id="xodim-table"></tbody>
+      </table>
+    </div>
+    <div class="card-list mobile-only" id="xodim-cards"></div>
+  </div>
+
+  <!-- FILIALLAR -->
+  <div id="page-filiallar" class="page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Filiallar</h1>
+        <p class="page-sub" id="filial-count"></p>
+      </div>
+      <button class="btn-primary" onclick="openModal('modal-filial')">+ Qo'shish</button>
+    </div>
+    <div class="table-wrap desktop-only">
+      <table>
+        <thead><tr><th>Filial</th><th>Manzil</th><th>Xodimlar</th><th>Ish vaqti</th><th>Amal</th></tr></thead>
+        <tbody id="filial-table"></tbody>
+      </table>
+    </div>
+    <div class="card-list mobile-only" id="filial-cards"></div>
+  </div>
+
+  <!-- HISOBOTLAR -->
+  <div id="page-hisobotlar" class="page">
+    <div class="page-header">
+      <h1 class="page-title">Hisobotlar</h1>
+    </div>
+    <div class="period-tabs">
+      <button class="period-tab active" onclick="selectPeriod(this,'bugun')">Bugun</button>
+      <button class="period-tab" onclick="selectPeriod(this,'hafta')">7 kun</button>
+      <button class="period-tab" onclick="selectPeriod(this,'oy')">Oy</button>
+      <button class="period-tab" onclick="selectPeriod(this,'hammasi')">Hammasi</button>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Davomat grafigi (Iyun 2026)</div>
+      <div class="bar-chart" id="bar-chart"></div>
+    </div>
+    <div class="table-wrap desktop-only">
+      <div class="table-header-row">
+        <span class="section-title" style="margin:0">Batafsil</span>
+        <button class="btn-secondary" onclick="exportCSV()">⬇ CSV</button>
+      </div>
+      <table>
+        <thead><tr><th>Xodim</th><th>Keldi</th><th>Kechikdi</th><th>Kelmadi</th><th>Ta'til</th><th>%</th></tr></thead>
+        <tbody id="hisobot-table"></tbody>
+      </table>
+    </div>
+    <div class="card-list mobile-only" id="hisobot-cards"></div>
+  </div>
+
+  <!-- SOZLAMALAR -->
+  <div id="page-sozlamalar" class="page">
+    <div class="page-header">
+      <h1 class="page-title">Sozlamalar</h1>
+    </div>
+    <div class="settings-block">
+      <div class="settings-block-title">Kompaniya</div>
+      <div class="form-row">
+        <label class="form-label">Nomi</label>
+        <input class="form-input" id="set-company" value="Ai Up">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Asosiy rang</label>
+        <div style="display:flex;align-items:center;gap:10px">
+          <input type="color" id="set-color" value="#ea580c" onchange="updateColor(this.value)" style="width:36px;height:36px;border:none;border-radius:6px;cursor:pointer">
+          <span id="color-hex">#ea580c</span>
+        </div>
+      </div>
+      <button class="btn-primary btn-full" onclick="saveBrand()">💾 Saqlash</button>
+    </div>
+    <div class="settings-block">
+      <div class="settings-block-title">Bildirishnoma vaqtlari</div>
+      <div class="form-row"><label class="form-label">📋 Davomat boshlash</label><input type="time" class="form-input time" value="08:30" id="t1"></div>
+      <div class="form-row"><label class="form-label">⏰ Kechikish chegarasi</label><input type="time" class="form-input time" value="09:30" id="t2"></div>
+      <div class="form-row"><label class="form-label">❌ Kelmaganlik</label><input type="time" class="form-input time" value="10:00" id="t3"></div>
+      <div class="form-row"><label class="form-label">📊 Kunlik hisobot</label><input type="time" class="form-input time" value="18:00" id="t4"></div>
+      <button class="btn-primary btn-full" onclick="saveNotif()">💾 Saqlash</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <div class="bn-item active" id="bn-dashboard" onclick="showPage('dashboard',null,'bn-dashboard')">
+    <span>🏠</span><span>Bosh</span>
+  </div>
+  <div class="bn-item" id="bn-xodimlar" onclick="showPage('xodimlar',null,'bn-xodimlar')">
+    <span>👥</span><span>Xodimlar</span>
+  </div>
+  <div class="bn-item" id="bn-filiallar" onclick="showPage('filiallar',null,'bn-filiallar')">
+    <span>📍</span><span>Filiallar</span>
+  </div>
+  <div class="bn-item" id="bn-hisobotlar" onclick="showPage('hisobotlar',null,'bn-hisobotlar')">
+    <span>📊</span><span>Hisobot</span>
+  </div>
+  <div class="bn-item" id="bn-sozlamalar" onclick="showPage('sozlamalar',null,'bn-sozlamalar')">
+    <span>⚙️</span><span>Sozlama</span>
+  </div>
+</nav>
+
+<!-- MODAL: Xodim qo'shish -->
+<div class="modal-overlay" id="modal-xodim">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Yangi xodim</div>
+    <div class="form-row"><label class="form-label">Ism Familiya *</label><input class="form-input" id="x-ism" placeholder="Ali Karimov"></div>
+    <div class="form-row"><label class="form-label">Lavozim *</label><input class="form-input" id="x-lavozim" placeholder="Dasturchi"></div>
+    <div class="form-row"><label class="form-label">Telefon</label><input class="form-input" id="x-tel" placeholder="+998901234567" type="tel"></div>
+    <div class="form-row"><label class="form-label">Filial</label>
+      <select class="form-input" id="x-filial"><option value="">— Tanlang —</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary btn-full" onclick="addXodim()">✅ Saqlash</button>
+      <button class="btn-secondary btn-full" onclick="closeModal('modal-xodim')">Bekor</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Filial qo'shish -->
+<div class="modal-overlay" id="modal-filial">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Yangi filial</div>
+    <div class="form-row"><label class="form-label">Filial nomi *</label><input class="form-input" id="f-nom" placeholder="Markaziy ofis"></div>
+    <div class="form-row"><label class="form-label">Manzil</label><input class="form-input" id="f-manzil" placeholder="Toshkent, Chilonzor"></div>
+    <div class="form-row"><label class="form-label">Ish boshlanish</label><input type="time" class="form-input" id="f-bosh" value="09:00"></div>
+    <div class="form-row"><label class="form-label">Ish tugash</label><input type="time" class="form-input" id="f-tug" value="18:00"></div>
+    <div class="modal-actions">
+      <button class="btn-primary btn-full" onclick="addFilial()">✅ Saqlash</button>
+      <button class="btn-secondary btn-full" onclick="closeModal('modal-filial')">Bekor</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Davomat -->
+<div class="modal-overlay" id="modal-checkin">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Davomat belgilash</div>
+    <input type="hidden" id="ci-id">
+    <div class="form-row"><label class="form-label">Xodim: <b id="ci-name"></b></label></div>
+    <div class="form-row"><label class="form-label">Holat</label>
+      <select class="form-input" id="ci-holat">
+        <option value="keldi">✅ Keldi</option>
+        <option value="kechikdi">⏰ Kechikdi</option>
+        <option value="kelmadi">❌ Kelmadi</option>
+        <option value="tatil">🏖 Ta'tilda</option>
+      </select>
+    </div>
+    <div class="form-row"><label class="form-label">Vaqt</label><input type="time" class="form-input" id="ci-vaqt"></div>
+    <div class="modal-actions">
+      <button class="btn-primary btn-full" onclick="saveCheckin()">✅ Saqlash</button>
+      <button class="btn-secondary btn-full" onclick="closeModal('modal-checkin')">Bekor</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
