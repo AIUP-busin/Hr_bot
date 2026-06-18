@@ -10,8 +10,8 @@ const PHOTOS_DIR = path.join(DATA_DIR, 'photos');
 if (!fs.existsSync(DATA_DIR))   fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(PHOTOS_DIR)) fs.mkdirSync(PHOTOS_DIR, { recursive: true });
 
-const OFFICE_LAT   = parseFloat(process.env.OFFICE_LAT   || '41.308143');
-const OFFICE_LON   = parseFloat(process.env.OFFICE_LON   || '69.210944');
+const OFFICE_LAT   = parseFloat(process.env.OFFICE_LAT   || '41.308056');
+const OFFICE_LON   = parseFloat(process.env.OFFICE_LON   || '69.211075');
 const MAX_DIST     = parseFloat(process.env.MAX_DIST      || '20');
 const BOT_TOKEN    = process.env.BOT_TOKEN    || '';
 const BOSS_CHAT_ID = process.env.BOSS_CHAT_ID || '';
