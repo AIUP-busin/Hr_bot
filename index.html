@@ -315,7 +315,7 @@ if (tg) { tg.ready(); tg.expand(); }
 // ===== KONSTANTALAR =====
 const OFFICE_LAT = 41.308056;
 const OFFICE_LON = 69.211075;
-const MAX_DIST   = 20;      // metr (radius)
+const MAX_DIST   = 100;      // metr (radius)
 const SHIFT_START = 14 * 60; // 840 daqiqa
 const SHIFT_END   = 24 * 60 + 30; // 1470 daqiqa
 
@@ -556,12 +556,22 @@ function photoTaken(){
   if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
-    photo=e.target.result;
-    const prev=document.getElementById('phPreview');
-    prev.src=photo; prev.style.display='block';
-    document.getElementById('phPlaceholder').style.display='none';
-    document.getElementById('btnConfirmPh').style.display='block';
-    document.getElementById('btnRetryPh').style.display='block';
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      const MAX_W=800;
+      const scale=Math.min(1,MAX_W/img.width);
+      canvas.width=img.width*scale;
+      canvas.height=img.height*scale;
+      canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+      photo=canvas.toDataURL('image/jpeg',0.7);
+      const prev=document.getElementById('phPreview');
+      prev.src=photo; prev.style.display='block';
+      document.getElementById('phPlaceholder').style.display='none';
+      document.getElementById('btnConfirmPh').style.display='block';
+      document.getElementById('btnRetryPh').style.display='block';
+    };
+    img.src=e.target.result;
   };
   reader.readAsDataURL(file);
 }
