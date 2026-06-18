@@ -2,910 +2,648 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Ai Up — HR Boshqaruv</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>HR Davomat</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 :root{
-  --pr:#f97316;--pr2:#fb923c;--pr3:rgba(249,115,22,.12);
-  --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--bg4:#1f1f28;
-  --bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.13);
-  --tx:#f0eff8;--tx2:rgba(240,239,248,.55);--tx3:rgba(240,239,248,.28);
-  --green:#22d3a0;--green-bg:rgba(34,211,160,.1);
-  --red:#f87171;--red-bg:rgba(248,113,113,.1);
-  --yellow:#fbbf24;--yellow-bg:rgba(251,191,36,.1);
-  --blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);
-  --nav:60px;--safe-b:env(safe-area-inset-bottom,0px);
-  --r:14px;
+  --g1:#004d40;--g2:#00796b;--g3:#00b894;--g4:#55efc4;
+  --r1:#b71c1c;--r2:#e94560;--r3:#ff6b6b;
+  --offwhite:#f0fdf8;
 }
-html{height:100%;background:var(--bg)}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  background:var(--bg);color:var(--tx);min-height:100%;overflow-x:hidden}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100px) rotate(720deg);opacity:0}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,184,148,.4)}70%{box-shadow:0 0 0 12px rgba(0,184,148,0)}}
 
-/* ═══ BOTTOM NAV ═══ */
-.bnav{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:rgba(10,10,15,.92);border-top:1px solid var(--bd);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  display:flex;padding-bottom:var(--safe-b);
+.page{display:none;min-height:100vh;}
+.page.active{display:flex;flex-direction:column;}
+
+/* ===== PIN ===== */
+#pagePIN{
+  align-items:center;justify-content:center;padding:24px 20px;
+  background:linear-gradient(160deg,#002b22 0%,var(--g1) 35%,var(--g2) 70%,var(--g3) 100%);
 }
-.bn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:10px 0;cursor:pointer;transition:.2s;color:var(--tx3);border:none;background:none}
-.bn svg{width:22px;height:22px;transition:.2s}
-.bn span{font-size:10px;font-weight:500;transition:.2s}
-.bn.active{color:var(--pr)}
-.bn.active svg{filter:drop-shadow(0 0 6px rgba(249,115,22,.5))}
+.pin-head{text-align:center;margin-bottom:28px;animation:fadeUp .5s ease;}
+.pin-logo{width:80px;height:80px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 14px;border:2px solid rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.3);}
+.pin-title{font-size:24px;font-weight:900;color:#fff;margin-bottom:4px;}
+.pin-sub{font-size:13px;color:rgba(255,255,255,.6);font-weight:500;}
+.pin-card{background:#fff;border-radius:28px;padding:26px 22px;width:100%;max-width:330px;box-shadow:0 32px 80px rgba(0,0,0,.35);animation:fadeUp .5s .1s ease both;}
+.pin-display{background:var(--offwhite);border-radius:18px;padding:18px 14px;text-align:center;margin-bottom:22px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #c8f0e0;transition:border-color .3s;}
+.pin-display.ok{border-color:var(--g3);}
+.dots{display:flex;gap:16px;justify-content:center;margin-bottom:8px;}
+.dot{width:15px;height:15px;border-radius:50%;background:#daeee8;transition:all .2s cubic-bezier(.34,1.56,.64,1);}
+.dot.on{background:var(--g3);transform:scale(1.2);box-shadow:0 0 0 5px rgba(0,184,148,.2);}
+.pin-hint{font-size:12px;color:#8aab9e;font-weight:600;}
+.pin-emp-name{font-size:18px;font-weight:800;color:var(--g1);}
+.pin-emp-branch{display:inline-block;background:rgba(0,184,148,.1);color:var(--g2);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:5px;}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.key{height:66px;border:none;border-radius:18px;font-size:26px;font-weight:700;cursor:pointer;background:var(--offwhite);color:#1a3028;border:2px solid #d8eee6;transition:all .1s;display:flex;align-items:center;justify-content:center;}
+.key:active{transform:scale(.88);background:#c0e8d8;}
+.key.zero{grid-column:2;}
+.key.del{background:#fff0f2;color:var(--r2);border-color:#ffd6de;font-size:20px;}
+.key.del:active{background:#ffd6de;}
+.pin-err{color:var(--r2);font-size:13px;text-align:center;margin-top:14px;min-height:20px;font-weight:700;}
+.pin-err.shake{animation:shake .4s ease;}
 
-/* ═══ MAIN ═══ */
-main{padding:16px 16px calc(var(--nav) + var(--safe-b) + 16px)}
+/* ===== LOADING ===== */
+#pageLoading{align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(160deg,#002b22,var(--g2));}
+.loader{width:52px;height:52px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px;}
+.load-text{color:rgba(255,255,255,.75);font-size:14px;font-weight:600;}
 
-/* ═══ HEADER ═══ */
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-top:4px}
-.hdr-title{font-size:22px;font-weight:700;letter-spacing:-.5px}
-.hdr-sub{font-size:13px;color:var(--tx2);margin-top:2px}
-.hdr-badge{
-  background:var(--pr3);border:1px solid rgba(249,115,22,.25);
-  color:var(--pr2);font-size:12px;font-weight:600;
-  padding:5px 12px;border-radius:99px;white-space:nowrap
+/* ===== GPS XATO ===== */
+#pageGpsError{align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#3a0000,#7a0000,var(--r2));}
+.gps-err-card{background:#fff;border-radius:28px;padding:36px 24px;max-width:320px;width:100%;text-align:center;animation:pop .4s ease;}
+.gps-err-icon{font-size:72px;margin-bottom:16px;display:block;}
+.gps-err-title{font-size:20px;font-weight:900;color:var(--r1);margin-bottom:16px;}
+.gps-err-msg{font-size:14px;color:#333;line-height:1.8;margin-bottom:16px;background:#fff5f5;border-radius:14px;padding:16px;border-left:4px solid var(--r2);text-align:left;}
+.gps-err-dist{background:#fff0f0;border-radius:12px;padding:12px;font-size:13px;color:var(--r1);font-weight:800;margin-bottom:24px;border:1px solid #ffd6d6;}
+.btn-gps-back{width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--r3),var(--r2));color:#fff;}
+
+/* ===== CHECK-IN ===== */
+#pageCI{background:var(--offwhite);}
+.ci-header{background:linear-gradient(160deg,#002b22,var(--g1),var(--g2));padding:32px 24px 56px;}
+.ci-header-row{display:flex;align-items:center;gap:14px;}
+.ci-av{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;border:3px solid rgba(255,255,255,.4);box-shadow:0 6px 20px rgba(0,0,0,.25);flex-shrink:0;animation:pop .4s ease;}
+.ci-info{flex:1;}
+.ci-emp-name{font-size:19px;font-weight:800;color:#fff;}
+.ci-emp-branch{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.18);color:rgba(255,255,255,.9);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:5px;border:1px solid rgba(255,255,255,.25);}
+.ci-logout{background:rgba(255,255,255,.15);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#fff;flex-shrink:0;}
+.ci-body{flex:1;background:#fff;border-radius:28px 28px 0 0;margin-top:-24px;padding:20px;box-shadow:0 -4px 20px rgba(0,0,0,.06);}
+
+.clock-card{background:linear-gradient(135deg,var(--offwhite),#e0faf2);border-radius:20px;padding:16px;text-align:center;margin-bottom:14px;border:1px solid #c0ead6;}
+.clock-time{font-size:44px;font-weight:900;color:var(--g1);letter-spacing:-2px;font-variant-numeric:tabular-nums;line-height:1;}
+.clock-date{font-size:12px;color:#6b8c7a;margin-top:6px;font-weight:600;}
+
+.greet-card{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:12px 14px;margin-bottom:12px;border:1px solid #d4f0e0;}
+.greet-icon{font-size:26px;flex-shrink:0;}
+.greet-text{font-size:13px;font-weight:700;color:var(--g1);}
+.greet-sub{font-size:11px;color:#8aab9e;margin-top:2px;}
+
+/* Stat row — 3 ta quti */
+.stat-row{display:flex;gap:8px;margin-bottom:12px;}
+.stat-box{flex:1;background:#fff;border-radius:14px;padding:10px 8px;text-align:center;border:1px solid #d4f0e0;}
+.stat-num{font-size:18px;font-weight:900;color:var(--g1);}
+.stat-label{font-size:10px;color:#8aab9e;margin-top:2px;font-weight:600;line-height:1.3;}
+
+/* Smena banner */
+.shift-banner{
+  display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbe6,#fff3cd);
+  border-radius:12px;padding:10px 14px;margin-bottom:12px;border:1px solid #ffe58f;
 }
+.shift-banner span{font-size:12px;color:#8a6000;font-weight:600;}
 
-/* ═══ PAGES ═══ */
-.page{display:none;animation:fadeUp .25s ease both}
-.page.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.log-card{background:#fff;border-radius:16px;padding:12px 14px;margin-bottom:12px;border:1px solid #d4f0e0;}
+.log-card h4{font-size:11px;color:#8aab9e;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:700;}
+.log-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f9f5;font-size:13px;}
+.log-item:last-child{border:none;}
+.log-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;}
+.badge-in{background:#e8faf2;color:var(--g2);}
+.badge-out{background:#fff0f3;color:var(--r2);}
+.badge-early{background:#fff8e1;color:#f57c00;}
+.log-hours{font-size:12px;color:#6b8c7a;font-weight:700;background:var(--offwhite);padding:2px 8px;border-radius:10px;}
 
-/* ═══ STAT CARDS ═══ */
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.stat{
-  background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);
-  padding:14px;position:relative;overflow:hidden
-}
-.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.stat.s-orange::before{background:linear-gradient(90deg,var(--pr),transparent)}
-.stat.s-green::before{background:linear-gradient(90deg,var(--green),transparent)}
-.stat.s-red::before{background:linear-gradient(90deg,var(--red),transparent)}
-.stat.s-blue::before{background:linear-gradient(90deg,var(--blue),transparent)}
-.stat-icon{font-size:20px;margin-bottom:8px}
-.stat-num{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1}
-.stat-lbl{font-size:12px;color:var(--tx2);margin-top:4px}
+.ci-btns{display:flex;flex-direction:column;gap:10px;}
+.ci-btn{width:100%;padding:18px;border:none;border-radius:20px;font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s;}
+.ci-btn:active{transform:scale(.96);}
+.ci-btn:disabled{opacity:.35;cursor:not-allowed;}
+.btn-in{background:linear-gradient(135deg,var(--g4),var(--g3),var(--g2));color:#fff;box-shadow:0 10px 28px rgba(0,184,148,.45);animation:pulse 2s infinite;}
+.btn-out{background:linear-gradient(135deg,#ff9a9a,var(--r3),var(--r2));color:#fff;box-shadow:0 10px 28px rgba(233,69,96,.4);}
 
-/* ═══ SECTION TITLE ═══ */
-.sec-title{font-size:15px;font-weight:700;margin-bottom:12px;letter-spacing:-.2px}
+/* ===== FOTO ===== */
+#pagePhoto{align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#002b22,var(--g1),var(--g2));}
+.ph-card{background:#fff;border-radius:28px;padding:26px 22px;max-width:320px;width:100%;animation:fadeUp .3s ease;}
+.ph-title{font-size:19px;font-weight:800;color:var(--g1);margin-bottom:6px;text-align:center;}
+.ph-sub{font-size:13px;color:#8aab9e;margin-bottom:18px;text-align:center;font-weight:500;}
+.ph-preview{width:100%;height:220px;border-radius:20px;object-fit:cover;margin-bottom:14px;display:none;border:3px solid var(--g3);}
+.ph-placeholder{width:100%;height:220px;border-radius:20px;background:var(--offwhite);display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px;border:2px dashed #a0d8b8;}
+.ph-placeholder span{font-size:60px;margin-bottom:10px;}
+.ph-placeholder p{font-size:13px;color:#8aab9e;font-weight:600;}
+input[type=file]{display:none;}
+.btn-cam{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;margin-bottom:10px;}
+.btn-confirm-ph{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g4),var(--g3));color:#fff;margin-bottom:10px;display:none;}
+.btn-retry-ph{width:100%;padding:13px;border:2px solid #d4f0e0;border-radius:14px;font-size:14px;cursor:pointer;background:#fff;color:#6b8c7a;margin-bottom:10px;display:none;font-weight:700;}
+.btn-back-ph{width:100%;padding:12px;border:none;background:transparent;color:#8aab9e;font-size:13px;cursor:pointer;font-weight:600;}
 
-/* ═══ CARD ═══ */
-.card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-.card-row{
-  display:flex;align-items:center;gap:12px;padding:14px;
-  border-bottom:1px solid var(--bd);cursor:pointer;transition:.15s
-}
-.card-row:last-child{border-bottom:none}
-.card-row:active{background:var(--bg3)}
+/* ===== ERTA KELISH OGOH ===== */
+#pageEarlyWarn{align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#3d2600,#8a5000,#f57c00);}
+.early-card{background:#fff;border-radius:28px;padding:36px 24px;max-width:320px;width:100%;text-align:center;animation:pop .4s ease;}
+.early-icon{font-size:72px;margin-bottom:14px;display:block;}
+.early-title{font-size:20px;font-weight:900;color:#e65100;margin-bottom:14px;}
+.early-msg{font-size:14px;color:#444;line-height:1.7;margin-bottom:20px;background:#fff8e1;border-radius:14px;padding:16px;border-left:4px solid #f57c00;text-align:left;}
+.early-time{font-size:28px;font-weight:900;color:#e65100;margin-bottom:20px;}
+.btn-early-ok{width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#ffb74d,#f57c00);color:#fff;margin-bottom:10px;}
+.btn-early-back{width:100%;padding:12px;border:2px solid #ffe0b2;border-radius:14px;font-size:14px;cursor:pointer;background:#fff;color:#8a5000;font-weight:600;}
 
-/* ═══ AVATAR ═══ */
-.ava{
-  width:40px;height:40px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:700;flex-shrink:0;color:#fff
-}
-.ava-o{background:linear-gradient(135deg,#f97316,#ea580c)}
-.ava-g{background:linear-gradient(135deg,#22d3a0,#059669)}
-.ava-b{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
-.ava-p{background:linear-gradient(135deg,#c084fc,#9333ea)}
-.ava-y{background:linear-gradient(135deg,#fbbf24,#d97706)}
-.ava-r{background:linear-gradient(135deg,#f87171,#ef4444)}
-
-.row-info{flex:1;min-width:0}
-.row-name{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row-sub{font-size:12px;color:var(--tx2)}
-
-/* ═══ BADGE ═══ */
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px}
-.badge.keldi{background:var(--green-bg);color:var(--green)}
-.badge.kelmadi{background:var(--red-bg);color:var(--red)}
-.badge.kechikdi{background:var(--yellow-bg);color:var(--yellow)}
-.badge.dam{background:var(--blue-bg);color:var(--blue)}
-.badge.faol{background:var(--green-bg);color:var(--green)}
-
-/* ═══ BRANCH CARD ═══ */
-.branch-card{
-  background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);
-  padding:18px;margin-bottom:12px;position:relative;overflow:hidden
-}
-.branch-card::after{
-  content:'';position:absolute;top:0;right:0;width:100px;height:100px;
-  border-radius:50%;opacity:.06;transform:translate(30%,-30%)
-}
-.branch-card.bc-o::after{background:var(--pr)}
-.branch-card.bc-g::after{background:var(--green)}
-.branch-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
-.branch-name{font-size:18px;font-weight:800;letter-spacing:-.5px}
-.branch-addr{font-size:12px;color:var(--tx2);margin-top:3px}
-.branch-icon{
-  width:44px;height:44px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;font-size:22px
-}
-.bc-o .branch-icon{background:var(--pr3)}
-.bc-g .branch-icon{background:var(--green-bg)}
-.branch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.bstat{background:var(--bg3);border-radius:10px;padding:10px;text-align:center}
-.bstat-num{font-size:18px;font-weight:800;letter-spacing:-.5px}
-.bstat-lbl{font-size:11px;color:var(--tx2);margin-top:2px}
-
-/* ═══ DAVOMAT CALENDAR ═══ */
-.cal-wrap{overflow-x:auto;padding-bottom:4px}
-.cal{display:flex;gap:6px;min-width:max-content;margin-bottom:16px}
-.cal-day{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  min-width:32px
-}
-.cal-d{font-size:10px;color:var(--tx3);font-weight:500}
-.cal-dot{
-  width:26px;height:26px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700
-}
-.cd-k{background:var(--green-bg);color:var(--green)}
-.cd-n{background:var(--red-bg);color:var(--red)}
-.cd-kech{background:var(--yellow-bg);color:var(--yellow)}
-.cd-dam{background:var(--blue-bg);color:var(--blue)}
-.cd-tdy{border:2px solid var(--pr);background:var(--pr3);color:var(--pr)}
-
-/* ═══ HISOBOT ═══ */
-.chart-wrap{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:12px}
-.chart-title{font-size:14px;font-weight:700;margin-bottom:14px}
-.bars{display:flex;align-items:flex-end;gap:6px;height:100px}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
-.bar-v{font-size:10px;color:var(--tx2)}
-.bar-b{width:100%;border-radius:5px 5px 0 0;min-height:4px;transition:.5s}
-.bar-l{font-size:9px;color:var(--tx3);margin-top:2px}
-
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.sum-card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:14px}
-.sum-pct{font-size:24px;font-weight:800;letter-spacing:-1px}
-.sum-lbl{font-size:12px;color:var(--tx2);margin-top:3px}
-
-/* ═══ SOZLAMALAR ═══ */
-.soz-card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-.soz-row{
-  display:flex;align-items:center;gap:12px;padding:15px;
-  border-bottom:1px solid var(--bd)
-}
-.soz-row:last-child{border-bottom:none}
-.soz-icon{
-  width:36px;height:36px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0
-}
-.soz-info{flex:1}
-.soz-label{font-size:14px;font-weight:600}
-.soz-val{font-size:12px;color:var(--tx2);margin-top:2px}
-.soz-arrow{color:var(--tx3);font-size:18px}
-.toggle{
-  width:44px;height:24px;border-radius:99px;border:none;cursor:pointer;
-  position:relative;transition:.3s;background:var(--bd2);flex-shrink:0
-}
-.toggle.on{background:var(--pr)}
-.toggle::after{
-  content:'';position:absolute;top:2px;left:2px;
-  width:20px;height:20px;border-radius:50%;background:#fff;
-  transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.3)
-}
-.toggle.on::after{left:22px}
-
-/* ═══ MODAL ═══ */
-.overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;
-  display:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)
-}
-.overlay.show{display:flex;align-items:flex-end}
-.modal{
-  background:var(--bg2);border-radius:24px 24px 0 0;width:100%;
-  border-top:1px solid var(--bd2);padding:0 0 var(--safe-b);
-  animation:slideUp .3s cubic-bezier(.32,1.25,.55,1)
-}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:40px;height:4px;border-radius:99px;background:var(--bd2);margin:12px auto}
-.modal-head{padding:4px 20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd)}
-.modal-title-txt{font-size:17px;font-weight:700}
-.modal-close{
-  width:32px;height:32px;border-radius:50%;background:var(--bg3);border:none;
-  color:var(--tx);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center
-}
-.modal-body{padding:20px}
-
-/* ═══ CHECKIN OPTIONS ═══ */
-.status-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.s-opt{
-  border:1.5px solid var(--bd);border-radius:14px;padding:16px;text-align:center;
-  cursor:pointer;transition:.2s;background:var(--bg3)
-}
-.s-opt:active{transform:scale(.97)}
-.s-opt.sel{border-color:var(--pr);background:var(--pr3)}
-.s-opt-icon{font-size:28px;margin-bottom:8px}
-.s-opt-lbl{font-size:13px;font-weight:600}
-.s-opt-sub{font-size:11px;color:var(--tx2);margin-top:2px}
-.s-opt.sel .s-opt-lbl{color:var(--pr)}
-
-.btn-save{
-  width:100%;margin-top:16px;padding:16px;border-radius:14px;
-  background:var(--pr);border:none;color:#fff;font-size:16px;font-weight:700;
-  cursor:pointer;letter-spacing:-.3px;transition:.2s;font-family:inherit
-}
-.btn-save:active{opacity:.85;transform:scale(.98)}
-.btn-save:disabled{opacity:.4}
-
-/* ═══ EMPTY ═══ */
-.empty{text-align:center;padding:48px 20px;color:var(--tx3)}
-.empty-ico{font-size:48px;margin-bottom:12px}
-.empty-txt{font-size:14px}
-
-/* ═══ XODIM DETAIL ═══ */
-.xd-ava{
-  width:72px;height:72px;border-radius:20px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:28px;font-weight:800;color:#fff;margin-bottom:12px
-}
-.xd-name{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
-.xd-info{font-size:13px;color:var(--tx2);margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.xd-divider{height:1px;background:var(--bd);margin:16px 0}
-.month-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
-.ms{text-align:center;background:var(--bg3);border-radius:10px;padding:10px 4px}
-.ms-n{font-size:18px;font-weight:800}
-.ms-l{font-size:10px;color:var(--tx2);margin-top:2px}
-
-/* ═══ SEARCH ═══ */
-.search-box{
-  display:flex;align-items:center;gap:10px;
-  background:var(--bg2);border:1px solid var(--bd);border-radius:12px;
-  padding:11px 14px;margin-bottom:16px
-}
-.search-box svg{color:var(--tx3);flex-shrink:0}
-.search-box input{
-  background:none;border:none;outline:none;color:var(--tx);
-  font-size:14px;flex:1;font-family:inherit
-}
-.search-box input::placeholder{color:var(--tx3)}
-
-/* ═══ FILIAL FILTER ═══ */
-.flt-row{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px}
-.flt-row::-webkit-scrollbar{display:none}
-.flt-btn{
-  padding:7px 16px;border-radius:99px;font-size:13px;font-weight:600;
-  border:1.5px solid var(--bd);background:var(--bg2);color:var(--tx2);
-  cursor:pointer;white-space:nowrap;transition:.2s;font-family:inherit
-}
-.flt-btn.active{border-color:var(--pr);background:var(--pr3);color:var(--pr)}
-
-/* ═══ EXPORT BTN ═══ */
-.export-btn{
-  width:100%;padding:14px;border-radius:12px;
-  background:var(--bg2);border:1.5px solid var(--pr);color:var(--pr);
-  font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  font-family:inherit;transition:.2s
-}
-.export-btn:active{opacity:.8}
-
-/* ═══ DIVIDER ═══ */
-.div{height:1px;background:var(--bd);margin:20px 0}
-
-/* ═══ PROGRESS BAR ═══ */
-.prog-wrap{margin-bottom:6px}
-.prog-head{display:flex;justify-content:space-between;margin-bottom:5px}
-.prog-name{font-size:13px;font-weight:600}
-.prog-pct{font-size:12px;color:var(--tx2)}
-.prog-bar{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
-.prog-fill{height:100%;border-radius:99px;transition:.6s}
-
-/* ═══ TOAST ═══ */
-.toast{
-  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);
-  background:var(--bg3);border:1px solid var(--bd2);
-  color:var(--tx);padding:12px 20px;border-radius:12px;
-  font-size:13px;font-weight:600;z-index:999;transition:.4s;
-  white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.4)
-}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-/* ═══ LEGEND ═══ */
-.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2)}
-.leg-dot{width:10px;height:10px;border-radius:3px}
+/* ===== NATIJA ===== */
+#pageResult{align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#002b22,var(--g1),var(--g3));}
+.res-card{background:#fff;border-radius:28px;padding:40px 26px;max-width:320px;width:100%;text-align:center;animation:pop .4s ease;position:relative;overflow:hidden;}
+.confetti-wrap{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.c-dot{position:absolute;width:9px;height:9px;border-radius:50%;animation:confetti 1.2s ease forwards;}
+.res-icon{font-size:80px;margin-bottom:14px;display:block;}
+.res-title{font-size:24px;font-weight:900;margin-bottom:10px;}
+.res-title.in{color:var(--g2);}
+.res-title.out{color:var(--r2);}
+.res-hours{font-size:22px;font-weight:900;color:var(--g1);margin-bottom:10px;}
+.res-info{font-size:13px;color:#6b8c7a;line-height:2.1;margin-bottom:24px;background:var(--offwhite);border-radius:14px;padding:14px;border:1px solid #d4f0e0;text-align:left;}
+.res-back{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;}
 </style>
 </head>
 <body>
 
-<!-- PAGES -->
-<main>
-
-<!-- DASHBOARD -->
-<div class="page active" id="p-dashboard">
-  <div class="hdr">
-    <div>
-      <div class="hdr-title">Bosh sahifa</div>
-      <div class="hdr-sub" id="dash-date"></div>
-    </div>
-    <div class="hdr-badge" id="dash-badge">●&nbsp;Online</div>
+<!-- 1. PIN -->
+<div id="pagePIN" class="page active">
+  <div class="pin-head">
+    <div class="pin-logo">👥</div>
+    <div class="pin-title">HR Davomat</div>
+    <div class="pin-sub">Parus &amp; Nukus filiali</div>
   </div>
-
-  <div class="stats">
-    <div class="stat s-orange">
-      <div class="stat-icon">👥</div>
-      <div class="stat-num" id="d-total">13</div>
-      <div class="stat-lbl">Jami xodimlar</div>
+  <div class="pin-card">
+    <div class="pin-display" id="pinDisplay">
+      <div class="dots">
+        <div class="dot" id="d0"></div><div class="dot" id="d1"></div>
+        <div class="dot" id="d2"></div><div class="dot" id="d3"></div>
+      </div>
+      <div class="pin-hint" id="pinHint">PIN kodingizni kiriting</div>
+      <div class="pin-emp-name" id="pinName" style="display:none"></div>
+      <div class="pin-emp-branch" id="pinBranch" style="display:none"></div>
     </div>
-    <div class="stat s-green">
-      <div class="stat-icon">✅</div>
-      <div class="stat-num" id="d-keldi">—</div>
-      <div class="stat-lbl">Bugun keldi</div>
+    <div class="keypad">
+      <button class="key" onclick="kp('1')">1</button>
+      <button class="key" onclick="kp('2')">2</button>
+      <button class="key" onclick="kp('3')">3</button>
+      <button class="key" onclick="kp('4')">4</button>
+      <button class="key" onclick="kp('5')">5</button>
+      <button class="key" onclick="kp('6')">6</button>
+      <button class="key" onclick="kp('7')">7</button>
+      <button class="key" onclick="kp('8')">8</button>
+      <button class="key" onclick="kp('9')">9</button>
+      <button class="key zero" onclick="kp('0')">0</button>
+      <button class="key del" onclick="kd()">⌫</button>
     </div>
-    <div class="stat s-red">
-      <div class="stat-icon">❌</div>
-      <div class="stat-num" id="d-kelmadi">—</div>
-      <div class="stat-lbl">Kelmadi</div>
-    </div>
-    <div class="stat s-blue">
-      <div class="stat-icon">⏰</div>
-      <div class="stat-num" id="d-kechikdi">—</div>
-      <div class="stat-lbl">Kechikdi</div>
-    </div>
+    <div class="pin-err" id="pinErr"></div>
   </div>
-
-  <div class="sec-title">Filiallar holati</div>
-  <div id="dash-branches"></div>
-
-  <div class="sec-title">So'nggi davomat</div>
-  <div class="card" id="dash-recent"></div>
 </div>
 
-<!-- XODIMLAR -->
-<div class="page" id="p-xodimlar">
-  <div class="hdr">
-    <div>
-      <div class="hdr-title">Xodimlar</div>
-      <div class="hdr-sub">13 nafar</div>
-    </div>
-  </div>
-  <div class="search-box">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input id="search-inp" placeholder="Xodim qidirish..." oninput="filterXodimlar()">
-  </div>
-  <div class="flt-row">
-    <button class="flt-btn active" onclick="setFlt(this,'all')">Hammasi</button>
-    <button class="flt-btn" onclick="setFlt(this,'1')">🏢 Parus</button>
-    <button class="flt-btn" onclick="setFlt(this,'2')">🏙 Nukus</button>
-  </div>
-  <div class="card" id="xodimlar-list"></div>
+<!-- 2. LOADING -->
+<div id="pageLoading" class="page">
+  <div class="loader"></div>
+  <div class="load-text" id="loadText">📍 GPS tekshirilmoqda...</div>
 </div>
 
-<!-- FILIALLAR -->
-<div class="page" id="p-filiallar">
-  <div class="hdr">
-    <div>
-      <div class="hdr-title">Filiallar</div>
-      <div class="hdr-sub">2 ta filial</div>
+<!-- 3. GPS XATO -->
+<div id="pageGpsError" class="page">
+  <div class="gps-err-card">
+    <span class="gps-err-icon">🚫</span>
+    <div class="gps-err-title">Siz ishxonada emassiz!</div>
+    <div class="gps-err-msg">
+      ⚠️ Iltimos, yolg'ondan qo'rqing!<br><br>
+      Siz hozir boshqa joydasiz. Siz qilayotgan hamma narsa rahbarga boradi!
     </div>
+    <div class="gps-err-dist" id="gpsErrDist"></div>
+    <button class="btn-gps-back" onclick="goBackPin()">← Orqaga qaytish</button>
   </div>
-  <div id="filiallar-list"></div>
 </div>
 
-<!-- HISOBOT -->
-<div class="page" id="p-hisobot">
-  <div class="hdr">
-    <div>
-      <div class="hdr-title">Hisobot</div>
-      <div class="hdr-sub">Iyun 2026</div>
+<!-- 4. ERTA KELISH OGOHLANTIRISH -->
+<div id="pageEarlyWarn" class="page">
+  <div class="early-card">
+    <span class="early-icon">⏰</span>
+    <div class="early-title">Siz erta keldingiz!</div>
+    <div class="early-msg">
+      Smena <b>14:00</b> dan boshlanadi.<br><br>
+      Hozir bosish mumkin, lekin <b>ish vaqti 14:00 dan hisoblanadi</b>.
+      Rahbarga xabar yuborildi.
     </div>
+    <div class="early-time" id="earlyTime">🕐 Hozir: 00:00</div>
+    <button class="btn-early-ok" onclick="earlyConfirm()">✅ Tushundim, qayd etish</button>
+    <button class="btn-early-back" onclick="show('pageCI')">← Orqaga</button>
   </div>
-
-  <div class="summary-grid" id="hiso-summary"></div>
-  <div class="chart-wrap">
-    <div class="chart-title">Kunlik davomat (Iyun 1–14)</div>
-    <div class="bars" id="hiso-bars"></div>
-  </div>
-  <div class="sec-title">Xodimlar reytingi</div>
-  <div class="card" style="padding:14px 14px 6px" id="hiso-rating"></div>
-  <button class="export-btn" onclick="exportCSV()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    CSV yuklab olish
-  </button>
 </div>
 
-<!-- SOZLAMALAR -->
-<div class="page" id="p-sozlamalar">
-  <div class="hdr">
-    <div>
-      <div class="hdr-title">Sozlamalar</div>
+<!-- 5. CHECK-IN -->
+<div id="pageCI" class="page">
+  <div class="ci-header">
+    <div class="ci-header-row">
+      <div class="ci-av" id="ciAv"></div>
+      <div class="ci-info">
+        <div class="ci-emp-name" id="ciName"></div>
+        <span class="ci-emp-branch" id="ciBranch"></span>
+      </div>
+      <button class="ci-logout" onclick="goBackPin()">🚪</button>
     </div>
   </div>
-
-  <div class="sec-title">Tizim</div>
-  <div class="soz-card">
-    <div class="soz-row">
-      <div class="soz-icon" style="background:var(--pr3)">🏢</div>
-      <div class="soz-info">
-        <div class="soz-label">Kompaniya</div>
-        <div class="soz-val">Ai Up Holdings</div>
-      </div>
-      <div class="soz-arrow">›</div>
+  <div class="ci-body">
+    <div class="clock-card">
+      <div class="clock-time" id="ciClock">00:00:00</div>
+      <div class="clock-date" id="ciDate"></div>
     </div>
-    <div class="soz-row">
-      <div class="soz-icon" style="background:var(--green-bg)">⏰</div>
-      <div class="soz-info">
-        <div class="soz-label">Ish vaqti</div>
-        <div class="soz-val">09:00 – 18:00</div>
-      </div>
-      <div class="soz-arrow">›</div>
-    </div>
-    <div class="soz-row">
-      <div class="soz-icon" style="background:var(--yellow-bg)">🔔</div>
-      <div class="soz-info">
-        <div class="soz-label">Bildirishnomalar</div>
-        <div class="soz-val">Yoqilgan</div>
-      </div>
-      <button class="toggle on" id="notif-toggle" onclick="this.classList.toggle('on')"></button>
-    </div>
-    <div class="soz-row">
-      <div class="soz-icon" style="background:var(--blue-bg)">🌙</div>
-      <div class="soz-info">
-        <div class="soz-label">Qorong'i rejim</div>
-        <div class="soz-val">Doim yoniq</div>
-      </div>
-      <button class="toggle on"></button>
-    </div>
-  </div>
-
-  <div class="sec-title">Ma'lumot</div>
-  <div class="soz-card">
-    <div class="soz-row">
-      <div class="soz-icon" style="background:var(--blue-bg)">📊</div>
-      <div class="soz-info">
-        <div class="soz-label">Jami xodimlar</div>
-        <div class="soz-val">13 nafar, 2 filial</div>
+    <div class="greet-card">
+      <span class="greet-icon" id="greetIcon">👋</span>
+      <div>
+        <div class="greet-text" id="greetText">Xush kelibsiz!</div>
+        <div class="greet-sub" id="greetSub"></div>
       </div>
     </div>
-    <div class="soz-row">
-      <div class="soz-icon" style="background:var(--pr3)">📅</div>
-      <div class="soz-info">
-        <div class="soz-label">Davomat davri</div>
-        <div class="soz-val">Iyun 1–14, 2026</div>
+    <div class="shift-banner">
+      <span>🕐</span>
+      <span>Smena: <b>14:00 — 00:30</b></span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num" id="statStatus">—</div>
+        <div class="stat-label">Bugungi holat</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statHours">—</div>
+        <div class="stat-label">Bugungi ish soati</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statVisits">0</div>
+        <div class="stat-label">Keldi-ketdi soni</div>
       </div>
     </div>
-    <div class="soz-row">
-      <div class="soz-icon" style="background:var(--green-bg)">✅</div>
-      <div class="soz-info">
-        <div class="soz-label">Versiya</div>
-        <div class="soz-val">HR Boshqaruv v2.0</div>
-      </div>
+    <div class="log-card" id="logCard" style="display:none">
+      <h4>📋 Bugungi qaydlar</h4>
+      <div id="logList"></div>
+    </div>
+    <div class="ci-btns">
+      <button class="ci-btn btn-in"  id="btnIn"  onclick="startCheck('in')">✅&nbsp;&nbsp;KELDI</button>
+      <button class="ci-btn btn-out" id="btnOut" onclick="startCheck('out')" style="display:none">🚪&nbsp;&nbsp;KETDI</button>
     </div>
   </div>
 </div>
 
-</main>
-
-<!-- BOTTOM NAV -->
-<nav class="bnav">
-  <button class="bn active" id="bn-dashboard" onclick="showPage('dashboard')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    <span>Bosh</span>
-  </button>
-  <button class="bn" id="bn-xodimlar" onclick="showPage('xodimlar')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    <span>Xodimlar</span>
-  </button>
-  <button class="bn" id="bn-filiallar" onclick="showPage('filiallar')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span>Filiallar</span>
-  </button>
-  <button class="bn" id="bn-hisobot" onclick="showPage('hisobot')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-    <span>Hisobot</span>
-  </button>
-  <button class="bn" id="bn-sozlamalar" onclick="showPage('sozlamalar')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    <span>Sozlamalar</span>
-  </button>
-</nav>
-
-<!-- MODAL: Xodim detail / Checkin -->
-<div class="overlay" id="overlay" onclick="closeModal()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-head">
-      <div class="modal-title-txt" id="modal-title">Xodim</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+<!-- 6. FOTO -->
+<div id="pagePhoto" class="page">
+  <div class="ph-card">
+    <div class="ph-title">📸 Selfie tasdiqlash</div>
+    <div class="ph-sub" id="phSub">Old kamera bilan rasm oling</div>
+    <img id="phPreview" class="ph-preview" alt="selfie">
+    <div class="ph-placeholder" id="phPlaceholder">
+      <span>🤳</span><p>Kamera tugmasini bosing</p>
     </div>
-    <div class="modal-body" id="modal-body"></div>
+    <input type="file" id="photoInput" accept="image/*" capture="user" onchange="photoTaken()">
+    <button class="btn-cam" onclick="document.getElementById('photoInput').click()">📷 Kamera ochish</button>
+    <button class="btn-confirm-ph" id="btnConfirmPh" onclick="confirmPhoto()">✅ Tasdiqlash va yuborish</button>
+    <button class="btn-retry-ph"   id="btnRetryPh"   onclick="retakePhoto()">🔄 Qayta olish</button>
+    <button class="btn-back-ph"    onclick="show('pageCI')">← Orqaga</button>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+<!-- 7. NATIJA -->
+<div id="pageResult" class="page">
+  <div class="res-card">
+    <div class="confetti-wrap" id="confettiWrap"></div>
+    <span class="res-icon" id="resIcon"></span>
+    <div class="res-title" id="resTitle"></div>
+    <div class="res-hours" id="resHours" style="display:none"></div>
+    <div class="res-info" id="resInfo"></div>
+    <button class="res-back" onclick="goBackPin()">🏠 Bosh sahifaga qaytish</button>
+  </div>
+</div>
 
 <script>
-// ═══════════════ DATA ═══════════════
 const tg = window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();tg.setHeaderColor?.('#0a0a0f');tg.setBackgroundColor?.('#0a0a0f')}
+if (tg) { tg.ready(); tg.expand(); }
 
-const filiallar = [
-  {id:1,nom:'Parus',manzil:'Toshkent, Mirzo Ulugbek',emoji:'🏢',bosh:'09:00',tug:'18:00',color:'bc-o'},
-  {id:2,nom:'Nukus',manzil:"Nukus, Markaziy ko'cha",emoji:'🏙',bosh:'09:00',tug:'18:00',color:'bc-g'},
+// ===== KONSTANTALAR =====
+const OFFICE_LAT = 41.308143;
+const OFFICE_LON = 69.210944;
+const MAX_DIST   = 10;      // metr (radius)
+const SHIFT_START = 14 * 60; // 840 daqiqa
+const SHIFT_END   = 24 * 60 + 30; // 1470 daqiqa
+
+// ===== XODIMLAR =====
+const EMPS = [
+  {n:'Muhammad Amin',      b:'Parus', p:'1001', c:'#e94560'},
+  {n:'Ibrohim',            b:'Parus', p:'1002', c:'#0f3460'},
+  {n:'Ibrohim Stajor',     b:'Parus', p:'1003', c:'#9b59b6'},
+  {n:'Zoxida',             b:'Parus', p:'1004', c:'#00b894'},
+  {n:'Ilxom',              b:'Parus', p:'1005', c:'#f39c12'},
+  {n:'Kamola',             b:'Parus', p:'1006', c:'#e67e22'},
+  {n:'Xurshid Soyibjonov', b:'Nukus', p:'2001', c:'#1a6ea8'},
+  {n:'Dadaxon Yulchiyev',  b:'Nukus', p:'2002', c:'#6a1b9a'},
+  {n:'Mohichehra',         b:'Nukus', p:'2003', c:'#2e7d32'},
+  {n:'Aziza',              b:'Nukus', p:'2004', c:'#c62828'},
+  {n:'Aliakbar',           b:'Nukus', p:'2005', c:'#37474f'},
+  {n:'Abrorbek',           b:'Nukus', p:'2006', c:'#00838f'},
+  {n:'Maryam',             b:'Nukus', p:'2007', c:'#ad1457'},
 ];
 
-const xodimlar = [
-  {id:101,ism:'Aziz Karimov',lavozim:'Dasturchi',filial:1,holat:'faol',tel:'+998901001001',ava:'AK',cls:'ava-o'},
-  {id:102,ism:'Barno Tosheva',lavozim:'Dizayner',filial:1,holat:'faol',tel:'+998901001002',ava:'BT',cls:'ava-p'},
-  {id:103,ism:'Davron Yusupov',lavozim:'Menejer',filial:1,holat:'faol',tel:'+998901001003',ava:'DY',cls:'ava-b'},
-  {id:104,ism:'Ezgulik Rahimova',lavozim:'HR Mutaxassis',filial:1,holat:'faol',tel:'+998901001004',ava:'ER',cls:'ava-g'},
-  {id:105,ism:'Farhodjon Aliev',lavozim:'Backend Dev',filial:1,holat:'faol',tel:'+998901001005',ava:'FA',cls:'ava-y'},
-  {id:106,ism:'Gulnora Hasanova',lavozim:'Marketing',filial:1,holat:'faol',tel:'+998901001006',ava:'GH',cls:'ava-r'},
-  {id:201,ism:'Hamid Eshmatov',lavozim:'Filial Boshlig\'i',filial:2,holat:'faol',tel:'+998901002001',ava:'HE',cls:'ava-o'},
-  {id:202,ism:'Iroda Nazarova',lavozim:'Buxgalter',filial:2,holat:'faol',tel:'+998901002002',ava:'IN',cls:'ava-g'},
-  {id:203,ism:'Jasur Mirzaev',lavozim:'Logist',filial:2,holat:'faol',tel:'+998901002003',ava:'JM',cls:'ava-b'},
-  {id:204,ism:'Kamola Saidova',lavozim:'Operator',filial:2,holat:'faol',tel:'+998901002004',ava:'KS',cls:'ava-p'},
-  {id:205,ism:'Laziz Qodirov',lavozim:'Texnik',filial:2,holat:'faol',tel:'+998901002005',ava:'LQ',cls:'ava-y'},
-  {id:206,ism:'Maftuna Norova',lavozim:'Mijozlar bilan ishlash',filial:2,holat:'faol',tel:'+998901002006',ava:'MN',cls:'ava-r'},
-  {id:207,ism:'Nodir Tursunov',lavozim:'Haydovchi',filial:2,holat:'faol',tel:'+998901002007',ava:'NT',cls:'ava-o'},
-];
+// ===== STATE =====
+let buf='', emp=null, clkTimer=null, pendingType=null, photo=null, uLat=null, uLon=null;
 
-// keldi / kelmadi / kechikdi / dam
-const davomatData = {
-  101:['keldi','keldi','keldi','kechikdi','keldi','keldi','dam','dam','keldi','keldi','keldi','kechikdi','keldi','keldi'],
-  102:['keldi','keldi','kechikdi','keldi','keldi','keldi','dam','dam','keldi','keldi','kelmadi','keldi','keldi','keldi'],
-  103:['keldi','kelmadi','keldi','keldi','keldi','keldi','dam','dam','keldi','kechikdi','keldi','keldi','keldi','keldi'],
-  104:['keldi','keldi','keldi','keldi','kechikdi','keldi','dam','dam','kelmadi','keldi','keldi','keldi','kechikdi','keldi'],
-  105:['kechikdi','keldi','keldi','keldi','keldi','kelmadi','dam','dam','keldi','keldi','keldi','keldi','keldi','kechikdi'],
-  106:['keldi','keldi','keldi','keldi','keldi','keldi','dam','dam','keldi','keldi','kechikdi','keldi','keldi','keldi'],
-  201:['keldi','keldi','keldi','kechikdi','keldi','keldi','dam','dam','keldi','kelmadi','keldi','keldi','keldi','keldi'],
-  202:['keldi','keldi','kelmadi','keldi','keldi','keldi','dam','dam','kechikdi','keldi','keldi','keldi','keldi','keldi'],
-  203:['keldi','kechikdi','keldi','keldi','keldi','keldi','dam','dam','keldi','keldi','keldi','kelmadi','keldi','keldi'],
-  204:['keldi','keldi','keldi','keldi','keldi','kechikdi','dam','dam','keldi','keldi','keldi','keldi','kelmadi','keldi'],
-  205:['kelmadi','keldi','keldi','keldi','kechikdi','keldi','dam','dam','keldi','keldi','keldi','keldi','keldi','keldi'],
-  206:['keldi','keldi','keldi','kelmadi','keldi','keldi','dam','dam','keldi','kechikdi','keldi','keldi','keldi','keldi'],
-  207:['keldi','keldi','keldi','keldi','keldi','keldi','dam','dam','keldi','keldi','kelmadi','keldi','kechikdi','keldi'],
-};
-
-const DAYS = ['Dsh','Ssh','Chr','Pay','Jum','Sha','Yak'];
-const STATUS_LABELS = {keldi:'Keldi',kelmadi:'Kelmadi',kechikdi:'Kechikdi',dam:"Dam oldi"};
-const STATUS_CD = {keldi:'cd-k',kelmadi:'cd-n',kechikdi:'cd-kech',dam:'cd-dam'};
-const STATUS_BD = {keldi:'keldi',kelmadi:'kelmadi',kechikdi:'kechikdi',dam:'dam'};
-
-let todayCheckin = JSON.parse(localStorage.getItem('checkin_today')||'{}');
-let curFlt='all', curSearch='';
-
-// ═══════════════ NAVIGATION ═══════════════
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.bn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('p-'+id).classList.add('active');
-  document.getElementById('bn-'+id).classList.add('active');
-  const renders={dashboard:renderDash,xodimlar:renderXodimlar,filiallar:renderFiliallar,hisobot:renderHisobot};
-  renders[id]?.();
-  window.scrollTo(0,0);
+// ===== ISH SOATI =====
+function parseMin(t) {
+  const [h,m] = t.split(':').map(Number);
+  return h*60+m;
+}
+function calcWorkMinutes(inTime, outTime) {
+  let inMin  = parseMin(inTime);
+  let outMin = parseMin(outTime);
+  if (outMin <= 90) outMin += 24*60; // 00:00–01:30 keyingi kun
+  const effIn  = Math.max(inMin,  SHIFT_START);
+  const effOut = Math.min(outMin, SHIFT_END);
+  if (effOut <= effIn) return 0;
+  return effOut - effIn;
+}
+function fmtMin(min) {
+  if (!min && min !== 0) return '—';
+  const h = Math.floor(min/60), m = min%60;
+  if (h>0) return `${h}s ${m}d`;
+  return `${m}d`;
 }
 
-// ═══════════════ DASHBOARD ═══════════════
-function renderDash(){
-  const today = new Date();
-  const opts={weekday:'long',year:'numeric',month:'long',day:'numeric'};
-  document.getElementById('dash-date').textContent = today.toLocaleDateString('uz-UZ',opts);
+// ===== PIN =====
+function kp(d) {
+  if (buf.length>=4) return;
+  buf+=d; dots();
+  if (buf.length===4) checkPin();
+}
+function kd() {
+  if (!buf.length) return;
+  buf=buf.slice(0,-1); dots(); resetPin();
+}
+function dots() {
+  for(let i=0;i<4;i++) document.getElementById('d'+i).classList.toggle('on',i<buf.length);
+}
+function resetPin() {
+  document.getElementById('pinName').style.display='none';
+  document.getElementById('pinBranch').style.display='none';
+  document.getElementById('pinHint').style.display='block';
+  document.getElementById('pinDisplay').classList.remove('ok');
+  document.getElementById('pinErr').textContent='';
+}
+function checkPin() {
+  emp = EMPS.find(e=>e.p===buf);
+  if (emp) {
+    document.getElementById('pinName').textContent = emp.n;
+    document.getElementById('pinName').style.display = 'block';
+    document.getElementById('pinBranch').textContent = '🏢 '+emp.b;
+    document.getElementById('pinBranch').style.display = 'inline-block';
+    document.getElementById('pinHint').style.display = 'none';
+    document.getElementById('pinDisplay').classList.add('ok');
+    document.getElementById('pinErr').textContent = '';
+    setTimeout(() => openCI(), 600);
+  } else {
+    const el = document.getElementById('pinErr');
+    el.textContent = "❌ PIN noto'g'ri! Qayta urinib ko'ring.";
+    el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+    if (tg) tg.HapticFeedback?.notificationOccurred('error');
+    setTimeout(() => { buf=''; dots(); resetPin(); }, 900);
+  }
+}
 
-  // today stats from todayCheckin
-  let k=0,n=0,kech=0;
-  xodimlar.forEach(x=>{
-    const s=todayCheckin[x.id];
-    if(s==='keldi')k++;
-    else if(s==='kelmadi')n++;
-    else if(s==='kechikdi')kech++;
-  });
-  document.getElementById('d-keldi').textContent=k||0;
-  document.getElementById('d-kelmadi').textContent=n||0;
-  document.getElementById('d-kechikdi').textContent=kech||0;
+// ===== GPS =====
+function haversine(lat2, lon2) {
+  const R=6371000;
+  const dL=(lat2-OFFICE_LAT)*Math.PI/180;
+  const dO=(lon2-OFFICE_LON)*Math.PI/180;
+  const a=Math.sin(dL/2)**2+Math.cos(OFFICE_LAT*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dO/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
 
-  // branch cards
-  const bc = document.getElementById('dash-branches');
-  bc.innerHTML='';
-  filiallar.forEach(f=>{
-    const members = xodimlar.filter(x=>x.filial===f.id);
-    let fk=0,fn=0,fkech=0;
-    members.forEach(x=>{
-      const s=todayCheckin[x.id];
-      if(s==='keldi')fk++;
-      else if(s==='kelmadi')fn++;
-      else if(s==='kechikdi')fkech++;
-    });
-    bc.innerHTML+=`
-    <div class="branch-card ${f.color}" style="margin-bottom:12px">
-      <div class="branch-top">
-        <div>
-          <div class="branch-name">${f.nom}</div>
-          <div class="branch-addr">📍 ${f.manzil}</div>
-        </div>
-        <div class="branch-icon">${f.emoji}</div>
-      </div>
-      <div class="branch-stats">
-        <div class="bstat"><div class="bstat-num">${members.length}</div><div class="bstat-lbl">Xodim</div></div>
-        <div class="bstat"><div class="bstat-num" style="color:var(--green)">${fk}</div><div class="bstat-lbl">Keldi</div></div>
-        <div class="bstat"><div class="bstat-num" style="color:var(--red)">${fn+fkech}</div><div class="bstat-lbl">Yo'q</div></div>
-      </div>
-    </div>`;
-  });
-
-  // recent — last 5 checked
-  const recent = document.getElementById('dash-recent');
-  const checked = xodimlar.filter(x=>todayCheckin[x.id]);
-  if(!checked.length){
-    recent.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Bugun hali davomat belgilanmagan</div></div>';
+// GPS faqat KELDI/KETDI tugmasi bosilganda ishlatiladi
+function checkGPSandProceed() {
+  document.getElementById('loadText').textContent = '📍 Joylashuv tekshirilmoqda...';
+  show('pageLoading');
+  if (!navigator.geolocation) {
+    show('pageCI');
+    alert("❌ Qurilmangiz GPS ni qo'llab-quvvatlamaydi!");
     return;
   }
-  recent.innerHTML = checked.slice(-5).reverse().map(x=>`
-    <div class="card-row" onclick="openXodim(${x.id})">
-      <div class="ava ${x.cls}">${x.ava}</div>
-      <div class="row-info">
-        <div class="row-name">${x.ism}</div>
-        <div class="row-sub">${x.lavozim}</div>
-      </div>
-      <span class="badge ${STATUS_BD[todayCheckin[x.id]]}">${STATUS_LABELS[todayCheckin[x.id]]}</span>
-    </div>`).join('');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      uLat = pos.coords.latitude;
+      uLon = pos.coords.longitude;
+      const dist = haversine(uLat, uLon);
+      if (dist > MAX_DIST) {
+        document.getElementById('gpsErrDist').textContent =
+          `📍 Siz ishxonadan taxminan ${Math.round(dist)} metr uzoqdasiz\n(Ruxsat etilgan masofa: ${MAX_DIST} metr)`;
+        if (tg) tg.HapticFeedback?.notificationOccurred('error');
+        show('pageGpsError');
+      } else {
+        afterGPS();
+      }
+    },
+    err => {
+      show('pageCI');
+      if (err.code === 1) {
+        // Ruxsat berilmadi
+        alert("📍 GPS ruxsat berilmadi!\n\nTelegramda: Sozlamalar → Maxfiylik → Joylashuv → Telegramga ruxsat bering.");
+      } else {
+        alert("📍 GPS aniqlab bo'lmadi. Ochiq joyga chiqing va qayta urinib ko'ring.");
+      }
+    },
+    { enableHighAccuracy:true, timeout:15000, maximumAge:0 }
+  );
 }
 
-// ═══════════════ XODIMLAR ═══════════════
-function renderXodimlar(){
-  const list = document.getElementById('xodimlar-list');
-  const q = curSearch.toLowerCase();
-  let data = xodimlar.filter(x=>{
-    const fltOk = curFlt==='all' || x.filial===Number(curFlt);
-    const searchOk = !q || x.ism.toLowerCase().includes(q) || x.lavozim.toLowerCase().includes(q);
-    return fltOk && searchOk;
-  });
-  if(!data.length){list.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><div class="empty-txt">Topilmadi</div></div>';return;}
-  list.innerHTML = data.map(x=>{
-    const s = todayCheckin[x.id];
-    const sBadge = s ? `<span class="badge ${STATUS_BD[s]}">${STATUS_LABELS[s]}</span>` : `<span style="font-size:12px;color:var(--tx3)">Belgilanmagan</span>`;
-    return `<div class="card-row" onclick="openXodim(${x.id})">
-      <div class="ava ${x.cls}">${x.ava}</div>
-      <div class="row-info">
-        <div class="row-name">${x.ism}</div>
-        <div class="row-sub">${x.lavozim} · ${filiallar.find(f=>f.id===x.filial).nom}</div>
-      </div>
-      ${sBadge}
-    </div>`;
-  }).join('');
+// ===== CHECK-IN SAHIFASI =====
+function today() { return new Date().toISOString().split('T')[0]; }
+function timeNow() { return new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'}); }
+function nowMin() { const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+
+function openCI() {
+  const av=document.getElementById('ciAv');
+  av.textContent=emp.n[0].toUpperCase(); av.style.background=emp.c;
+  document.getElementById('ciName').textContent=emp.n;
+  document.getElementById('ciBranch').textContent='🏢 '+emp.b;
+  setGreeting(); startClock(); loadLog();
+  show('pageCI');
 }
 
-function setFlt(btn,val){
-  curFlt=val;
-  document.querySelectorAll('.flt-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderXodimlar();
-}
-function filterXodimlar(){curSearch=document.getElementById('search-inp').value;renderXodimlar();}
-
-// ═══════════════ XODIM DETAIL MODAL ═══════════════
-function openXodim(id){
-  const x = xodimlar.find(x=>x.id===id);
-  const d = davomatData[id]||[];
-  // merge with todayCheckin if today's date is in range
-  const today = new Date();
-  const todayIdx = today.getDate()-1; // June 1=idx0
-  const isJune = today.getMonth()===5 && today.getFullYear()===2026 && todayIdx<14;
-  const merged = [...d];
-  if(isJune && todayCheckin[id]) merged[todayIdx]=todayCheckin[id];
-
-  const dayNames=['1','2','3','4','5','6','7','8','9','10','11','12','13','14'];
-  const calHTML = merged.map((s,i)=>`
-    <div class="cal-day">
-      <div class="cal-d">${dayNames[i]}</div>
-      <div class="cal-dot ${STATUS_CD[s]||'cd-n'}" title="${STATUS_LABELS[s]||''}">${s==='keldi'?'✓':s==='kelmadi'?'✗':s==='kechikdi'?'⏰':'🏖'}</div>
-    </div>`).join('');
-
-  const countS = s=>merged.filter(x=>x===s).length;
-  const filNom = filiallar.find(f=>f.id===x.filial).nom;
-
-  document.getElementById('modal-title').textContent = x.ism;
-  document.getElementById('modal-body').innerHTML = `
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-      <div class="xd-ava ${x.cls}">${x.ava}</div>
-      <div>
-        <div class="xd-name">${x.ism}</div>
-        <div class="xd-info">💼 ${x.lavozim}</div>
-        <div class="xd-info">🏢 ${filNom} &nbsp;·&nbsp; 📞 ${x.tel}</div>
-      </div>
-    </div>
-    <div class="month-stats">
-      <div class="ms"><div class="ms-n" style="color:var(--green)">${countS('keldi')}</div><div class="ms-l">Keldi</div></div>
-      <div class="ms"><div class="ms-n" style="color:var(--red)">${countS('kelmadi')}</div><div class="ms-l">Kelmadi</div></div>
-      <div class="ms"><div class="ms-n" style="color:var(--yellow)">${countS('kechikdi')}</div><div class="ms-l">Kechikdi</div></div>
-      <div class="ms"><div class="ms-n" style="color:var(--blue)">${countS('dam')}</div><div class="ms-l">Dam</div></div>
-    </div>
-    <div class="sec-title" style="margin-top:4px">Iyun davomat (1–14)</div>
-    <div class="legend">
-      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Keldi</div>
-      <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Kelmadi</div>
-      <div class="leg-item"><div class="leg-dot" style="background:var(--yellow)"></div>Kechikdi</div>
-      <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Dam</div>
-    </div>
-    <div class="cal-wrap"><div class="cal">${calHTML}</div></div>
-    <div class="xd-divider"></div>
-    <div class="sec-title">Bugungi davomat</div>
-    <div class="status-opts" id="status-opts">
-      ${['keldi','kechikdi','kelmadi','dam'].map(s=>`
-        <div class="s-opt ${todayCheckin[id]===s?'sel':''}" onclick="selectStatus('${s}',${id})">
-          <div class="s-opt-icon">${s==='keldi'?'✅':s==='kechikdi'?'⏰':s==='kelmadi'?'❌':'🏖'}</div>
-          <div class="s-opt-lbl">${STATUS_LABELS[s]}</div>
-          <div class="s-opt-sub">${s==='keldi'?'O\'z vaqtida':s==='kechikdi'?'Kechikib keldi':s==='kelmadi'?'Ishga kelmadi':'Dam olish kuni'}</div>
-        </div>`).join('')}
-    </div>
-    <button class="btn-save" id="save-btn" onclick="saveCheckin(${id})" ${todayCheckin[id]?'':'disabled'}>
-      ${todayCheckin[id]?'Saqlash':'Status tanlang'}
-    </button>`;
-
-  openModal();
-  document.getElementById('modal-title').textContent = x.ism;
-  window._checkinId = id;
-  window._checkinSel = todayCheckin[id]||null;
+function setGreeting() {
+  const h=new Date().getHours();
+  let icon,text,sub;
+  if(h<6)     {icon='🌙';text='Xayrli tun!';   sub='Siz juda erta keldingiz!';}
+  else if(h<12){icon='🌅';text='Xayrli tong!'; sub='Bugungi ishga xush kelibsiz! 💪';}
+  else if(h<17){icon='☀️';text='Xayrli kun!';  sub='Smena boshlanmoqda, omad!';}
+  else if(h<21){icon='🌆';text='Xayrli oqshom!';sub='Ish davom etmoqda!';}
+  else         {icon='🌙';text='Xayrli kech!'; sub='Bugun ham yaxshi ish qildingiz!';}
+  document.getElementById('greetIcon').textContent=icon;
+  document.getElementById('greetText').textContent=emp.n.split(' ')[0]+', '+text;
+  document.getElementById('greetSub').textContent=sub;
 }
 
-function selectStatus(s,id){
-  window._checkinSel=s;
-  document.querySelectorAll('.s-opt').forEach(o=>o.classList.remove('sel'));
-  event.currentTarget.classList.add('sel');
-  const btn=document.getElementById('save-btn');
-  btn.disabled=false;btn.textContent='Saqlash';
+function startClock() {
+  clearInterval(clkTimer);
+  const tick=()=>{
+    document.getElementById('ciClock').textContent=
+      new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    document.getElementById('ciDate').textContent=
+      new Date().toLocaleDateString('uz-UZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  };
+  tick(); clkTimer=setInterval(tick,1000);
 }
 
-function saveCheckin(id){
-  if(!window._checkinSel)return;
-  todayCheckin[id]=window._checkinSel;
-  localStorage.setItem('checkin_today',JSON.stringify(todayCheckin));
-  closeModal();
-  showToast('✅ Davomat saqlandi!');
-  const cur=document.querySelector('.page.active')?.id?.replace('p-','');
-  if(cur==='xodimlar')renderXodimlar();
-  if(cur==='dashboard')renderDash();
-}
+async function loadLog() {
+  let log=[];
+  try { const r=await fetch(`/api/log/${emp.p}/${today()}`); log=await r.json(); } catch(e){}
 
-// ═══════════════ FILIALLAR ═══════════════
-function renderFiliallar(){
-  const el = document.getElementById('filiallar-list');
-  el.innerHTML = filiallar.map(f=>{
-    const members=xodimlar.filter(x=>x.filial===f.id);
-    const monthK=members.reduce((acc,x)=>{
-      return acc+(davomatData[x.id]||[]).filter(s=>s==='keldi').length;
-    },0);
-    const total=members.reduce((acc,x)=>(acc+(davomatData[x.id]||[]).filter(s=>s!=='dam').length),0);
-    const pct=total?Math.round(monthK/total*100):0;
-
-    return `<div class="branch-card ${f.color}">
-      <div class="branch-top">
-        <div>
-          <div class="branch-name">${f.nom} filiali</div>
-          <div class="branch-addr">📍 ${f.manzil}</div>
-          <div class="branch-addr" style="margin-top:4px">🕘 ${f.bosh} – ${f.tug}</div>
-        </div>
-        <div class="branch-icon" style="font-size:28px">${f.emoji}</div>
-      </div>
-      <div class="branch-stats" style="margin-bottom:14px">
-        <div class="bstat"><div class="bstat-num">${members.length}</div><div class="bstat-lbl">Xodim</div></div>
-        <div class="bstat"><div class="bstat-num">${pct}%</div><div class="bstat-lbl">Keldi (oy)</div></div>
-        <div class="bstat"><div class="bstat-num">${monthK}</div><div class="bstat-lbl">Kun-marta</div></div>
-      </div>
-      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${f.id===1?'var(--pr)':'var(--green)'}"></div></div>
-      <div style="font-size:11px;color:var(--tx2);margin-top:6px;margin-bottom:14px">Oy davomidagi davomat foizi</div>
-      <div style="font-size:13px;font-weight:700;margin-bottom:8px">Xodimlar:</div>
-      ${members.map(x=>`
-        <div class="card-row" style="background:var(--bg3);border-radius:10px;margin-bottom:6px;border:none" onclick="openXodim(${x.id})">
-          <div class="ava ${x.cls}" style="width:34px;height:34px;border-radius:9px;font-size:12px">${x.ava}</div>
-          <div class="row-info">
-            <div class="row-name" style="font-size:13px">${x.ism}</div>
-            <div class="row-sub" style="font-size:11px">${x.lavozim}</div>
-          </div>
-          <span class="badge ${STATUS_BD[todayCheckin[x.id]]||''}">${todayCheckin[x.id]?STATUS_LABELS[todayCheckin[x.id]]:'—'}</span>
-        </div>`).join('')}
-    </div>`;
-  }).join('');
-}
-
-// ═══════════════ HISOBOT ═══════════════
-function renderHisobot(){
-  // per-day totals
-  const dailyK=[],dailyN=[],dailyKech=[];
-  for(let d=0;d<14;d++){
-    let k=0,n=0,kech=0;
-    xodimlar.forEach(x=>{
-      const s=(davomatData[x.id]||[])[d];
-      if(s==='keldi')k++;else if(s==='kelmadi')n++;else if(s==='kechikdi')kech++;
-    });
-    dailyK.push(k);dailyN.push(n);dailyKech.push(kech);
+  // Ish soatini hisoblash
+  let totalMin=0, lastIn=null;
+  for(const r of log){
+    if(r.type==='in') lastIn=r.effective_in||r.time;
+    else if(r.type==='out'&&lastIn){ totalMin+=calcWorkMinutes(lastIn,r.time); lastIn=null; }
   }
 
-  const totalKeldi=dailyK.reduce((a,b)=>a+b,0);
-  const totalKelmadi=dailyN.reduce((a,b)=>a+b,0);
-  const totalKech=dailyKech.reduce((a,b)=>a+b,0);
-  const totalWork=totalKeldi+totalKelmadi+totalKech;
-  const pct=Math.round(totalKeldi/totalWork*100);
-  const kechPct=Math.round(totalKech/totalWork*100);
+  // Statistika
+  const lastRec=log[log.length-1];
+  document.getElementById('statStatus').textContent =
+    !log.length ? '⬜' : (lastRec?.type==='in'?'🟢':'🔴');
+  document.getElementById('statHours').textContent  = totalMin>0 ? fmtMin(totalMin) : '—';
+  document.getElementById('statVisits').textContent = log.filter(r=>r.type==='in').length;
 
-  document.getElementById('hiso-summary').innerHTML=`
-    <div class="sum-card">
-      <div class="sum-pct" style="color:var(--green)">${pct}%</div>
-      <div class="sum-lbl">Keldi (umumiy)</div>
-    </div>
-    <div class="sum-card">
-      <div class="sum-pct" style="color:var(--red)">${Math.round(totalKelmadi/totalWork*100)}%</div>
-      <div class="sum-lbl">Kelmadi</div>
-    </div>
-    <div class="sum-card">
-      <div class="sum-pct" style="color:var(--yellow)">${kechPct}%</div>
-      <div class="sum-lbl">Kechikdi</div>
-    </div>
-    <div class="sum-card">
-      <div class="sum-pct">${totalWork}</div>
-      <div class="sum-lbl">Jami ish-kuni</div>
-    </div>`;
+  // Qaydlar ro'yxati
+  if(log.length){
+    document.getElementById('logList').innerHTML=log.map(r=>{
+      const isEarly=r.early_arrival;
+      const badge = r.type==='in'
+        ? `<span class="log-badge ${isEarly?'badge-early':'badge-in'}">${isEarly?'⏰ Erta keldi':'✅ Keldi'}</span>`
+        : `<span class="log-badge badge-out">🚪 Ketdi</span>`;
+      const hours = r.work_minutes>0 ? `<span class="log-hours">⏱ ${fmtMin(r.work_minutes)}</span>` : '';
+      return `<div class="log-item">${badge}<div style="display:flex;gap:6px;align-items:center"><span style="color:#6b8c7a;font-size:12px;font-weight:600">${r.time}</span>${hours}</div></div>`;
+    }).join('');
+    document.getElementById('logCard').style.display='block';
+  } else {
+    document.getElementById('logCard').style.display='none';
+  }
 
-  // bars
-  const maxV=Math.max(...dailyK);
-  const barsEl=document.getElementById('hiso-bars');
-  const dayLbls=['1','2','3','4','5','6','7','8','9','10','11','12','13','14'];
-  barsEl.innerHTML=dailyK.map((v,i)=>`
-    <div class="bar-col">
-      <div class="bar-v">${v}</div>
-      <div class="bar-b" style="height:${maxV?Math.round(v/maxV*72):4}px;background:${v===maxV?'var(--pr)':'rgba(249,115,22,.35)'}"></div>
-      <div class="bar-l">${dayLbls[i]}</div>
-    </div>`).join('');
-
-  // rating
-  const rated = xodimlar.map(x=>{
-    const d=davomatData[x.id]||[];
-    const k=d.filter(s=>s==='keldi').length;
-    const total=d.filter(s=>s!=='dam').length||1;
-    return{...x,pct:Math.round(k/total*100),k};
-  }).sort((a,b)=>b.pct-a.pct);
-
-  document.getElementById('hiso-rating').innerHTML=rated.map((x,i)=>`
-    <div class="prog-wrap" style="margin-bottom:12px">
-      <div class="prog-head">
-        <div class="prog-name">${i+1}. ${x.ism}</div>
-        <div class="prog-pct">${x.pct}% · ${x.k} kun</div>
-      </div>
-      <div class="prog-bar">
-        <div class="prog-fill" style="width:${x.pct}%;background:${x.pct>=90?'var(--green)':x.pct>=75?'var(--pr)':'var(--red)'}"></div>
-      </div>
-    </div>`).join('');
+  // Tugmalar
+  document.getElementById('btnIn').style.display  = (!lastRec||lastRec.type==='out')?'flex':'none';
+  document.getElementById('btnOut').style.display = (lastRec&&lastRec.type==='in') ?'flex':'none';
 }
 
-// ═══════════════ CSV ═══════════════
-function exportCSV(){
-  const headers=['ID','Ism','Lavozim','Filial',...Array.from({length:14},(_,i)=>`Iyun ${i+1}`),'Keldi','Kelmadi','Kechikdi'];
-  const rows=xodimlar.map(x=>{
-    const d=davomatData[x.id]||[];
-    const f=filiallar.find(f=>f.id===x.filial).nom;
-    const k=d.filter(s=>s==='keldi').length;
-    const n=d.filter(s=>s==='kelmadi').length;
-    const kech=d.filter(s=>s==='kechikdi').length;
-    return[x.id,x.ism,x.lavozim,f,...d.map(s=>STATUS_LABELS[s]||''),k,n,kech];
-  });
-  const csv=[headers,...rows].map(r=>r.join(',')).join('\n');
-  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);a.download='davomat_iyun2026.csv';a.click();
-  showToast('📊 CSV yuklab olindi!');
+// ===== KELDI/KETDI TUGMASI BOSILGANDA =====
+function startCheck(type) {
+  pendingType = type; photo = null;
+  checkGPSandProceed();
 }
 
-// ═══════════════ MODAL ═══════════════
-function openModal(){document.getElementById('overlay').classList.add('show')}
-function closeModal(){document.getElementById('overlay').classList.remove('show')}
-
-// ═══════════════ TOAST ═══════════════
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+function afterGPS() {
+  // Agar KELDI va vaqt 14:00 dan oldin bo'lsa — ogohlantirish
+  if(pendingType==='in' && nowMin()<SHIFT_START){
+    document.getElementById('earlyTime').textContent='🕐 Hozir: '+timeNow();
+    show('pageEarlyWarn');
+    return;
+  }
+  // Fotoga o'tish
+  openPhoto();
 }
 
-// ═══════════════ INIT ═══════════════
-document.getElementById('dash-date').textContent=new Date().toLocaleDateString('uz-UZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-renderDash();
+function earlyConfirm() {
+  // Foydalanuvchi tasdiqladi — fotoga o'tish
+  openPhoto();
+}
+
+function openPhoto() {
+  document.getElementById('phSub').textContent =
+    pendingType==='in' ? '✅ KELDI tasdiqlash uchun selfie oling' : '🚪 KETDI tasdiqlash uchun selfie oling';
+  retakePhoto();
+  show('pagePhoto');
+}
+
+// ===== FOTO =====
+function photoTaken(){
+  const file=document.getElementById('photoInput').files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    photo=e.target.result;
+    const prev=document.getElementById('phPreview');
+    prev.src=photo; prev.style.display='block';
+    document.getElementById('phPlaceholder').style.display='none';
+    document.getElementById('btnConfirmPh').style.display='block';
+    document.getElementById('btnRetryPh').style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+function retakePhoto(){
+  photo=null;
+  document.getElementById('phPreview').style.display='none';
+  document.getElementById('phPlaceholder').style.display='flex';
+  document.getElementById('btnConfirmPh').style.display='none';
+  document.getElementById('btnRetryPh').style.display='none';
+  document.getElementById('photoInput').value='';
+}
+
+async function confirmPhoto(){
+  if(!photo){alert("Avval selfie oling!");return;}
+  const btn=document.getElementById('btnConfirmPh');
+  btn.disabled=true; btn.textContent='⏳ Yuborilmoqda...';
+  try{
+    const r=await fetch('/api/checkin',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:emp.n,branch:emp.b,pin:emp.p,type:pendingType,time:timeNow(),date:today(),photo,lat:uLat,lon:uLon})
+    });
+    const d=await r.json();
+    if(d.ok){
+      if(tg)tg.HapticFeedback?.notificationOccurred('success');
+      showResult(pendingType, d.work_minutes);
+    } else {
+      if(d.error==='gps'){
+        document.getElementById('gpsErrDist').textContent=
+          `📍 Siz ishxonadan taxminan ${d.dist} metr uzoqdasiz`;
+        show('pageGpsError');
+      } else {
+        alert(d.msg||'❌ Xatolik yuz berdi!');
+        btn.disabled=false; btn.textContent='✅ Tasdiqlash va yuborish';
+      }
+    }
+  }catch(e){
+    alert("❌ Server bilan aloqa yo'q. Internet ulanishini tekshiring.");
+    btn.disabled=false; btn.textContent='✅ Tasdiqlash va yuborish';
+  }
+}
+
+// ===== NATIJA =====
+function showResult(type, workMin){
+  const wrap=document.getElementById('confettiWrap');
+  wrap.innerHTML='';
+  const colors=['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
+  for(let i=0;i<24;i++){
+    const d=document.createElement('div'); d.className='c-dot';
+    d.style.cssText=`left:${Math.random()*100}%;top:${-8+Math.random()*16}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.6}s;animation-duration:${1+Math.random()*.5}s;`;
+    wrap.appendChild(d);
+  }
+  document.getElementById('resIcon').textContent=type==='in'?'✅':'🚪';
+  const title=document.getElementById('resTitle');
+  title.textContent=type==='in'?'Keldi qayd etildi!':'Ketdi qayd etildi!';
+  title.className='res-title '+(type==='in'?'in':'out');
+
+  // Ish soati (faqat KETDI da)
+  const hoursEl=document.getElementById('resHours');
+  if(type==='out'&&workMin>0){
+    hoursEl.textContent='⏱ '+fmtMin(workMin)+' ishladi';
+    hoursEl.style.display='block';
+  } else {
+    hoursEl.style.display='none';
+  }
+
+  document.getElementById('resInfo').innerHTML=
+    `👤 <b>${emp.n}</b><br>🏢 ${emp.b}<br>🕐 ${timeNow()}<br>📅 ${today()}<br>📸 Foto saqlandi ✓`;
+  show('pageResult');
+}
+
+// ===== NAVIGATSIYA =====
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function goBackPin(){
+  clearInterval(clkTimer);
+  buf='';emp=null;pendingType=null;photo=null;uLat=null;uLon=null;
+  dots(); resetPin();
+  show('pagePIN');
+}
 </script>
 </body>
 </html>
