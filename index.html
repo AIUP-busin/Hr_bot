@@ -638,8 +638,15 @@ function showResult(type, workMin){
     hoursEl.style.display='none';
   }
 
+  // Maosh misol: 30,000 so'm/soat (keyinchalik o'zgartiriladi)
+  const SOATLIK_MAOSH = 30000;
+  let maoshStr = '';
+  if(type === 'out' && workMin > 0){
+    const maosh = Math.round(workMin / 60 * SOATLIK_MAOSH);
+    maoshStr = '<br>💰 Bugungi maosh: <b style="color:#00796b">' + maosh.toLocaleString('uz-UZ') + ' so'm</b>';
+  }
   document.getElementById('resInfo').innerHTML=
-    `👤 <b>${emp.n}</b><br>🏢 ${emp.b}<br>🕐 ${timeNow()}<br>📅 ${today()}<br>📸 Foto saqlandi ✓`;
+    `👤 <b>${emp.n}</b><br>🏢 ${emp.b}<br>🕐 ${timeNow()}<br>📅 ${today()}${maoshStr}<br>📸 Foto saqlandi ✓`;
   show('pageResult');
 }
 
