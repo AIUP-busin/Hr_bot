@@ -162,15 +162,36 @@ input[type=file]{display:none;}
 </head>
 <body>
 
-<!-- 1. PIN -->
-<!-- 1. XODIM TANLASH (birinchi marta) -->
+<!-- 1. BOT KODI KIRISH -->
 <div id="pageREG" class="page active">
   <div class="pin-head">
-    <div class="pin-logo">👥</div>
+    <div class="pin-logo">🤖</div>
     <div class="pin-title">HR Davomat</div>
-    <div class="pin-sub">Ismingizni bir marta tanlang</div>
+    <div class="pin-sub">Botdan olgan kodingizni kiriting</div>
   </div>
-  <div class="reg-list" id="regList"></div>
+  <div class="pin-card">
+    <div class="pin-display" id="pinDisplay">
+      <div class="dots">
+        <div class="dot" id="d0"></div><div class="dot" id="d1"></div>
+        <div class="dot" id="d2"></div><div class="dot" id="d3"></div>
+      </div>
+      <div class="pin-hint" id="pinHint">4 xonali kod</div>
+    </div>
+    <div class="keypad">
+      <button class="key" onclick="kp('1')">1</button>
+      <button class="key" onclick="kp('2')">2</button>
+      <button class="key" onclick="kp('3')">3</button>
+      <button class="key" onclick="kp('4')">4</button>
+      <button class="key" onclick="kp('5')">5</button>
+      <button class="key" onclick="kp('6')">6</button>
+      <button class="key" onclick="kp('7')">7</button>
+      <button class="key" onclick="kp('8')">8</button>
+      <button class="key" onclick="kp('9')">9</button>
+      <button class="key zero" onclick="kp('0')">0</button>
+      <button class="key del" onclick="kd()">⌫</button>
+    </div>
+    <div class="pin-err" id="pinErr"></div>
+  </div>
 </div>
 
 <!-- 2. LOADING -->
@@ -295,10 +316,12 @@ input[type=file]{display:none;}
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
-// Auto-login: saqlangan xodim bo'lsa to'g'ridan kirish
+// Auto-login: saved pin OR show code entry
 const _saved = localStorage.getItem('hr_saved_pin');
-if (_saved) { window.addEventListener('load', () => startApp(_saved)); }
-else { window.addEventListener('load', () => { buildRegList(); show('pageREG'); }); }
+if (_saved) {
+  const _emp = EMPS.find(e => e.p === _saved);
+  if (_emp) { pendingEmp = _emp; openCI(); } else { show('pageREG'); resetCode(); }
+} else { show('pageREG'); resetCode(); }
 
 // ===== KONSTANTALAR =====
 const OFFICE_LAT = 41.308056;
@@ -346,23 +369,42 @@ function fmtMin(min) {
 }
 
 // ===== XODIM TANLASH =====
-function buildRegList() {
-  const ul = document.getElementById('regList');
-  if(!ul) return;
-  ul.innerHTML = EMPS.map(e => {
-    const av = e.n[0];
-    return '<div class="reg-item" onclick="selectEmp(\'' + e.p + '\')"><div class="reg-avatar" style="background:' + e.c + '">' + av + '</div><div><div class="reg-name">' + e.n + '</div><div class="reg-branch">\uD83C\uDFE2 ' + e.b + '</div></div></div>';
-  }).join('');
+// ===== KOD KIRISH =====
+let buf = [];
+function kp(d) {
+  if (buf.length >= 4) return;
+  buf.push(d); dots();
+  if (buf.length === 4) setTimeout(checkCode, 200);
 }
-function selectEmp(pin) {
-  localStorage.setItem('hr_saved_pin', pin);
-  startApp(pin);
+function kd() { buf.pop(); dots(); }
+function dots() {
+  for(let i=0;i<4;i++) document.getElementById('d'+i)?.classList.toggle('filled', i<buf.length);
 }
-function startApp(pin) {
-  const found = EMPS.find(e => e.p === pin);
-  if (!found) { localStorage.removeItem('hr_saved_pin'); buildRegList(); show('pageREG'); return; }
-  pendingEmp = found;
-  openCI();
+function resetCode() {
+  buf = []; dots();
+  const pe = document.getElementById('pinErr'); if(pe) pe.textContent='';
+  document.getElementById('pinDisplay')?.classList.remove('ok','shake');
+}
+async function checkCode() {
+  const code = buf.join('');
+  try {
+    const r = await fetch('/verify-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+    const data = await r.json();
+    if (data.ok) {
+      document.getElementById('pinDisplay')?.classList.add('ok');
+      localStorage.setItem('hr_saved_pin', data.emp.p);
+      setTimeout(() => { pendingEmp = data.emp; openCI(); }, 400);
+    } else {
+      document.getElementById('pinErr').textContent = '\u274C ' + data.msg;
+      const el = document.getElementById('pinDisplay');
+      el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+      if (tg) tg.HapticFeedback?.notificationOccurred('error');
+      setTimeout(resetCode, 1200);
+    }
+  } catch(e) {
+    document.getElementById('pinErr').textContent = '\u274C Server bilan aloqa yo\'q';
+    setTimeout(resetCode, 1500);
+  }
 }
 // ===== PIN =====
 function kp(d) {
@@ -659,7 +701,7 @@ function show(id){
 function goBackPin(){
   clearInterval(clkTimer);
   buf='';emp=null;pendingType=null;photo=null;uLat=null;uLon=null;
-  buildRegList();
+  resetCode();
   show('pageREG');
 }
 </script>
