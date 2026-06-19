@@ -85,7 +85,7 @@ body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 .greet-text{font-size:13px;font-weight:700;color:var(--g1);}
 .greet-sub{font-size:11px;color:#8aab9e;margin-top:2px;}
 
-/* Stat row — 3 ta quti */
+/* Stat row */
 .stat-row{display:flex;gap:8px;margin-bottom:12px;}
 .stat-box{flex:1;background:#fff;border-radius:14px;padding:10px 8px;text-align:center;border:1px solid #d4f0e0;}
 .stat-num{font-size:18px;font-weight:900;color:var(--g1);}
@@ -125,7 +125,7 @@ body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 .ph-placeholder span{font-size:60px;margin-bottom:10px;}
 .ph-placeholder p{font-size:13px;color:#8aab9e;font-weight:600;}
 input[type=file]{display:none;}
-.btn-cam{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;margin-bottom:10px;}
+.btn-ca&{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;margin-bottom:10px;}
 .btn-confirm-ph{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g4),var(--g3));color:#fff;margin-bottom:10px;display:none;}
 .btn-retry-ph{width:100%;padding:13px;border:2px solid #d4f0e0;border-radius:14px;font-size:14px;cursor:pointer;background:#fff;color:#6b8c7a;margin-bottom:10px;display:none;font-weight:700;}
 .btn-back-ph{width:100%;padding:12px;border:none;background:transparent;color:#8aab9e;font-size:13px;cursor:pointer;font-weight:600;}
@@ -152,22 +152,16 @@ input[type=file]{display:none;}
 .res-hours{font-size:22px;font-weight:900;color:var(--g1);margin-bottom:10px;}
 .res-info{font-size:13px;color:#6b8c7a;line-height:2.1;margin-bottom:24px;background:var(--offwhite);border-radius:14px;padding:14px;border:1px solid #d4f0e0;text-align:left;}
 .res-back{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;}
-.reg-list{padding:12px 16px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;}
-.reg-item{background:var(--card,#1e2a3a);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .15s,opacity .15s;}
-.reg-item:active{transform:scale(.97);opacity:.8;}
-.reg-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;}
-.reg-name{font-size:16px;font-weight:600;color:var(--text,#fff);}
-.reg-branch{font-size:13px;opacity:.6;margin-top:2px;}
 </style>
 </head>
 <body>
 
-<!-- 1. BOT KODI KIRISH -->
-<div id="pageREG" class="page active">
+<!-- 1. PIN -->
+<div id="pagePIN" class="page active">
   <div class="pin-head">
-    <div class="pin-logo">🤖</div>
+    <div class="pin-logo">&#128101;</div>
     <div class="pin-title">HR Davomat</div>
-    <div class="pin-sub">Botdan olgan kodingizni kiriting</div>
+    <div class="pin-sub">Parus &amp; Nukus filiali</div>
   </div>
   <div class="pin-card">
     <div class="pin-display" id="pinDisplay">
@@ -175,7 +169,9 @@ input[type=file]{display:none;}
         <div class="dot" id="d0"></div><div class="dot" id="d1"></div>
         <div class="dot" id="d2"></div><div class="dot" id="d3"></div>
       </div>
-      <div class="pin-hint" id="pinHint">4 xonali kod</div>
+      <div class="pin-hint" id="pinHint">Bot kodini kiriting</div>
+      <div class="pin-emp-name" id="pinName" style="display:none"></div>
+      <div class="pin-emp-branch" id="pinBranch" style="display:none"></div>
     </div>
     <div class="keypad">
       <button class="key" onclick="kp('1')">1</button>
@@ -188,7 +184,7 @@ input[type=file]{display:none;}
       <button class="key" onclick="kp('8')">8</button>
       <button class="key" onclick="kp('9')">9</button>
       <button class="key zero" onclick="kp('0')">0</button>
-      <button class="key del" onclick="kd()">⌫</button>
+      <button class="key del" onclick="kd()">&#9003;</button>
     </div>
     <div class="pin-err" id="pinErr"></div>
   </div>
@@ -197,36 +193,36 @@ input[type=file]{display:none;}
 <!-- 2. LOADING -->
 <div id="pageLoading" class="page">
   <div class="loader"></div>
-  <div class="load-text" id="loadText">📍 GPS tekshirilmoqda...</div>
+  <div class="load-text" id="loadText">&#128205; GPS tekshirilmoqda...</div>
 </div>
 
 <!-- 3. GPS XATO -->
 <div id="pageGpsError" class="page">
   <div class="gps-err-card">
-    <span class="gps-err-icon">🚫</span>
+    <span class="gps-err-icon">&#128683;</span>
     <div class="gps-err-title">Siz ishxonada emassiz!</div>
     <div class="gps-err-msg">
-      ⚠️ Iltimos, yolg'ondan qo'rqing!<br><br>
+      Iltimos, yolgondan qorqing!<br><br>
       Siz hozir boshqa joydasiz. Siz qilayotgan hamma narsa rahbarga boradi!
     </div>
     <div class="gps-err-dist" id="gpsErrDist"></div>
-    <button class="btn-gps-back" onclick="goBackPin()">← Orqaga qaytish</button>
+    <button class="btn-gps-back" onclick="goBackPin()">&#8592; Orqaga qaytish</button>
   </div>
 </div>
 
 <!-- 4. ERTA KELISH OGOHLANTIRISH -->
 <div id="pageEarlyWarn" class="page">
   <div class="early-card">
-    <span class="early-icon">⏰</span>
+    <span class="early-icon">&#9200;</span>
     <div class="early-title">Siz erta keldingiz!</div>
     <div class="early-msg">
       Smena <b>14:00</b> dan boshlanadi.<br><br>
       Hozir bosish mumkin, lekin <b>ish vaqti 14:00 dan hisoblanadi</b>.
       Rahbarga xabar yuborildi.
     </div>
-    <div class="early-time" id="earlyTime">🕐 Hozir: 00:00</div>
-    <button class="btn-early-ok" onclick="earlyConfirm()">✅ Tushundim, qayd etish</button>
-    <button class="btn-early-back" onclick="show('pageCI')">← Orqaga</button>
+    <div class="early-time" id="earlyTime">&#128336; Hozir: 00:00</div>
+    <button class="btn-early-ok" onclick="earlyConfirm()">&#9989; Tushundim, qayd etish</button>
+    <button class="btn-early-back" onclick="show('pageCI')">&#8592; Orqaga</button>
   </div>
 </div>
 
@@ -239,7 +235,7 @@ input[type=file]{display:none;}
         <div class="ci-emp-name" id="ciName"></div>
         <span class="ci-emp-branch" id="ciBranch"></span>
       </div>
-      <button class="ci-logout" onclick="goBackPin()">🚪</button>
+      <button class="ci-logout" onclick="goBackPin()">&#128682;</button>
     </div>
   </div>
   <div class="ci-body">
@@ -248,23 +244,23 @@ input[type=file]{display:none;}
       <div class="clock-date" id="ciDate"></div>
     </div>
     <div class="greet-card">
-      <span class="greet-icon" id="greetIcon">👋</span>
+      <span class="greet-icon" id="greetIcon">&#128075;</span>
       <div>
         <div class="greet-text" id="greetText">Xush kelibsiz!</div>
         <div class="greet-sub" id="greetSub"></div>
       </div>
     </div>
     <div class="shift-banner">
-      <span>🕐</span>
-      <span>Smena: <b>Jadvalga qarab</b></span>
+      <span>&#128336;</span>
+      <span>Smena: <b>14:00 &#8212; 00:30</b></span>
     </div>
     <div class="stat-row">
       <div class="stat-box">
-        <div class="stat-num" id="statStatus">—</div>
+        <div class="stat-num" id="statStatus">&#8212;</div>
         <div class="stat-label">Bugungi holat</div>
       </div>
       <div class="stat-box">
-        <div class="stat-num" id="statHours">—</div>
+        <div class="stat-num" id="statHours">&#8212;</div>
         <div class="stat-label">Bugungi ish soati</div>
       </div>
       <div class="stat-box">
@@ -273,12 +269,12 @@ input[type=file]{display:none;}
       </div>
     </div>
     <div class="log-card" id="logCard" style="display:none">
-      <h4>📋 Bugungi qaydlar</h4>
+      <h4>&#128203; Bugungi qaydlar</h4>
       <div id="logList"></div>
     </div>
     <div class="ci-btns">
-      <button class="ci-btn btn-in"  id="btnIn"  onclick="startCheck('in')">✅&nbsp;&nbsp;KELDI</button>
-      <button class="ci-btn btn-out" id="btnOut" onclick="startCheck('out')" style="display:none">🚪&nbsp;&nbsp;KETDI</button>
+      <button class="ci-btn btn-in"  id="btnIn"  onclick="startCheck('in')">&#9989;&nbsp;&nbsp;KELDI</button>
+      <button class="ci-btn btn-out" id="btnOut" onclick="startCheck('out')" style="display:none">&#128682;&nbsp;&nbsp;KETDI</button>
     </div>
   </div>
 </div>
@@ -286,17 +282,17 @@ input[type=file]{display:none;}
 <!-- 6. FOTO -->
 <div id="pagePhoto" class="page">
   <div class="ph-card">
-    <div class="ph-title">📸 Selfie tasdiqlash</div>
+    <div class="ph-title">&#128248; Selfie tasdiqlash</div>
     <div class="ph-sub" id="phSub">Old kamera bilan rasm oling</div>
     <img id="phPreview" class="ph-preview" alt="selfie">
     <div class="ph-placeholder" id="phPlaceholder">
-      <span>🤳</span><p>Kamera tugmasini bosing</p>
+      <span>&#129335;</span><p>Kamera tugmasini bosing</p>
     </div>
     <input type="file" id="photoInput" accept="image/*" capture="user" onchange="photoTaken()">
-    <button class="btn-cam" onclick="document.getElementById('photoInput').click()">📷 Kamera ochish</button>
-    <button class="btn-confirm-ph" id="btnConfirmPh" onclick="confirmPhoto()">✅ Tasdiqlash va yuborish</button>
-    <button class="btn-retry-ph"   id="btnRetryPh"   onclick="retakePhoto()">🔄 Qayta olish</button>
-    <button class="btn-back-ph"    onclick="show('pageCI')">← Orqaga</button>
+    <button class="btn-cam" onclick="document.getElementById('photoInput').click()">&#128247; Kamera ochish</button>
+    <button class="btn-confirm-ph" id="btnConfirmPh" onclick="confirmPhoto()">&#9989; Tasdiqlash va yuborish</button>
+    <button class="btn-retry-ph"   id="btnRetryPh"   onclick="retakePhoto()">&#128260; Qayta olish</button>
+    <button class="btn-back-ph"    onclick="show('pageCI')">&#8592; Orqaga</button>
   </div>
 </div>
 
@@ -308,203 +304,303 @@ input[type=file]{display:none;}
     <div class="res-title" id="resTitle"></div>
     <div class="res-hours" id="resHours" style="display:none"></div>
     <div class="res-info" id="resInfo"></div>
-    <button class="res-back" onclick="goBackPin()">🏠 Bosh sahifaga qaytish</button>
+    <button class="res-back" onclick="goBackPin()">&#127968; Bosh sahifaga qaytish</button>
   </div>
 </div>
 
 <script>
-const tg = window.Telegram?.WebApp;
+const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
+// ===== KONSTANTALAR =====
 const BRANCH_COLORS = {'Parus':'#e94560','Nukus':'#1a6ea8'};
 function empColor(b){return BRANCH_COLORS[b]||'#00b894';}
-const OFFICE_LAT=41.308143,OFFICE_LON=69.210944,MAX_DIST=10;
-let buf='',emp=null,clkTimer=null,pendingType=null,photo=null,uLat=null,uLon=null;
+const OFFICE_LAT = 41.308143;
+const OFFICE_LON = 69.210944;
+const MAX_DIST   = 10;
+const SHIFT_START = 14 * 60;
+const SHIFT_END   = 24 * 60 + 30;
 
+// ===== STATE =====
+var buf='', emp=null, clkTimer=null, pendingType=null, photo=null, uLat=null, uLon=null;
+
+// ===== AUTO-LOGIN =====
 (function(){
-  const saved=localStorage.getItem('hr_saved_emp');
-  if(saved){
-    try{const e=JSON.parse(saved);if(e&&e.n&&e.b&&e.p){emp={...e,c:empColor(e.b)};openCI();return;}}
-    catch(ex){localStorage.removeItem('hr_saved_emp');}
-  }
+  try{
+    var s=localStorage.getItem('hr_emp');
+    if(s){var e=JSON.parse(s);if(e&&e.n&&e.b&&e.p){emp={n:e.n,b:e.b,p:e.p,c:empColor(e.b)};openCI();return;}}
+  }catch(ex){localStorage.removeItem('hr_emp');}
   dots();show('pagePIN');
 })();
 
-function kp(d){if(buf.length>=4)return;buf+=d;dots();if(buf.length===4)setTimeout(checkCode,200);}
-function kd(){if(!buf.length)return;buf=buf.slice(0,-1);dots();document.getElementById('pinErr').textContent='';}
-function dots(){for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('on',i<buf.length);}
-function resetCode(){buf='';dots();const e=document.getElementById('pinErr');if(e)e.textContent='';document.getElementById('pinDisplay').classList.remove('ok');}
+// ===== ISH SOATI =====
+function parseMin(t){var parts=t.split(':').map(Number);return parts[0]*60+parts[1];}
+function calcWorkMinutes(inTime,outTime){
+  var inMin=parseMin(inTime);
+  var outMin=parseMin(outTime);
+  if(outMin<=90) outMin+=24*60;
+  return Math.max(0,outMin-inMin);
+}
+function fmtMin(min){
+  if(!min&&min!==0)return '--';
+  var h=Math.floor(min/60),m=min%60;
+  if(h>0)return h+'s '+m+'d';
+  return m+'d';
+}
+
+// ===== KOD KIRITISH =====
+function kp(d){
+  if(buf.length>=4)return;
+  buf+=d;dots();
+  if(buf.length===4)setTimeout(checkCode,200);
+}
+function kd(){
+  if(!buf.length)return;
+  buf=buf.slice(0,-1);dots();resetCode();
+}
+function dots(){
+  for(var i=0;i<4;i++){var el=document.getElementById('d'+i);if(el)el.classList.toggle('on',i<buf.length);}
+}
+function resetCode(){
+  document.getElementById('pinHint').style.display='block';
+  document.getElementById('pinName').style.display='none';
+  document.getElementById('pinBranch').style.display='none';
+  document.getElementById('pinDisplay').classList.remove('ok');
+  document.getElementById('pinErr').textContent='';
+}
 
 async function checkCode(){
-  const code=buf;document.getElementById('pinErr').textContent='';
+  var code=buf;
+  var errEl=document.getElementById('pinErr');
+  if(errEl)errEl.textContent='';
   try{
-    const r=await fetch('/verify-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
-    const data=await r.json();
+    var r=await fetch('/verify-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:code})});
+    var data=await r.json();
     if(data.ok){
-      emp={...data.emp,c:empColor(data.emp.b)};
-      localStorage.setItem('hr_saved_emp',JSON.stringify(data.emp));
+      emp={n:data.emp.n,b:data.emp.b,p:data.emp.p,c:empColor(data.emp.b)};
+      localStorage.setItem('hr_emp',JSON.stringify({n:emp.n,b:emp.b,p:emp.p}));
+      document.getElementById('pinName').textContent=emp.n;
+      document.getElementById('pinName').style.display='block';
+      document.getElementById('pinBranch').textContent='&#127970; '+emp.b;
+      document.getElementById('pinBranch').style.display='inline-block';
+      document.getElementById('pinHint').style.display='none';
       document.getElementById('pinDisplay').classList.add('ok');
-      setTimeout(()=>openCI(),600);
+      setTimeout(function(){openCI();},600);
     }else{
-      const el=document.getElementById('pinErr');
-      el.textContent='❌ '+(data.msg||"Kod noto'g'ri!");
-      el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');
-      if(tg)tg.HapticFeedback?.notificationOccurred('error');
-      setTimeout(resetCode,1200);
+      if(errEl){errEl.textContent=data.msg||'Kod xato';errEl.classList.remove('shake');void errEl.offsetWidth;errEl.classList.add('shake');}
+      if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('error');
+      setTimeout(function(){buf='';dots();resetCode();},1200);
     }
-  }catch(e){document.getElementById('pinErr').textContent="❌ Server bilan aloqa yo'q";setTimeout(resetCode,1500);}
+  }catch(err){
+    if(errEl)errEl.textContent='Server bilan aloqa uzildi';
+    setTimeout(function(){buf='';dots();resetCode();},1500);
+  }
 }
 
+// ===== GPS =====
 function haversine(lat2,lon2){
-  const R=6371000,dL=(lat2-OFFICE_LAT)*Math.PI/180,dO=(lon2-OFFICE_LON)*Math.PI/180;
-  const a=Math.sin(dL/2)**2+Math.cos(OFFICE_LAT*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dO/2)**2;
+  var R=6371000;
+  var dL=(lat2-OFFICE_LAT)*Math.PI/180;
+  var dO=(lon2-OFFICE_LON)*Math.PI/180;
+  var a=Math.pow(Math.sin(dL/2),2)+Math.cos(OFFICE_LAT*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.pow(Math.sin(dO/2),2);
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
+
 function checkGPSandProceed(){
-  document.getElementById('loadText').textContent='📍 Joylashuv tekshirilmoqda...';
+  document.getElementById('loadText').textContent='&#128205; Joylashuv tekshirilmoqda...';
   show('pageLoading');
-  if(!navigator.geolocation){show('pageCI');alert('❌ GPS qo'llab-quvvatlanmaydi!');return;}
+  if(!navigator.geolocation){show('pageCI');alert('GPS qollab-quvvatlanmaydi!');return;}
   navigator.geolocation.getCurrentPosition(
-    pos=>{
+    function(pos){
       uLat=pos.coords.latitude;uLon=pos.coords.longitude;
-      const dist=haversine(uLat,uLon);
+      var dist=haversine(uLat,uLon);
       if(dist>MAX_DIST){
-        document.getElementById('gpsErrDist').textContent='📍 Siz ishxonadan taxminan '+Math.round(dist)+' metr uzoqdasiz
-(Ruxsat: '+MAX_DIST+' metr)';
-        if(tg)tg.HapticFeedback?.notificationOccurred('error');
+        document.getElementById('gpsErrDist').textContent='&#128205; Siz ishxonadan taxminan '+Math.round(dist)+' metr uzoqdasiz (Ruxsat: '+MAX_DIST+' metr)';
+        if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('error');
         show('pageGpsError');
-      }else{openPhoto();}
+      }else{afterGPS();}
     },
-    err=>{
+    function(err){
       show('pageCI');
-      if(err.code===1)alert('📍 GPS ruxsat berilmadi!
-Telegramda: Sozlamalar → Maxfiylik → Joylashuv → ruxsat bering.');
-      else alert('📍 GPS aniqlab bo'lmadi. Ochiq joyga chiqing.');
+      if(err.code===1){alert('GPS ruxsat berilmadi! Telegram sozlamalarida joylashuvga ruxsat bering.');}
+      else{alert('GPS aniqlab bolmadi. Ochiq joyga chiqing.');}
     },
     {enableHighAccuracy:true,timeout:15000,maximumAge:0}
   );
 }
 
-function parseMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
-function calcWorkMinutes(a,b){let x=parseMin(a),y=parseMin(b);if(y<=x)y+=24*60;return Math.min(y-x,24*60);}
-function fmtMin(m){if(!m&&m!==0)return '—';const h=Math.floor(m/60),mm=m%60;return h>0?h+'s '+mm+'d':mm+'d';}
+// ===== CHECK-IN SAHIFASI =====
 function today(){return new Date().toISOString().split('T')[0];}
 function timeNow(){return new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});}
+function nowMin(){var n=new Date();return n.getHours()*60+n.getMinutes();}
 
 function openCI(){
-  const av=document.getElementById('ciAv');
+  var av=document.getElementById('ciAv');
   av.textContent=emp.n[0].toUpperCase();av.style.background=emp.c;
   document.getElementById('ciName').textContent=emp.n;
-  document.getElementById('ciBranch').textContent='🏢 '+emp.b;
-  setGreeting();startClock();loadLog();show('pageCI');
+  document.getElementById('ciBranch').textContent='&#127970; '+emp.b;
+  setGreeting();startClock();loadLog();
+  show('pageCI');
 }
+
 function setGreeting(){
-  const h=new Date().getHours();let icon,text,sub;
-  if(h<6){icon='🌙';text='Xayrli tun!';sub='Siz juda erta keldingiz!';}
-  else if(h<12){icon='🌅';text='Xayrli tong!';sub='Bugungi ishga xush kelibsiz! 💪';}
-  else if(h<17){icon='☀️';text='Xayrli kun!';sub='Smena boshlanmoqda, omad!';}
-  else if(h<21){icon='🌆';text='Xayrli oqshom!';sub='Ish davom etmoqda!';}
-  else{icon='🌙';text='Xayrli kech!';sub='Bugun ham yaxshi ish qildingiz!';}
-  document.getElementById('greetIcon').textContent=icon;
+  var h=new Date().getHours();
+  var icon,text,sub;
+  if(h<6){icon='&#127769;';text='Xayrli tun!';sub='Siz juda erta keldingiz!';}
+  else if(h<12){icon='&#127749;';text='Xayrli tong!';sub='Bugungi ishga xush kelibsiz!';}
+  else if(h<17){icon='&#9728;';text='Xayrli kun!';sub='Smena boshlanmoqda, omad!';}
+  else if(h<21){icon='&#127750;';text='Xayrli oqshom!';sub='Ish davom etmoqda!';}
+  else{icon='&#127769;';text='Xayrli kech!';sub='Bugun ham yaxshi ish qildingiz!';}
+  document.getElementById('greetIcon').innerHTML=icon;
   document.getElementById('greetText').textContent=emp.n.split(' ')[0]+', '+text;
   document.getElementById('greetSub').textContent=sub;
 }
+
 function startClock(){
   clearInterval(clkTimer);
-  const tick=()=>{
+  var tick=function(){
     document.getElementById('ciClock').textContent=new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
     document.getElementById('ciDate').textContent=new Date().toLocaleDateString('uz-UZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   };
   tick();clkTimer=setInterval(tick,1000);
 }
+
 async function loadLog(){
-  let log=[];
-  try{const r=await fetch('/api/log/'+emp.p+'/'+today());log=await r.json();}catch(e){}
-  let totalMin=0,lastIn=null;
-  for(const r of log){if(r.type==='in')lastIn=r.time;else if(r.type==='out'&&lastIn){totalMin+=calcWorkMinutes(lastIn,r.time);lastIn=null;}}
-  const lastRec=log[log.length-1];
-  document.getElementById('statStatus').textContent=!log.length?'◻':(lastRec?.type==='in'?'🟢':'🔴');
-  document.getElementById('statHours').textContent=totalMin>0?fmtMin(totalMin):'—';
-  document.getElementById('statVisits').textContent=log.filter(r=>r.type==='in').length;
+  var log=[];
+  try{var r=await fetch('/api/log/'+emp.p+'/'+today());log=await r.json();}catch(e){}
+  var totalMin=0,lastIn=null;
+  for(var i=0;i<log.length;i++){
+    var rec=log[i];
+    if(rec.type==='in')lastIn=rec.effective_in||rec.time;
+    else if(rec.type==='out'&&lastIn){totalMin+=calcWorkMinutes(lastIn,rec.time);lastIn=null;}
+  }
+  var lastRec=log[log.length-1];
+  document.getElementById('statStatus').textContent=!log.length?'&#9634;':(lastRec&&lastRec.type==='in'?'&#128994;':'&#128308;');
+  document.getElementById('statHours').textContent=totalMin>0?fmtMin(totalMin):'--';
+  document.getElementById('statVisits').textContent=log.filter(function(r){return r.type==='in';}).length;
   if(log.length){
-    document.getElementById('logList').innerHTML=log.map(r=>{
-      const badge=r.type==='in'?'<span class="log-badge badge-in">✅ Keldi</span>':'<span class="log-badge badge-out">🚪 Ketdi</span>';
-      const hours=r.work_minutes>0?'<span class="log-hours">⏱ '+fmtMin(r.work_minutes)+'</span>':'';
+    document.getElementById('logList').innerHTML=log.map(function(r){
+      var isEarly=r.early_arrival;
+      var badge=r.type==='in'?('<span class="log-badge '+(isEarly?'badge-early':'badge-in')+'">'+(isEarly?'&#9200; Erta keldi':'&#9989; Keldi')+'</span>'):'<span class="log-badge badge-out">&#128682; Ketdi</span>';
+      var hours=r.work_minutes>0?('<span class="log-hours">&#9203; '+fmtMin(r.work_minutes)+'</span>'):'';
       return '<div class="log-item">'+badge+'<div style="display:flex;gap:6px;align-items:center"><span style="color:#6b8c7a;font-size:12px;font-weight:600">'+r.time+'</span>'+hours+'</div></div>';
     }).join('');
     document.getElementById('logCard').style.display='block';
-  }else document.getElementById('logCard').style.display='none';
+  }else{
+    document.getElementById('logCard').style.display='none';
+  }
   document.getElementById('btnIn').style.display=(!lastRec||lastRec.type==='out')?'flex':'none';
   document.getElementById('btnOut').style.display=(lastRec&&lastRec.type==='in')?'flex':'none';
 }
 
 function startCheck(type){pendingType=type;photo=null;checkGPSandProceed();}
+
+function afterGPS(){
+  if(pendingType==='in'&&nowMin()<SHIFT_START){
+    document.getElementById('earlyTime').textContent='&#128336; Hozir: '+timeNow();
+    show('pageEarlyWarn');return;
+  }
+  openPhoto();
+}
+
+function earlyConfirm(){openPhoto();}
+
 function openPhoto(){
-  document.getElementById('phSub').textContent=pendingType==='in'?'✅ KELDI tasdiqlash uchun selfie oling':'🚪 KETDI tasdiqlash uchun selfie oling';
+  document.getElementById('phSub').textContent=pendingType==='in'?'&#9989; KELDI tasdiqlash uchun selfie oling':'&#128682; KETDI tasdiqlash uchun selfie oling';
   retakePhoto();show('pagePhoto');
 }
+
 function photoTaken(){
-  const file=document.getElementById('photoInput').files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');const MAX=800;let w=img.width,h=img.height;
-      if(w>MAX){h=h*MAX/w;w=MAX;}canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      photo=canvas.toDataURL('image/jpeg',0.7);
-      const prev=document.getElementById('phPreview');
-      prev.src=photo;prev.style.display='block';
-      document.getElementById('phPlaceholder').style.display='none';
-      document.getElementById('btnConfirmPh').style.display='block';
-      document.getElementById('btnRetryPh').style.display='block';
-    };img.src=e.target.result;
-  };reader.readAsDataURL(file);
+  var file=document.getElementById('photoInput').files[0];
+  if(!file)return;
+  var canvas=document.createElement('canvas');
+  var ctx=canvas.getContext('2d');
+  var img=new Image();
+  img.onload=function(){
+    var MAX=800;
+    var w=img.width,h=img.height;
+    if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+    canvas.width=w;canvas.height=h;
+    ctx.drawImage(img,0,0,w,h);
+    photo=canvas.toDataURL('image/jpeg',0.7);
+    var prev=document.getElementById('phPreview');
+    prev.src=photo;prev.style.display='block';
+    document.getElementById('phPlaceholder').style.display='none';
+    document.getElementById('btnConfirmPh').style.display='block';
+    document.getElementById('btnRetryPh').style.display='block';
+  };
+  var reader=new FileReader();
+  reader.onload=function(e){img.src=e.target.result;};
+  reader.readAsDataURL(file);
 }
+
 function retakePhoto(){
-  photo=null;document.getElementById('phPreview').style.display='none';
+  photo=null;
+  document.getElementById('phPreview').style.display='none';
   document.getElementById('phPlaceholder').style.display='flex';
   document.getElementById('btnConfirmPh').style.display='none';
   document.getElementById('btnRetryPh').style.display='none';
   document.getElementById('photoInput').value='';
 }
+
 async function confirmPhoto(){
   if(!photo){alert('Avval selfie oling!');return;}
-  const btn=document.getElementById('btnConfirmPh');btn.disabled=true;btn.textContent='⏳ Yuborilmoqda...';
+  var btn=document.getElementById('btnConfirmPh');
+  btn.disabled=true;btn.textContent='&#9203; Yuborilmoqda...';
   try{
-    const r=await fetch('/api/checkin',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:emp.n,branch:emp.b,pin:emp.p,type:pendingType,time:timeNow(),date:today(),photo,lat:uLat,lon:uLon})
+    var r=await fetch('/api/checkin',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:emp.n,branch:emp.b,pin:emp.p,type:pendingType,time:timeNow(),date:today(),photo:photo,lat:uLat,lon:uLon})
     });
-    const d=await r.json();
-    if(d.ok){if(tg)tg.HapticFeedback?.notificationOccurred('success');showResult(pendingType,d.work_minutes);}
-    else{
-      if(d.error==='gps'){document.getElementById('gpsErrDist').textContent='📍 '+d.dist+' metr uzoqdasiz';show('pageGpsError');}
-      else{alert(d.msg||'❌ Xatolik!');btn.disabled=false;btn.textContent='✅ Tasdiqlash va yuborish';}
+    var d=await r.json();
+    if(d.ok){
+      if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+      showResult(pendingType,d.work_minutes);
+    }else{
+      if(d.error==='gps'){
+        document.getElementById('gpsErrDist').textContent='&#128205; Siz ishxonadan taxminan '+d.dist+' metr uzoqdasiz';
+        show('pageGpsError');
+      }else{
+        alert(d.msg||'Xatolik yuz berdi!');
+        btn.disabled=false;btn.textContent='&#9989; Tasdiqlash va yuborish';
+      }
     }
-  }catch(e){alert("❌ Server bilan aloqa yo'q.");btn.disabled=false;btn.textContent='✅ Tasdiqlash va yuborish';}
+  }catch(e){
+    alert("Server bilan aloqa yo'q. Internet ulanishini tekshiring.");
+    btn.disabled=false;btn.textContent='&#9989; Tasdiqlash va yuborish';
+  }
 }
 
 function showResult(type,workMin){
-  const wrap=document.getElementById('confettiWrap');wrap.innerHTML='';
-  const colors=['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
-  for(let i=0;i<24;i++){
-    const d=document.createElement('div');d.className='c-dot';
+  var wrap=document.getElementById('confettiWrap');wrap.innerHTML='';
+  var colors=['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
+  for(var i=0;i<24;i++){
+    var d=document.createElement('div');d.className='c-dot';
     d.style.cssText='left:'+Math.random()*100+'%;top:'+(Math.random()*16-8)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-delay:'+Math.random()*.6+'s;animation-duration:'+(1+Math.random()*.5)+'s;';
     wrap.appendChild(d);
   }
-  document.getElementById('resIcon').textContent=type==='in'?'✅':'🚪';
-  const title=document.getElementById('resTitle');title.textContent=type==='in'?'Keldi qayd etildi!':'Ketdi qayd etildi!';title.className='res-title '+(type==='in'?'in':'out');
-  const hoursEl=document.getElementById('resHours');
-  if(type==='out'&&workMin>0){hoursEl.textContent='⏱ '+fmtMin(workMin)+' ishladi';hoursEl.style.display='block';}
-  else hoursEl.style.display='none';
-  document.getElementById('resInfo').innerHTML='👤 <b>'+emp.n+'</b><br>🏢 '+emp.b+'<br>🕐 '+timeNow()+'<br>📅 '+today()+'<br>📸 Foto saqlandi ✓';
+  document.getElementById('resIcon').textContent=type==='in'?'&#9989;':'&#128682;';
+  var title=document.getElementById('resTitle');
+  title.textContent=type==='in'?'Keldi qayd etildi!':'Ketdi qayd etildi!';
+  title.className='res-title '+(type==='in'?'in':'out');
+  var hoursEl=document.getElementById('resHours');
+  if(type==='out'&&workMin>0){hoursEl.textContent='&#9203; '+fmtMin(workMin)+' ishladi';hoursEl.style.display='block';}
+  else{hoursEl.style.display='none';}
+  document.getElementById('resInfo').innerHTML='&#128100; <b>'+emp.n+'</b><br>&#127970; '+emp.b+'<br>&#128336; '+timeNow()+'<br>&#128197; '+today()+'<br>&#128248; Foto saqlandi';
   show('pageResult');
 }
 
-function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function show(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+}
+
 function goBackPin(){
-  clearInterval(clkTimer);buf='';emp=null;pendingType=null;photo=null;uLat=null;uLon=null;
-  localStorage.removeItem('hr_saved_emp');resetCode();show('pagePIN');
+  clearInterval(clkTimer);
+  buf='';emp=null;pendingType=null;photo=null;uLat=null;uLon=null;
+  localStorage.removeItem('hr_emp');
+  dots();resetCode();show('pagePIN');
 }
 </script>
 </body>
