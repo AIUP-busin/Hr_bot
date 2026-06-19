@@ -125,7 +125,7 @@ body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 .ph-placeholder span{font-size:60px;margin-bottom:10px;}
 .ph-placeholder p{font-size:13px;color:#8aab9e;font-weight:600;}
 input[type=file]{display:none;}
-.btn-ca&{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;margin-bottom:10px;}
+.btn-can{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;margin-bottom:10px;}
 .btn-confirm-ph{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g4),var(--g3));color:#fff;margin-bottom:10px;display:none;}
 .btn-retry-ph{width:100%;padding:13px;border:2px solid #d4f0e0;border-radius:14px;font-size:14px;cursor:pointer;background:#fff;color:#6b8c7a;margin-bottom:10px;display:none;font-weight:700;}
 .btn-back-ph{width:100%;padding:12px;border:none;background:transparent;color:#8aab9e;font-size:13px;cursor:pointer;font-weight:600;}
@@ -315,9 +315,11 @@ if (tg) { tg.ready(); tg.expand(); }
 // ===== KONSTANTALAR =====
 const BRANCH_COLORS = {'Parus':'#e94560','Nukus':'#1a6ea8'};
 function empColor(b){return BRANCH_COLORS[b]||'#00b894';}
-const OFFICE_LAT = 41.308143;
-const OFFICE_LON = 69.210944;
-const MAX_DIST   = 10;
+const OFFICES = {
+  'Parus': {lat:41.292104, lon:69.211173},
+  'Nukus': {lat:41.350782, lon:69.218418},
+};
+const MAX_DIST   = 20;
 const SHIFT_START = 14 * 60;
 const SHIFT_END   = 24 * 60 + 30;
 
@@ -398,11 +400,16 @@ async function checkCode(){
 }
 
 // ===== GPS =====
+function getOffice(){
+  var o=OFFICES[emp&&emp.b]||OFFICES['Parus'];
+  return o;
+}
 function haversine(lat2,lon2){
+  var o=getOffice();
   var R=6371000;
-  var dL=(lat2-OFFICE_LAT)*Math.PI/180;
-  var dO=(lon2-OFFICE_LON)*Math.PI/180;
-  var a=Math.pow(Math.sin(dL/2),2)+Math.cos(OFFICE_LAT*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.pow(Math.sin(dO/2),2);
+  var dL=(lat2-o.lat)*Math.PI/180;
+  var dO=(lon2-o.lon)*Math.PI/180;
+  var a=Math.pow(Math.sin(dL/2),2)+Math.cos(o.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.pow(Math.sin(dO/2),2);
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
@@ -415,7 +422,7 @@ function checkGPSandProceed(){
       uLat=pos.coords.latitude;uLon=pos.coords.longitude;
       var dist=haversine(uLat,uLon);
       if(dist>MAX_DIST){
-        document.getElementById('gpsErrDist').textContent='&#128205; Siz ishxonadan taxminan '+Math.round(dist)+' metr uzoqdasiz (Ruxsat: '+MAX_DIST+' metr)';
+        document.getElementById('gpsErrDist').textContent='&#128205; Siz ishxonadan taxminan '+Math.round(dist)+' metr uzoqdasiz (Ruxsat: '+MAX_DIST+' metr);
         if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('error');
         show('pageGpsError');
       }else{afterGPS();}
@@ -429,7 +436,7 @@ function checkGPSandProceed(){
   );
 }
 
-// ===== CHECK-IN SAHIFASI =====
+// ===== CHECI-IN SAHIFASI =====
 function today(){return new Date().toISOString().split('T')[0];}
 function timeNow(){return new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});}
 function nowMin(){var n=new Date();return n.getHours()*60+n.getMinutes();}
@@ -462,7 +469,7 @@ function startClock(){
     document.getElementById('ciClock').textContent=new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
     document.getElementById('ciDate').textContent=new Date().toLocaleDateString('uz-UZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   };
-  tick();clkTimer=setInterval(tick,1000);
+  tick();clkTimer=setInterval(tick,\000);
 }
 
 async function loadLog(){
@@ -481,7 +488,7 @@ async function loadLog(){
   if(log.length){
     document.getElementById('logList').innerHTML=log.map(function(r){
       var isEarly=r.early_arrival;
-      var badge=r.type==='in'?('<span class="log-badge '+(isEarly?'badge-early':'badge-in')+'">'+(isEarly?'&#9200; Erta keldi':'&#9989; Keldi')+'</span>'):'<span class="log-badge badge-out">&#128682; Ketdi</span>';
+      var badge=r.type==='in'?('<span class="log-badge '+(isEarly?'badge-early':'badge-in')+'">'+(isEarly?'&#9200; Erta keldi':'&#9989; Keldi'+)+'</span>'):'<span class="log-badge badge-out">&#128682; Ketdi</span>';
       var hours=r.work_minutes>0?('<span class="log-hours">&#9203; '+fmtMin(r.work_minutes)+'</span>'):'';
       return '<div class="log-item">'+badge+'<div style="display:flex;gap:6px;align-items:center"><span style="color:#6b8c7a;font-size:12px;font-weight:600">'+r.time+'</span>'+hours+'</div></div>';
     }).join('');
@@ -549,6 +556,7 @@ async function confirmPhoto(){
   btn.disabled=true;btn.textContent='&#9203; Yuborilmoqda...';
   try{
     var r=await fetch('/api/checkin',{
+
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({name:emp.n,branch:emp.b,pin:emp.p,type:pendingType,time:timeNow(),date:today(),photo:photo,lat:uLat,lon:uLon})
@@ -577,10 +585,10 @@ function showResult(type,workMin){
   var colors=['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
   for(var i=0;i<24;i++){
     var d=document.createElement('div');d.className='c-dot';
-    d.style.cssText='left:'+Math.random()*100+'%;top:'+(Math.random()*16-8)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-delay:'+Math.random()*.6+'s;animation-duration:'+(1+Math.random()*.5)+'s;';
+    d.style.cssText='left:'+Math.random()*100+'%;top:'+(Math.random()*16-8)+'px;background:%ç-olors[Math.floor(Math.random()*colors.length)]+';animation-delay:'+Math.random()*.6+'s;animation-duration:'+(1+Math.random()*.5)+'s;';
     wrap.appendChild(d);
   }
-  document.getElementById('resIcon').textContent=type==='in'?'&#9989;':'&#128682;';
+  document.getElementById('resIcon').textContent=type==='in'?'&#9989;':'&#128682;;
   var title=document.getElementById('resTitle');
   title.textContent=type==='in'?'Keldi qayd etildi!':'Ketdi qayd etildi!';
   title.className='res-title '+(type==='in'?'in':'out');
@@ -598,10 +606,4 @@ function show(id){
 
 function goBackPin(){
   clearInterval(clkTimer);
-  buf='';emp=null;pendingType=null;photo=null;uLat=null;uLon=null;
-  localStorage.removeItem('hr_emp');
-  dots();resetCode();show('pagePIN');
-}
-</script>
-</body>
-</html>
+  buf='';emp=null;pendingType=null
