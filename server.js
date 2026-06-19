@@ -127,7 +127,7 @@ app.post('/webhook', (req, res) => {
     tgRequest('answerCallbackQuery', {callback_query_id: u.callback_query.id});
     tgRequest('sendMessage', {
       chat_id: u.callback_query.message.chat.id,
-      text: '\u2705 '+emp.n+' ('+emp.b+')\n\n\uD83D\uDD11 Sizning kirish kodingiz:\n\n<b>'+code+'</b>\n\n\u26A0\uFE0F Bu kodni hech kimga bermang!\nMini app'ga kiriting.',
+      text: '\u2705 '+emp.n+' ('+emp.b+')\n\n\uD83D\uDD11 Sizning kirish kodingiz:\n\n<b>'+code+'</b>\n\n\u26A0\uFE0F Bu kodni hech kimga bermang!\nMini app\u2019ga kiriting.',
       parse_mode: 'HTML'
     });
   }
@@ -160,7 +160,7 @@ app.post('/verify-code', (req, res) => {
   const code = String(req.body.code || '').trim();
   if (!code) return res.json({ok:false, msg:"Kod kiritilmadi"});
   const entry = pendingCodes.get(code);
-  if (!entry) return res.json({ok:false, msg:"Kod noto\'g\'ri yoki muddati o\'tgan"});
+  if (!entry) return res.json({ok:false, msg:"Kod notogri yoki muddati otgan"});
   const emp = EMPS.find(e => e.p === entry.pin);
   if (!emp) return res.json({ok:false, msg:"Xodim topilmadi"});
   res.json({ok:true, emp:{n:emp.n, b:emp.b, p:emp.p}});
