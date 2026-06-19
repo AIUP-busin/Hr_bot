@@ -15,8 +15,8 @@ const OFFICE_LON   = parseFloat(process.env.OFFICE_LON   || '69.211075');
 const MAX_DIST     = parseFloat(process.env.MAX_DIST      || '100');
 const BOT_TOKEN    = process.env.BOT_TOKEN    || '';
 const BOSS_CHAT_ID = process.env.BOSS_CHAT_ID || '';
-const SHIFT_START  = 14 * 60;
-const SHIFT_END    = 24 * 60 + 30;
+// ISH VAQTI: kirish va chiqish orasidagi farq (har xodim o'z jadvaliga qarab)
+
 
 function distance(lat1, lon1, lat2, lon2) {
   const R = 6371000;
@@ -32,10 +32,11 @@ function fmtHours(min) {
   return h>0?`${h} soat ${m} daqiqa`:`${m} daqiqa`;
 }
 function calcWorkMinutes(inTime, outTime) {
-  let inMin=parseMin(inTime), outMin=parseMin(outTime);
-  if(outMin<=90) outMin+=24*60;
-  const effIn=Math.max(inMin,SHIFT_START), effOut=Math.min(outMin,SHIFT_END);
-  return effOut<=effIn ? 0 : effOut-effIn;
+  let inMin  = parseMin(inTime);
+  let outMin = parseMin(outTime);
+  // Yarim tun oshganda (16:00 - 00:00 kabi)
+  if (outMin <= inMin) outMin += 24 * 60;
+  return Math.min(outMin - inMin, 24 * 60);
 }
 function notifyBoss(text) {
   if(!BOT_TOKEN||!BOSS_CHAT_ID) return;
