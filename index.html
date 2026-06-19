@@ -252,7 +252,7 @@ input[type=file]{display:none;}
     </div>
     <div class="shift-banner">
       <span>🕐</span>
-      <span>Smena: <b>14:00 — 00:30</b></span>
+      <span>Smena: <b>Jadvalga qarab</b></span>
     </div>
     <div class="stat-row">
       <div class="stat-box">
@@ -316,8 +316,8 @@ if (tg) { tg.ready(); tg.expand(); }
 const OFFICE_LAT = 41.308056;
 const OFFICE_LON = 69.211075;
 const MAX_DIST   = 100;      // metr (radius)
-const SHIFT_START = 14 * 60; // 840 daqiqa
-const SHIFT_END   = 24 * 60 + 30; // 1470 daqiqa
+// Ish vaqti: kirish va chiqish orasidagi farq (har xodim o'z jadvaliga qarab)
+
 
 // ===== XODIMLAR =====
 const EMPS = [
@@ -347,11 +347,8 @@ function parseMin(t) {
 function calcWorkMinutes(inTime, outTime) {
   let inMin  = parseMin(inTime);
   let outMin = parseMin(outTime);
-  if (outMin <= 90) outMin += 24*60; // 00:00–01:30 keyingi kun
-  const effIn  = Math.max(inMin,  SHIFT_START);
-  const effOut = Math.min(outMin, SHIFT_END);
-  if (effOut <= effIn) return 0;
-  return effOut - effIn;
+  if (outMin <= inMin) outMin += 24 * 60; // yarim tun oshganda
+  return Math.min(outMin - inMin, 24 * 60);
 }
 function fmtMin(min) {
   if (!min && min !== 0) return '—';
@@ -529,11 +526,8 @@ function startCheck(type) {
 
 function afterGPS() {
   // Agar KELDI va vaqt 14:00 dan oldin bo'lsa — ogohlantirish
-  if(pendingType==='in' && nowMin()<SHIFT_START){
-    document.getElementById('earlyTime').textContent='🕐 Hozir: '+timeNow();
-    show('pageEarlyWarn');
-    return;
-  }
+  // GPS tekshiruvi o'tdi — to'g'ridan-to'g'ri fotoga o'tish
+  openPhoto();
   // Fotoga o'tish
   openPhoto();
 }
