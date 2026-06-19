@@ -152,42 +152,25 @@ input[type=file]{display:none;}
 .res-hours{font-size:22px;font-weight:900;color:var(--g1);margin-bottom:10px;}
 .res-info{font-size:13px;color:#6b8c7a;line-height:2.1;margin-bottom:24px;background:var(--offwhite);border-radius:14px;padding:14px;border:1px solid #d4f0e0;text-align:left;}
 .res-back{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;}
+.reg-list{padding:12px 16px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;}
+.reg-item{background:var(--card,#1e2a3a);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .15s,opacity .15s;}
+.reg-item:active{transform:scale(.97);opacity:.8;}
+.reg-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;}
+.reg-name{font-size:16px;font-weight:600;color:var(--text,#fff);}
+.reg-branch{font-size:13px;opacity:.6;margin-top:2px;}
 </style>
 </head>
 <body>
 
 <!-- 1. PIN -->
-<div id="pagePIN" class="page active">
+<!-- 1. XODIM TANLASH (birinchi marta) -->
+<div id="pageREG" class="page active">
   <div class="pin-head">
     <div class="pin-logo">👥</div>
     <div class="pin-title">HR Davomat</div>
-    <div class="pin-sub">Parus &amp; Nukus filiali</div>
+    <div class="pin-sub">Ismingizni bir marta tanlang</div>
   </div>
-  <div class="pin-card">
-    <div class="pin-display" id="pinDisplay">
-      <div class="dots">
-        <div class="dot" id="d0"></div><div class="dot" id="d1"></div>
-        <div class="dot" id="d2"></div><div class="dot" id="d3"></div>
-      </div>
-      <div class="pin-hint" id="pinHint">PIN kodingizni kiriting</div>
-      <div class="pin-emp-name" id="pinName" style="display:none"></div>
-      <div class="pin-emp-branch" id="pinBranch" style="display:none"></div>
-    </div>
-    <div class="keypad">
-      <button class="key" onclick="kp('1')">1</button>
-      <button class="key" onclick="kp('2')">2</button>
-      <button class="key" onclick="kp('3')">3</button>
-      <button class="key" onclick="kp('4')">4</button>
-      <button class="key" onclick="kp('5')">5</button>
-      <button class="key" onclick="kp('6')">6</button>
-      <button class="key" onclick="kp('7')">7</button>
-      <button class="key" onclick="kp('8')">8</button>
-      <button class="key" onclick="kp('9')">9</button>
-      <button class="key zero" onclick="kp('0')">0</button>
-      <button class="key del" onclick="kd()">⌫</button>
-    </div>
-    <div class="pin-err" id="pinErr"></div>
-  </div>
+  <div class="reg-list" id="regList"></div>
 </div>
 
 <!-- 2. LOADING -->
@@ -312,6 +295,11 @@ input[type=file]{display:none;}
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
+// Auto-login: saqlangan xodim bo'lsa to'g'ridan kirish
+const _saved = localStorage.getItem('hr_saved_pin');
+if (_saved) { window.addEventListener('load', () => startApp(_saved)); }
+else { window.addEventListener('load', () => { buildRegList(); show('pageREG'); }); }
+
 // ===== KONSTANTALAR =====
 const OFFICE_LAT = 41.308056;
 const OFFICE_LON = 69.211075;
@@ -357,6 +345,25 @@ function fmtMin(min) {
   return `${m}d`;
 }
 
+// ===== XODIM TANLASH =====
+function buildRegList() {
+  const ul = document.getElementById('regList');
+  if(!ul) return;
+  ul.innerHTML = EMPS.map(e => {
+    const av = e.n[0];
+    return '<div class="reg-item" onclick="selectEmp(\'' + e.p + '\')"><div class="reg-avatar" style="background:' + e.c + '">' + av + '</div><div><div class="reg-name">' + e.n + '</div><div class="reg-branch">\uD83C\uDFE2 ' + e.b + '</div></div></div>';
+  }).join('');
+}
+function selectEmp(pin) {
+  localStorage.setItem('hr_saved_pin', pin);
+  startApp(pin);
+}
+function startApp(pin) {
+  const found = EMPS.find(e => e.p === pin);
+  if (!found) { localStorage.removeItem('hr_saved_pin'); buildRegList(); show('pageREG'); return; }
+  pendingEmp = found;
+  openCI();
+}
 // ===== PIN =====
 function kp(d) {
   if (buf.length>=4) return;
@@ -652,8 +659,8 @@ function show(id){
 function goBackPin(){
   clearInterval(clkTimer);
   buf='';emp=null;pendingType=null;photo=null;uLat=null;uLon=null;
-  dots(); resetPin();
-  show('pagePIN');
+  buildRegList();
+  show('pageREG');
 }
 </script>
 </body>
