@@ -10,9 +10,9 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 :root{
---g1:#004d40;--g2:#00796b;--g3:#00b894;--g4:#55efc4;
---r1:#b71c1c;--r2:#e94560;--r3:#ff6b6b;
---offwhite:#f0fdf8;
+  --g1:#004d40;--g2:#00796b;--g3:#00b894;--g4:#55efc4;
+  --r1:#b71c1c;--r2:#e94560;--r3:#ff6b6b;
+  --offwhite:#f0fdf8;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
@@ -24,32 +24,42 @@ body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 .page{display:none;min-height:100vh;}
 .page.active{display:flex;flex-direction:column;}
 
-/* ===== PIN ===== */
+/* ===== FILAL TANLASH ===== */
+#pageBranch{
+  align-items:center;justify-content:center;padding:24px 20px;
+  background:linear-gradient(160deg,#002b22 0%,var(--g1) 35%,var(--g2) 70%,var(--g3) 100%);
+}
+.branch-head{text-align:center;margin-bottom:36px;animation:fadeUp .5s ease;}
+.branch-logo{width:80px;height:80px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 14px;border:2px solid rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.3);}
+.branch-title{font-size:24px;font-weight:900;color:#fff;margin-bottom:4px;}
+.branch-sub{font-size:13px;color:rgba(255,255,255,.6);font-weight:500;}
+.branch-card{width:100%;max-width:330px;display:flex;flex-direction:column;gap:16px;animation:fadeUp .5s .1s ease both;}
+.branch-btn{width:100%;padding:24px;border:none;border-radius:24px;font-size:20px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .15s;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+.branch-btn:active{transform:scale(.95);}
+.branch-parus{background:linear-gradient(135deg,#fff,#e0faf2);color:var(--g1);}
+.branch-nukus{background:linear-gradient(135deg,#fff,#e3f2fd);color:#1565c0;}
+
+/* ===== ISM KIRISH ===== */
 #pagePIN{
-align-items:center;justify-content:center;padding:24px 20px;
-background:linear-gradient(160deg,#002b22 0%,var(--g1) 35%,var(--g2) 70%,var(--g3) 100%);
+  align-items:center;justify-content:center;padding:24px 20px;
+  background:linear-gradient(160deg,#002b22 0%,var(--g1) 35%,var(--g2) 70%,var(--g3) 100%);
 }
 .pin-head{text-align:center;margin-bottom:28px;animation:fadeUp .5s ease;}
 .pin-logo{width:80px;height:80px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 14px;border:2px solid rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.3);}
 .pin-title{font-size:24px;font-weight:900;color:#fff;margin-bottom:4px;}
 .pin-sub{font-size:13px;color:rgba(255,255,255,.6);font-weight:500;}
 .pin-card{background:#fff;border-radius:28px;padding:26px 22px;width:100%;max-width:330px;box-shadow:0 32px 80px rgba(0,0,0,.35);animation:fadeUp .5s .1s ease both;}
-.pin-display{background:var(--offwhite);border-radius:18px;padding:18px 14px;text-align:center;margin-bottom:22px;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #c8f0e0;transition:border-color .3s;}
-.pin-display.ok{border-color:var(--g3);}
-.dots{display:flex;gap:16px;justify-content:center;margin-bottom:8px;}
-.dot{width:15px;height:15px;border-radius:50%;background:#daeee8;transition:all .2s cubic-bezier(.34,1.56,.64,1);}
-.dot.on{background:var(--g3);transform:scale(1.2);box-shadow:0 0 0 5px rgba(0,184,148,.2);}
-.pin-hint{font-size:12px;color:#8aab9e;font-weight:600;}
-.pin-emp-name{font-size:18px;font-weight:800;color:var(--g1);}
-.pin-emp-branch{display:inline-block;background:rgba(0,184,148,.1);color:var(--g2);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:5px;}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.key{height:66px;border:none;border-radius:18px;font-size:26px;font-weight:700;cursor:pointer;background:var(--offwhite);color:#1a3028;border:2px solid #d8eee6;transition:all .1s;display:flex;align-items:center;justify-content:center;}
-.key:active{transform:scale(.88);background:#c0e8d8;}
-.key.zero{grid-column:2;}
-.key.del{background:#fff0f2;color:var(--r2);border-color:#ffd6de;font-size:20px;}
-.key.del:active{background:#ffd6de;}
-.pin-err{color:var(--r2);font-size:13px;text-align:center;margin-top:14px;min-height:20px;font-weight:700;}
-.pin-err.shake{animation:shake .4s ease;}
+.name-input{width:100%;padding:16px 18px;border:2px solid #c8f0e0;border-radius:18px;font-size:16px;font-weight:600;color:#1a3028;background:var(--offwhite);outline:none;transition:border-color .2s;font-family:'Inter',sans-serif;-webkit-appearance:none;}
+.name-input:focus{border-color:var(--g3);}
+.emp-results{margin-top:10px;display:flex;flex-direction:column;gap:8px;max-height:260px;overflow-y:auto;}
+.emp-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--offwhite);border-radius:16px;border:1.5px solid #d4f0e0;cursor:pointer;transition:all .1s;}
+.emp-item:active{transform:scale(.97);background:#c8f0e0;}
+.emp-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0;}
+.emp-name-txt{font-size:15px;font-weight:700;color:#1a3028;}
+.emp-not-found{text-align:center;color:#8aab9e;font-size:14px;padding:14px;font-weight:600;}
+.emp-confirmed{text-align:center;color:var(--g2);font-size:15px;font-weight:800;padding:12px;background:#e8faf2;border-radius:14px;border:2px solid var(--g3);}
+.pin-err{color:var(--r2);font-size:13px;text-align:center;margin-top:12px;min-height:20px;font-weight:700;}
+.btn-back-pin{width:100%;padding:12px;border:none;background:transparent;color:#8aab9e;font-size:13px;cursor:pointer;font-weight:600;margin-top:6px;}
 
 /* ===== LOADING ===== */
 #pageLoading{align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(160deg,#002b22,var(--g2));}
@@ -75,29 +85,19 @@ background:linear-gradient(160deg,#002b22 0%,var(--g1) 35%,var(--g2) 70%,var(--g
 .ci-emp-branch{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.18);color:rgba(255,255,255,.9);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:5px;border:1px solid rgba(255,255,255,.25);}
 .ci-logout{background:rgba(255,255,255,.15);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#fff;flex-shrink:0;}
 .ci-body{flex:1;background:#fff;border-radius:28px 28px 0 0;margin-top:-24px;padding:20px;box-shadow:0 -4px 20px rgba(0,0,0,.06);}
-
 .clock-card{background:linear-gradient(135deg,var(--offwhite),#e0faf2);border-radius:20px;padding:16px;text-align:center;margin-bottom:14px;border:1px solid #c0ead6;}
 .clock-time{font-size:44px;font-weight:900;color:var(--g1);letter-spacing:-2px;font-variant-numeric:tabular-nums;line-height:1;}
 .clock-date{font-size:12px;color:#6b8c7a;margin-top:6px;font-weight:600;}
-
 .greet-card{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:12px 14px;margin-bottom:12px;border:1px solid #d4f0e0;}
 .greet-icon{font-size:26px;flex-shrink:0;}
 .greet-text{font-size:13px;font-weight:700;color:var(--g1);}
 .greet-sub{font-size:11px;color:#8aab9e;margin-top:2px;}
-
-/* Stat row */
 .stat-row{display:flex;gap:8px;margin-bottom:12px;}
 .stat-box{flex:1;background:#fff;border-radius:14px;padding:10px 8px;text-align:center;border:1px solid #d4f0e0;}
 .stat-num{font-size:18px;font-weight:900;color:var(--g1);}
 .stat-label{font-size:10px;color:#8aab9e;margin-top:2px;font-weight:600;line-height:1.3;}
-
-/* Smena banner */
-.shift-banner{
-display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbe6,#fff3cd);
-border-radius:12px;padding:10px 14px;margin-bottom:12px;border:1px solid #ffe58f;
-}
+.shift-banner{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbe6,#fff3cd);border-radius:12px;padding:10px 14px;margin-bottom:12px;border:1px solid #ffe58f;}
 .shift-banner span{font-size:12px;color:#8a6000;font-weight:600;}
-
 .log-card{background:#fff;border-radius:16px;padding:12px 14px;margin-bottom:12px;border:1px solid #d4f0e0;}
 .log-card h4{font-size:11px;color:#8aab9e;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:700;}
 .log-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f9f5;font-size:13px;}
@@ -107,7 +107,6 @@ border-radius:12px;padding:10px 14px;margin-bottom:12px;border:1px solid #ffe58f
 .badge-out{background:#fff0f3;color:var(--r2);}
 .badge-early{background:#fff8e1;color:#f57c00;}
 .log-hours{font-size:12px;color:#6b8c7a;font-weight:700;background:var(--offwhite);padding:2px 8px;border-radius:10px;}
-
 .ci-btns{display:flex;flex-direction:column;gap:10px;}
 .ci-btn{width:100%;padding:18px;border:none;border-radius:20px;font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s;}
 .ci-btn:active{transform:scale(.96);}
@@ -125,12 +124,12 @@ border-radius:12px;padding:10px 14px;margin-bottom:12px;border:1px solid #ffe58f
 .ph-placeholder span{font-size:60px;margin-bottom:10px;}
 .ph-placeholder p{font-size:13px;color:#8aab9e;font-weight:600;}
 input[type=file]{display:none;}
-.btn-can{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;margin-bottom:10px;}
+.btn-cam{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;margin-bottom:10px;}
 .btn-confirm-ph{width:100%;padding:17px;border:none;border-radius:17px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--g4),var(--g3));color:#fff;margin-bottom:10px;display:none;}
 .btn-retry-ph{width:100%;padding:13px;border:2px solid #d4f0e0;border-radius:14px;font-size:14px;cursor:pointer;background:#fff;color:#6b8c7a;margin-bottom:10px;display:none;font-weight:700;}
 .btn-back-ph{width:100%;padding:12px;border:none;background:transparent;color:#8aab9e;font-size:13px;cursor:pointer;font-weight:600;}
 
-/* ===== ERTA KELISH OGOH ===== */
+/* ===== ERTA KELISH ===== */
 #pageEarlyWarn{align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#3d2600,#8a5000,#f57c00);}
 .early-card{background:#fff;border-radius:28px;padding:36px 24px;max-width:320px;width:100%;text-align:center;animation:pop .4s ease;}
 .early-icon{font-size:72px;margin-bottom:14px;display:block;}
@@ -156,498 +155,473 @@ input[type=file]{display:none;}
 </head>
 <body>
 
-<!-- 1. PIN -->
-<div id="pagePIN" class="page active">
-<div class="pin-head">
-<div class="pin-logo">&#128101;</div>
-<div class="pin-title">HR Davomat</div>
-<div class="pin-sub">Parus &amp; Nukus filiali</div>
-</div>
-<div class="pin-card">
-<div class="pin-display" id="pinDisplay">
-<div class="dots">
-<div class="dot" id="d0"></div><div class="dot" id="d1"></div>
-<div class="dot" id="d2"></div><div class="dot" id="d3"></div>
-</div>
-<div class="pin-hint" id="pinHint">Bot kodini kiriting</div>
-<div class="pin-emp-name" id="pinName" style="display:none"></div>
-<div class="pin-emp-branch" id="pinBranch" style="display:none"></div>
-</div>
-<div class="keypad">
-<button class="key" onclick="kp('1')">1</button>
-<button class="key" onclick="kp('2')">2</button>
-<button class="key" onclick="kp('3')">3</button>
-<button class="key" onclick="kp('4')">4</button>
-<button class="key" onclick="kp('5')">5</button>
-<button class="key" onclick="kp('6')">6</button>
-<button class="key" onclick="kp('7')">7</button>
-<button class="key" onclick="kp('8')">8</button>
-<button class="key" onclick="kp('9')">9</button>
-<button class="key zero" onclick="kp('0')">0</button>
-<button class="key del" onclick="kd()">&#9003;</button>
-</div>
-<div class="pin-err" id="pinErr"></div>
-</div>
+<!-- 1. FILAL TANLASH -->
+<div id="pageBranch" class="page active">
+  <div class="branch-head">
+    <div class="branch-logo">ð¥</div>
+    <div class="branch-title">HR Davomat</div>
+    <div class="branch-sub">Filalni tanlang</div>
+  </div>
+  <div class="branch-card">
+    <button class="branch-btn branch-parus" onclick="chooseBranch('Parus')">ð¢ &nbsp; Parus</button>
+    <button class="branch-btn branch-nukus" onclick="chooseBranch('Nukus')">ðï¸ &nbsp; Nukus</button>
+  </div>
 </div>
 
-<!-- 2. LOADING -->
+<!-- 2. ISM KIRISH -->
+<div id="pagePIN" class="page">
+  <div class="pin-head">
+    <div class="pin-logo">ð¥</div>
+    <div class="pin-title">HR Davomat</div>
+    <div class="pin-sub" id="pinSub">Filal</div>
+  </div>
+  <div class="pin-card">
+    <input type="text" class="name-input" id="nameInput"
+      placeholder="Ismingizni kiriting..."
+      oninput="searchEmp(this.value)"
+      autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="emp-results" id="empResults"></div>
+    <div class="pin-err" id="pinErr"></div>
+    <button class="btn-back-pin" onclick="goBackBranch()">â Orqaga</button>
+  </div>
+</div>
+
+<!-- 3. LOADING -->
 <div id="pageLoading" class="page">
-<div class="loader"></div>
-<div class="load-text" id="loadText">&#128205; GPS tekshirilmoqda...</div>
+  <div class="loader"></div>
+  <div class="load-text" id="loadText">ð GPS tekshirilmoqda...</div>
 </div>
 
-<!-- 3. GPS XATO -->
+<!-- 4. GPS XATO -->
 <div id="pageGpsError" class="page">
-<div class="gps-err-card">
-<span class="gps-err-icon">&#128683;</span>
-<div class="gps-err-title">Siz ishxonada emassiz!</div>
-<div class="gps-err-msg">
-Iltimos, yolgondan qorqing!<br><br>
-Siz hozir boshqa joydasiz. Siz qilayotgan hamma narsa rahbarga boradi!
-</div>
-<div class="gps-err-dist" id="gpsErrDist"></div>
-<button class="btn-gps-back" onclick="goBackPin()">&#8592; Orqaga qaytish</button>
-</div>
+  <div class="gps-err-card">
+    <span class="gps-err-icon">ð«</span>
+    <div class="gps-err-title">Siz ishxonada emassiz!</div>
+    <div class="gps-err-msg">
+      â ï¸ Iltimos, yolg'ondan qo'rqing!<br><br>
+      Siz hozir boshqa joydasiz. Siz qilayotgan hamma narsa rahbarga boradi!
+    </div>
+    <div class="gps-err-dist" id="gpsErrDist"></div>
+    <button class="btn-gps-back" onclick="goBackPin()">â Orqaga qaytish</button>
+  </div>
 </div>
 
-<!-- 4. ERTA KELISH OGOHLANTIRISH -->
+<!-- 5. ERTA KELISH OGOHLANTIRISH -->
 <div id="pageEarlyWarn" class="page">
-<div class="early-card">
-<span class="early-icon">&#9200;</span>
-<div class="early-title">Siz erta keldingiz!</div>
-<div class="early-msg">
-Smena <b>14:00</b> dan boshlanadi.<br><br>
-Hozir bosish mumkin, lekin <b>ish vaqti 14:00 dan hisoblanadi</b>.
-Rahbarga xabar yuborildi.
-</div>
-<div class="early-time" id="earlyTime">&#128336; Hozir: 00:00</div>
-<button class="btn-early-ok" onclick="earlyConfirm()">&#9989; Tushundim, qayd etish</button>
-<button class="btn-early-back" onclick="show('pageCI')">&#8592; Orqaga</button>
-</div>
+  <div class="early-card">
+    <span class="early-icon">â°</span>
+    <div class="early-title">Siz erta keldingiz!</div>
+    <div class="early-msg">
+      Smena <b>14:00</b> dan boshlanadi.<br><br>
+      Hozir bosish mumkin, lekin <b>ish vaqti 14:00 dan hisoblanadi</b>.
+      Rahbarga xabar yuborildi.
+    </div>
+    <div class="early-time" id="earlyTime">ð Hozir: 00:00</div>
+    <button class="btn-early-ok" onclick="earlyConfirm()">â Tushundim, qayd etish</button>
+    <button class="btn-early-back" onclick="show('pageCI')">â Orqaga</button>
+  </div>
 </div>
 
-<!-- 5. CHECK-IN -->
+<!-- 6. CHECK-IN -->
 <div id="pageCI" class="page">
-<div class="ci-header">
-<div class="ci-header-row">
-<div class="ci-av" id="ciAv"></div>
-<div class="ci-info">
-<div class="ci-emp-name" id="ciName"></div>
-<span class="ci-emp-branch" id="ciBranch"></span>
-</div>
-<button class="ci-logout" onclick="goBackPin()">&#128682;</button>
-</div>
-</div>
-<div class="ci-body">
-<div class="clock-card">
-<div class="clock-time" id="ciClock">00:00:00</div>
-<div class="clock-date" id="ciDate"></div>
-</div>
-<div class="greet-card">
-<span class="greet-icon" id="greetIcon">&#128075;</span>
-<div>
-<div class="greet-text" id="greetText">Xush kelibsiz!</div>
-<div class="greet-sub" id="greetSub"></div>
-</div>
-</div>
-<div class="shift-banner">
-<span>&#128336;</span>
-<span>Smena: <b>14:00 &#8212; 00:30</b></span>
-</div>
-<div class="stat-row">
-<div class="stat-box">
-<div class="stat-num" id="statStatus">&#8212;</div>
-<div class="stat-label">Bugungi holat</div>
-</div>
-<div class="stat-box">
-<div class="stat-num" id="statHours">&#8212;</div>
-<div class="stat-label">Bugungi ish soati</div>
-</div>
-<div class="stat-box">
-<div class="stat-num" id="statVisits">0</div>
-<div class="stat-label">Keldi-ketdi soni</div>
-</div>
-</div>
-<div class="log-card" id="logCard" style="display:none">
-<h4>&#128203; Bugungi qaydlar</h4>
-<div id="logList"></div>
-</div>
-<div class="ci-btns">
-<button class="ci-btn btn-in" id="btnIn" onclick="startCheck('in')">&#9989;&nbsp;&nbsp;KELDI</button>
-<button class="ci-btn btn-out" id="btnOut" onclick="startCheck('out')" style="display:none">&#128682;&nbsp;&nbsp;KETDI</button>
-</div>
-</div>
+  <div class="ci-header">
+    <div class="ci-header-row">
+      <div class="ci-av" id="ciAv"></div>
+      <div class="ci-info">
+        <div class="ci-emp-name" id="ciName"></div>
+        <span class="ci-emp-branch" id="ciBranch"></span>
+      </div>
+      <button class="ci-logout" onclick="goBackPin()">ðª</button>
+    </div>
+  </div>
+  <div class="ci-body">
+    <div class="clock-card">
+      <div class="clock-time" id="ciClock">00:00:00</div>
+      <div class="clock-date" id="ciDate"></div>
+    </div>
+    <div class="greet-card">
+      <span class="greet-icon" id="greetIcon">ð</span>
+      <div>
+        <div class="greet-text" id="greetText">Xush kelibsiz!</div>
+        <div class="greet-sub" id="greetSub"></div>
+      </div>
+    </div>
+    <div class="shift-banner">
+      <span>ð</span>
+      <span>Smena: <b>14:00 â 00:30</b></span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num" id="statStatus">â</div>
+        <div class="stat-label">Bugungi holat</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statHours">â</div>
+        <div class="stat-label">Bugungi ish soati</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statVisits">0</div>
+        <div class="stat-label">Keldi-ketdi soni</div>
+      </div>
+    </div>
+    <div class="log-card" id="logCard" style="display:none">
+      <h4>ð Bugungi qaydlar</h4>
+      <div id="logList"></div>
+    </div>
+    <div class="ci-btns">
+      <button class="ci-btn btn-in"  id="btnIn"  onclick="startCheck('in')">â&nbsp;&nbsp;KELDI</button>
+      <button class="ci-btn btn-out" id="btnOut" onclick="startCheck('out')" style="display:none">ðª&nbsp;&nbsp;KETDI</button>
+    </div>
+  </div>
 </div>
 
-<!-- 6. FOTO -->
+<!-- 7. FOTO -->
 <div id="pagePhoto" class="page">
-<div class="ph-card">
-<div class="ph-title">&#128248; Selfie tasdiqlash</div>
-<div class="ph-sub" id="phSub">Old kamera bilan rasm oling</div>
-<img id="phPreview" class="ph-preview" alt="selfie">
-<div class="ph-placeholder" id="phPlaceholder">
-<span>&#129335;</span><p>Kamera tugmasini bosing</p>
-</div>
-<input type="file" id="photoInput" accept="image/*" capture="user" onchange="photoTaken()">
-<button class="btn-can" onclick="document.getElementById('photoInput').click()">&#128247; Kamera ochish</button>
-<button class="btn-confirm-ph" id="btnConfirmPh" onclick="confirmPhoto()">&#9989; Tasdiqlash va yuborish</button>
-<button class="btn-retry-ph" id="btnRetryPh" onclick="retakePhoto()">&#128260; Qayta olish</button>
-<button class="btn-back-ph" onclick="show('pageCI')">&#8592; Orqaga</button>
-</div>
+  <div class="ph-card">
+    <div class="ph-title">ð¸ Selfie tasdiqlash</div>
+    <div class="ph-sub" id="phSub">Old kamera bilan rasm oling</div>
+    <img id="phPreview" class="ph-preview" alt="selfie">
+    <div class="ph-placeholder" id="phPlaceholder">
+      <span>ð¤³</span><p>Kamera tugmasini bosing</p>
+    </div>
+    <input type="file" id="photoInput" accept="image/*" capture="user" onchange="photoTaken()">
+    <button class="btn-cam" onclick="document.getElementById('photoInput').click()">ð· Kamera ochish</button>
+    <button class="btn-confirm-ph" id="btnConfirmPh" onclick="confirmPhoto()">â Tasdiqlash va yuborish</button>
+    <button class="btn-retry-ph"   id="btnRetryPh"   onclick="retakePhoto()">ð Qayta olish</button>
+    <button class="btn-back-ph"    onclick="show('pageCI')">â Orqaga</button>
+  </div>
 </div>
 
-<!-- 7. NATIJA -->
+<!-- 8. NATIJA -->
 <div id="pageResult" class="page">
-<div class="res-card">
-<div class="confetti-wrap" id="confettiWrap"></div>
-<span class="res-icon" id="resIcon"></span>
-<div class="res-title" id="resTitle"></div>
-<div class="res-hours" id="resHours" style="display:none"></div>
-<div class="res-info" id="resInfo"></div>
-<button class="res-back" onclick="goBackPin()">&#127968; Bosh sahifaga qaytish</button>
-</div>
+  <div class="res-card">
+    <div class="confetti-wrap" id="confettiWrap"></div>
+    <span class="res-icon" id="resIcon"></span>
+    <div class="res-title" id="resTitle"></div>
+    <div class="res-hours" id="resHours" style="display:none"></div>
+    <div class="res-info" id="resInfo"></div>
+    <button class="res-back" onclick="goBackPin()">ð  Bosh sahifaga qaytish</button>
+  </div>
 </div>
 
 <script>
-var tg = window.Telegram && window.Telegram.WebApp;
+const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
 // ===== KONSTANTALAR =====
-var BRANCH_COLORS = {'Parus':'#e94560','Nukus':'#1a6ea8'};
-function empColor(b){return BRANCH_COLORS[b]||'#00b894';}
-var OFFICES = {
-  'Parus': {lat:41.292104, lon:69.211173},
-  'Nukus': {lat:41.350782, lon:69.218418}
-};
-var MAX_DIST = 20;
-var SHIFT_START = 14 * 60;
-var SHIFT_END = 24 * 60 + 30;
+const OFFICE_LAT  = 41.308143;
+const OFFICE_LON  = 69.210944;
+const MAX_DIST    = 10;
+const SHIFT_START = 14 * 60;
+const SHIFT_END   = 24 * 60 + 30;
+
+// ===== XODIMLAR (Ibrohim Stajor yo'q) =====
+const EMPS = [
+  {n:'Muhammad Amin',      b:'Parus', p:'1001', c:'#e94560'},
+  {n:'Ibrohim',            b:'Parus', p:'1002', c:'#0f3460'},
+  {n:'Zoxida',             b:'Parus', p:'1004', c:'#00b894'},
+  {n:'Ilxom',              b:'Parus', p:'1005', c:'#f39c12'},
+  {n:'Kamola',             b:'Parus', p:'1006', c:'#e67e22'},
+  {n:'Xurshid Soyibjonov', b:'Nukus', p:'2001', c:'#1a6ea8'},
+  {n:'Dadaxon Yulchiyev',  b:'Nukus', p:'2002', c:'#6a1b9a'},
+  {n:'Mohichehra',         b:'Nukus', p:'2003', c:'#2e7d32'},
+  {n:'Aziza',              b:'Nukus', p:'2004', c:'#c62828'},
+  {n:'Aliakbar',           b:'Nukus', p:'2005', c:'#37474f'},
+  {n:'Abrorbek',           b:'Nukus', p:'2006', c:'#00838f'},
+  {n:'Maryam',             b:'Nukus', p:'2007', c:'#ad1457'},
+];
 
 // ===== STATE =====
-var buf = '', emp = null, clkTimer = null, pendingType = null, photo = null, uLat = null, uLon = null;
+let selectedBranch=null, emp=null, clkTimer=null, pendingType=null, photo=null, uLat=null, uLon=null;
 
-// ===== AUTO-LOGIN =====
-(function(){
-  try {
-    var s = localStorage.getItem('hr_emp');
-    if (s) {
-      var e = JSON.parse(s);
-      if (e && e.n && e.b && e.p) {
-        emp = {n:e.n, b:e.b, p:e.p, c:empColor(e.b)};
-        openCI();
-        return;
-      }
-    }
-  } catch(ex) { localStorage.removeItem('hr_emp'); }
-  dots();
-  show('pagePIN');
-})();
-
-// ===== ISH SOATI =====
-function parseMin(t){
-  var parts = t.split(':').map(Number);
-  return parts[0]*60 + parts[1];
-}
-function calcWorkMinutes(inTime, outTime){
-  var inMin = parseMin(inTime);
-  var outMin = parseMin(outTime);
-  if (outMin <= 90) outMin += 24*60;
-  return Math.max(0, outMin - inMin);
-}
-function fmtMin(min){
-  if (!min && min !== 0) return '--';
-  var h = Math.floor(min/60), m = min%60;
-  if (h > 0) return h + 's ' + m + 'd';
-  return m + 'd';
-}
-
-// ===== KOD KIRITISH =====
-function kp(d){
-  if (buf.length >= 4) return;
-  buf += d;
-  dots();
-  if (buf.length === 4) setTimeout(checkCode, 200);
-}
-function kd(){
-  if (!buf.length) return;
-  buf = buf.slice(0, -1);
-  dots();
-  resetCode();
-}
-function dots(){
-  for (var i = 0; i < 4; i++) {
-    var el = document.getElementById('d' + i);
-    if (el) el.classList.toggle('on', i < buf.length);
-  }
-}
-function resetCode(){
-  document.getElementById('pinHint').style.display = 'block';
-  document.getElementById('pinName').style.display = 'none';
-  document.getElementById('pinBranch').style.display = 'none';
-  document.getElementById('pinDisplay').classList.remove('ok');
+// ===== FILAL TANLASH =====
+function chooseBranch(branch) {
+  selectedBranch = branch;
+  document.getElementById('pinSub').textContent = (branch==='Parus'?'ð¢':'ðï¸') + ' ' + branch + ' filali';
+  document.getElementById('nameInput').value = '';
+  document.getElementById('empResults').innerHTML = '';
   document.getElementById('pinErr').textContent = '';
+  show('pagePIN');
+  setTimeout(()=>{ try{ document.getElementById('nameInput').focus(); }catch(e){} }, 400);
 }
 
-async function checkCode(){
-  var code = buf;
-  var errEl = document.getElementById('pinErr');
-  if (errEl) errEl.textContent = '';
-  try {
-    var r = await fetch('/verify-code', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({code: code})
-    });
-    var data = await r.json();
-    if (data.ok) {
-      emp = {n:data.emp.n, b:data.emp.b, p:data.emp.p, c:empColor(data.emp.b)};
-      localStorage.setItem('hr_emp', JSON.stringify({n:emp.n, b:emp.b, p:emp.p}));
-      document.getElementById('pinName').textContent = emp.n;
-      document.getElementById('pinName').style.display = 'block';
-      document.getElementById('pinBranch').textContent = 'ð  ' + emp.b;
-      document.getElementById('pinBranch').style.display = 'inline-block';
-      document.getElementById('pinHint').style.display = 'none';
-      document.getElementById('pinDisplay').classList.add('ok');
-      setTimeout(function(){ openCI(); }, 600);
-    } else {
-      if (errEl) {
-        errEl.textContent = data.msg || 'Kod xato';
-        errEl.classList.remove('shake');
-        void errEl.offsetWidth;
-        errEl.classList.add('shake');
-      }
-      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-      setTimeout(function(){ buf = ''; dots(); resetCode(); }, 1200);
-    }
-  } catch(err) {
-    if (errEl) errEl.textContent = 'Server bilan aloqa uzildi';
-    setTimeout(function(){ buf = ''; dots(); resetCode(); }, 1500);
+function goBackBranch() {
+  document.getElementById('nameInput').value = '';
+  document.getElementById('empResults').innerHTML = '';
+  document.getElementById('pinErr').textContent = '';
+  show('pageBranch');
+}
+
+// ===== ISM QIDIRISH =====
+function searchEmp(query) {
+  const res = document.getElementById('empResults');
+  const q   = query.trim().toLowerCase();
+  if (!q) { res.innerHTML=''; return; }
+
+  const matches = EMPS.filter(e =>
+    e.b === selectedBranch && e.n.toLowerCase().includes(q)
+  );
+
+  if (!matches.length) {
+    res.innerHTML = '<div class="emp-not-found">â Topilmadi</div>';
+    return;
   }
+
+  res.innerHTML = matches.map(e =>
+    `<div class="emp-item" onclick="selectEmp('${e.p}')">
+      <div class="emp-av" style="background:${e.c}">${e.n[0]}</div>
+      <span class="emp-name-txt">${e.n}</span>
+    </div>`
+  ).join('');
+}
+
+function selectEmp(pin) {
+  emp = EMPS.find(e => e.p === pin);
+  if (!emp) return;
+  document.getElementById('nameInput').value = emp.n;
+  document.getElementById('pinErr').textContent = '';
+  document.getElementById('empResults').innerHTML =
+    `<div class="emp-confirmed">â ${emp.n} â ${emp.b} filali</div>`;
+  if (tg) tg.HapticFeedback?.notificationOccurred('success');
+  setTimeout(() => openCI(), 600);
 }
 
 // ===== GPS =====
-function getOffice(){
-  var o = OFFICES[emp && emp.b] || OFFICES['Parus'];
-  return o;
-}
-function haversine(lat2, lon2){
-  var o = getOffice();
-  var R = 6371000;
-  var dL = (lat2 - o.lat) * Math.PI / 180;
-  var dO = (lon2 - o.lon) * Math.PI / 180;
-  var a = Math.pow(Math.sin(dL/2), 2) + Math.cos(o.lat*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.pow(Math.sin(dO/2), 2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+function haversine(lat2, lon2) {
+  const R=6371000;
+  const dL=(lat2-OFFICE_LAT)*Math.PI/180;
+  const dO=(lon2-OFFICE_LON)*Math.PI/180;
+  const a=Math.sin(dL/2)**2+Math.cos(OFFICE_LAT*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dO/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-function checkGPSandProceed(){
+function checkGPSandProceed() {
   document.getElementById('loadText').textContent = 'ð Joylashuv tekshirilmoqda...';
   show('pageLoading');
-  if (!navigator.geolocation) { show('pageCI'); alert('GPS qollab-quvvatlanmaydi!'); return; }
+  if (!navigator.geolocation) {
+    show('pageCI');
+    alert("â Qurilmangiz GPS ni qo'llab-quvvatlamaydi!");
+    return;
+  }
   navigator.geolocation.getCurrentPosition(
-    function(pos){
+    pos => {
       uLat = pos.coords.latitude;
       uLon = pos.coords.longitude;
-      var dist = haversine(uLat, uLon);
+      const dist = haversine(uLat, uLon);
       if (dist > MAX_DIST) {
-        document.getElementById('gpsErrDist').textContent = 'ð Siz ishxonadan taxminan ' + Math.round(dist) + ' metr uzoqdasiz (Ruxsat: ' + MAX_DIST + ' metr)';
-        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+        document.getElementById('gpsErrDist').textContent =
+          `ð Siz ishxonadan taxminan ${Math.round(dist)} metr uzoqdasiz\n(Ruxsat etilgan masofa: ${MAX_DIST} metr)`;
+        if (tg) tg.HapticFeedback?.notificationOccurred('error');
         show('pageGpsError');
       } else {
         afterGPS();
       }
     },
-    function(err){
+    err => {
       show('pageCI');
-      if (err.code === 1) { alert('GPS ruxsat berilmadi! Telegram sozlamalarida joylashuvga ruxsat bering.'); }
-      else { alert('GPS aniqlab bolmadi. Ochiq joyga chiqing.'); }
+      if (err.code===1) {
+        alert("ð GPS ruxsat berilmadi!\n\nTelegramda: Sozlamalar â Maxfiylik â Joylashuv â Telegramga ruxsat bering.");
+      } else {
+        alert("ð GPS aniqlab bo'lmadi. Ochiq joyga chiqing va qayta urinib ko'ring.");
+      }
     },
-    {enableHighAccuracy:true, timeout:15000, maximumAge:0}
+    { enableHighAccuracy:true, timeout:15000, maximumAge:0 }
   );
 }
 
-// ===== CHECK-IN SAHIFASI =====
-function today(){ return new Date().toISOString().split('T')[0]; }
-function timeNow(){ return new Date().toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit'}); }
-function nowMin(){ var n = new Date(); return n.getHours()*60 + n.getMinutes(); }
+// ===== CHECK-IN =====
+function today() { return new Date().toISOString().split('T')[0]; }
+function timeNow() { return new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'}); }
+function nowMin() { const n=new Date(); return n.getHours()*60+n.getMinutes(); }
 
-function openCI(){
-  var av = document.getElementById('ciAv');
-  av.textContent = emp.n[0].toUpperCase();
-  av.style.background = emp.c;
-  document.getElementById('ciName').textContent = emp.n;
-  document.getElementById('ciBranch').textContent = 'ð  ' + emp.b;
-  setGreeting();
-  startClock();
-  loadLog();
+function parseMin(t) {
+  const [h,m]=t.split(':').map(Number); return h*60+m;
+}
+function calcWorkMinutes(inTime, outTime) {
+  let inMin=parseMin(inTime), outMin=parseMin(outTime);
+  if (outMin<=90) outMin+=24*60;
+  const effIn=Math.max(inMin,SHIFT_START), effOut=Math.min(outMin,SHIFT_END);
+  if (effOut<=effIn) return 0;
+  return effOut-effIn;
+}
+function fmtMin(min) {
+  if (!min&&min!==0) return 'â';
+  const h=Math.floor(min/60), m=min%60;
+  return h>0?`${h}s ${m}d`:`${m}d`;
+}
+
+function openCI() {
+  const av=document.getElementById('ciAv');
+  av.textContent=emp.n[0].toUpperCase(); av.style.background=emp.c;
+  document.getElementById('ciName').textContent=emp.n;
+  document.getElementById('ciBranch').textContent='ð¢ '+emp.b+' filali';
+  setGreeting(); startClock(); loadLog();
   show('pageCI');
 }
 
-function setGreeting(){
-  var h = new Date().getHours();
-  var icon, text, sub;
-  if (h < 6)       { icon = 'ð'; text = 'Xayrli tun!';    sub = 'Siz juda erta keldingiz!'; }
-  else if (h < 12) { icon = 'ð'; text = 'Xayrli tong!';   sub = 'Bugungi ishga xush kelibsiz!'; }
-  else if (h < 17) { icon = 'âï¸'; text = 'Xayrli kun!';    sub = 'Smena boshlanmoqda, omad!'; }
-  else if (h < 21) { icon = 'ð'; text = 'Xayrli oqshom!'; sub = 'Ish davom etmoqda!'; }
-  else             { icon = 'ð'; text = 'Xayrli kech!';   sub = 'Bugun ham yaxshi ish qildingiz!'; }
-  document.getElementById('greetIcon').innerHTML = icon;
-  document.getElementById('greetText').textContent = emp.n.split(' ')[0] + ', ' + text;
-  document.getElementById('greetSub').textContent = sub;
+function setGreeting() {
+  const h=new Date().getHours();
+  let icon,text,sub;
+  if(h<6)      {icon='ð';text='Xayrli tun!';    sub='Siz juda erta keldingiz!';}
+  else if(h<12){icon='ð';text='Xayrli tong!';   sub='Bugungi ishga xush kelibsiz! ðª';}
+  else if(h<17){icon='âï¸';text='Xayrli kun!';    sub='Smena boshlanmoqda, omad!';}
+  else if(h<21){icon='ð';text='Xayrli oqshom!'; sub='Ish davom etmoqda!';}
+  else         {icon='ð';text='Xayrli kech!';   sub='Bugun ham yaxshi ish qildingiz!';}
+  document.getElementById('greetIcon').textContent=icon;
+  document.getElementById('greetText').textContent=emp.n.split(' ')[0]+', '+text;
+  document.getElementById('greetSub').textContent=sub;
 }
 
-function startClock(){
+function startClock() {
   clearInterval(clkTimer);
-  var tick = function(){
-    document.getElementById('ciClock').textContent = new Date().toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-    document.getElementById('ciDate').textContent = new Date().toLocaleDateString('uz-UZ', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  const tick=()=>{
+    document.getElementById('ciClock').textContent=
+      new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    document.getElementById('ciDate').textContent=
+      new Date().toLocaleDateString('uz-UZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   };
-  tick();
-  clkTimer = setInterval(tick, 1000);
+  tick(); clkTimer=setInterval(tick,1000);
 }
 
-async function loadLog(){
-  var log = [];
-  try { var r = await fetch('/api/log/' + emp.p + '/' + today()); log = await r.json(); } catch(e) {}
-  var totalMin = 0, lastIn = null;
-  for (var i = 0; i < log.length; i++) {
-    var rec = log[i];
-    if (rec.type === 'in') lastIn = rec.effective_in || rec.time;
-    else if (rec.type === 'out' && lastIn) { totalMin += calcWorkMinutes(lastIn, rec.time); lastIn = null; }
+async function loadLog() {
+  let log=[];
+  try { const r=await fetch(`/api/log/${emp.p}/${today()}`); log=await r.json(); } catch(e){}
+  let totalMin=0, lastIn=null;
+  for(const r of log){
+    if(r.type==='in') lastIn=r.effective_in||r.time;
+    else if(r.type==='out'&&lastIn){ totalMin+=calcWorkMinutes(lastIn,r.time); lastIn=null; }
   }
-  var lastRec = log[log.length - 1];
-  document.getElementById('statStatus').textContent = !log.length ? 'â¡' : (lastRec && lastRec.type === 'in' ? 'ð¢' : 'ð´');
-  document.getElementById('statHours').textContent = totalMin > 0 ? fmtMin(totalMin) : '--';
-  document.getElementById('statVisits').textContent = log.filter(function(r){ return r.type === 'in'; }).length;
-  if (log.length) {
-    document.getElementById('logList').innerHTML = log.map(function(r){
-      var isEarly = r.early_arrival;
-      var badge = r.type === 'in'
-        ? ('<span class="log-badge ' + (isEarly ? 'badge-early' : 'badge-in') + '">' + (isEarly ? 'â° Erta keldi' : 'â Keldi') + '</span>')
-        : '<span class="log-badge badge-out">ðª Ketdi</span>';
-      var hours = r.work_minutes > 0 ? ('<span class="log-hours">â³ ' + fmtMin(r.work_minutes) + '</span>') : '';
-      return '<div class="log-item">' + badge + '<div style="display:flex;gap:6px;align-items:center"><span style="color:#6b8c7a;font-size:12px;font-weight:600">' + r.time + '</span>' + hours + '</div></div>';
+  const lastRec=log[log.length-1];
+  document.getElementById('statStatus').textContent=!log.length?'â¬':(lastRec?.type==='in'?'ð¢':'ð´');
+  document.getElementById('statHours').textContent=totalMin>0?fmtMin(totalMin):'â';
+  document.getElementById('statVisits').textContent=log.filter(r=>r.type==='in').length;
+  if(log.length){
+    document.getElementById('logList').innerHTML=log.map(r=>{
+      const isEarly=r.early_arrival;
+      const badge=r.type==='in'
+        ?`<span class="log-badge ${isEarly?'badge-early':'badge-in'}">${isEarly?'â° Erta keldi':'â Keldi'}</span>`
+        :`<span class="log-badge badge-out">ðª Ketdi</span>`;
+      const hours=r.work_minutes>0?`<span class="log-hours">â± ${fmtMin(r.work_minutes)}</span>`:'';
+      return `<div class="log-item">${badge}<div style="display:flex;gap:6px;align-items:center"><span style="color:#6b8c7a;font-size:12px;font-weight:600">${r.time}</span>${hours}</div></div>`;
     }).join('');
-    document.getElementById('logCard').style.display = 'block';
+    document.getElementById('logCard').style.display='block';
   } else {
-    document.getElementById('logCard').style.display = 'none';
+    document.getElementById('logCard').style.display='none';
   }
-  document.getElementById('btnIn').style.display = (!lastRec || lastRec.type === 'out') ? 'flex' : 'none';
-  document.getElementById('btnOut').style.display = (lastRec && lastRec.type === 'in') ? 'flex' : 'none';
+  document.getElementById('btnIn').style.display=(!lastRec||lastRec.type==='out')?'flex':'none';
+  document.getElementById('btnOut').style.display=(lastRec&&lastRec.type==='in')?'flex':'none';
 }
 
-function startCheck(type){ pendingType = type; photo = null; checkGPSandProceed(); }
+function startCheck(type) {
+  pendingType=type; photo=null;
+  checkGPSandProceed();
+}
 
-function afterGPS(){
-  if (pendingType === 'in' && nowMin() < SHIFT_START) {
-    document.getElementById('earlyTime').textContent = 'ð Hozir: ' + timeNow();
+function afterGPS() {
+  if(pendingType==='in'&&nowMin()<SHIFT_START){
+    document.getElementById('earlyTime').textContent='ð Hozir: '+timeNow();
     show('pageEarlyWarn');
     return;
   }
   openPhoto();
 }
 
-function earlyConfirm(){ openPhoto(); }
+function earlyConfirm() { openPhoto(); }
 
-function openPhoto(){
-  document.getElementById('phSub').textContent = pendingType === 'in'
-    ? 'â KELDI tasdiqlash uchun selfie oling'
-    : 'ðª KETDI tasdiqlash uchun selfie oling';
+function openPhoto() {
+  document.getElementById('phSub').textContent=
+    pendingType==='in'?'â KELDI tasdiqlash uchun selfie oling':'ðª KETDI tasdiqlash uchun selfie oling';
   retakePhoto();
   show('pagePhoto');
 }
 
+// ===== FOTO =====
 function photoTaken(){
-  var file = document.getElementById('photoInput').files[0];
-  if (!file) return;
-  var canvas = document.createElement('canvas');
-  var ctx = canvas.getContext('2d');
-  var img = new Image();
-  img.onload = function(){
-    var MAX = 800;
-    var w = img.width, h = img.height;
-    if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-    canvas.width = w; canvas.height = h;
-    ctx.drawImage(img, 0, 0, w, h);
-    photo = canvas.toDataURL('image/jpeg', 0.7);
-    var prev = document.getElementById('phPreview');
-    prev.src = photo; prev.style.display = 'block';
-    document.getElementById('phPlaceholder').style.display = 'none';
-    document.getElementById('btnConfirmPh').style.display = 'block';
-    document.getElementById('btnRetryPh').style.display = 'block';
+  const file=document.getElementById('photoInput').files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    photo=e.target.result;
+    const prev=document.getElementById('phPreview');
+    prev.src=photo; prev.style.display='block';
+    document.getElementById('phPlaceholder').style.display='none';
+    document.getElementById('btnConfirmPh').style.display='block';
+    document.getElementById('btnRetryPh').style.display='block';
   };
-  var reader = new FileReader();
-  reader.onload = function(e){ img.src = e.target.result; };
   reader.readAsDataURL(file);
 }
-
 function retakePhoto(){
-  photo = null;
-  document.getElementById('phPreview').style.display = 'none';
-  document.getElementById('phPlaceholder').style.display = 'flex';
-  document.getElementById('btnConfirmPh').style.display = 'none';
-  document.getElementById('btnRetryPh').style.display = 'none';
-  document.getElementById('photoInput').value = '';
+  photo=null;
+  document.getElementById('phPreview').style.display='none';
+  document.getElementById('phPlaceholder').style.display='flex';
+  document.getElementById('btnConfirmPh').style.display='none';
+  document.getElementById('btnRetryPh').style.display='none';
+  document.getElementById('photoInput').value='';
 }
-
 async function confirmPhoto(){
-  if (!photo) { alert('Avval selfie oling!'); return; }
-  var btn = document.getElementById('btnConfirmPh');
-  btn.disabled = true; btn.textContent = 'â³ Yuborilmoqda...';
-  try {
-    var r = await fetch('/api/checkin', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name:emp.n, branch:emp.b, pin:emp.p, type:pendingType, time:timeNow(), date:today(), photo:photo, lat:uLat, lon:uLon})
+  if(!photo){alert("Avval selfie oling!");return;}
+  const btn=document.getElementById('btnConfirmPh');
+  btn.disabled=true; btn.textContent='â³ Yuborilmoqda...';
+  try{
+    const r=await fetch('/api/checkin',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:emp.n,branch:emp.b,pin:emp.p,type:pendingType,time:timeNow(),date:today(),photo,lat:uLat,lon:uLon})
     });
-    var d = await r.json();
-    if (d.ok) {
-      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-      showResult(pendingType, d.work_minutes);
+    const d=await r.json();
+    if(d.ok){
+      if(tg)tg.HapticFeedback?.notificationOccurred('success');
+      showResult(pendingType,d.work_minutes);
     } else {
-      if (d.error === 'gps') {
-        document.getElementById('gpsErrDist').textContent = 'ð Siz ishxonadan taxminan ' + d.dist + ' metr uzoqdasiz';
+      if(d.error==='gps'){
+        document.getElementById('gpsErrDist').textContent=`ð Siz ishxonadan taxminan ${d.dist} metr uzoqdasiz`;
         show('pageGpsError');
       } else {
-        alert(d.msg || 'Xatolik yuz berdi!');
-        btn.disabled = false; btn.textContent = 'â Tasdiqlash va yuborish';
+        alert(d.msg||'â Xatolik yuz berdi!');
+        btn.disabled=false; btn.textContent='â Tasdiqlash va yuborish';
       }
     }
-  } catch(e) {
-    alert("Server bilan aloqa yo'q. Internet ulanishini tekshiring.");
-    btn.disabled = false; btn.textContent = 'â Tasdiqlash va yuborish';
+  }catch(e){
+    alert("â Server bilan aloqa yo'q. Internet ulanishini tekshiring.");
+    btn.disabled=false; btn.textContent='â Tasdiqlash va yuborish';
   }
 }
 
+// ===== NATIJA =====
 function showResult(type, workMin){
-  var wrap = document.getElementById('confettiWrap'); wrap.innerHTML = '';
-  var colors = ['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
-  for (var i = 0; i < 24; i++) {
-    var d = document.createElement('div'); d.className = 'c-dot';
-    d.style.cssText = 'left:' + Math.random()*100 + '%;top:' + (Math.random()*16-8) + 'px;background:' + colors[Math.floor(Math.random()*colors.length)] + ';animation-delay:' + Math.random()*.6 + 's;animation-duration:' + (1+Math.random()*.5) + 's;';
+  const wrap=document.getElementById('confettiWrap');
+  wrap.innerHTML='';
+  const colors=['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
+  for(let i=0;i<24;i++){
+    const d=document.createElement('div'); d.className='c-dot';
+    d.style.cssText=`left:${Math.random()*100}%;top:${-8+Math.random()*16}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.6}s;animation-duration:${1+Math.random()*.5}s;`;
     wrap.appendChild(d);
   }
-  document.getElementById('resIcon').textContent = type === 'in' ? 'â' : 'ðª';
-  var title = document.getElementById('resTitle');
-  title.textContent = type === 'in' ? 'Keldi qayd etildi!' : 'Ketdi qayd etildi!';
-  title.className = 'res-title ' + (type === 'in' ? 'in' : 'out');
-  var hoursEl = document.getElementById('resHours');
-  if (type === 'out' && workMin > 0) { hoursEl.textContent = 'â³ ' + fmtMin(workMin) + ' ishladi'; hoursEl.style.display = 'block'; }
-  else { hoursEl.style.display = 'none'; }
-  document.getElementById('resInfo').innerHTML = 'ð¤ <b>' + emp.n + '</b><br>ð  ' + emp.b + '<br>ð ' + timeNow() + '<br>ð ' + today() + '<br>ð¸ Foto saqlandi';
+  document.getElementById('resIcon').textContent=type==='in'?'â':'ðª';
+  const title=document.getElementById('resTitle');
+  title.textContent=type==='in'?'Keldi qayd etildi!':'Ketdi qayd etildi!';
+  title.className='res-title '+(type==='in'?'in':'out');
+  const hoursEl=document.getElementById('resHours');
+  if(type==='out'&&workMin>0){
+    hoursEl.textContent='â± '+fmtMin(workMin)+' ishladi';
+    hoursEl.style.display='block';
+  } else {
+    hoursEl.style.display='none';
+  }
+  document.getElementById('resInfo').innerHTML=
+    `ð¤ <b>${emp.n}</b><br>ð¢ ${emp.b} filali<br>ð ${timeNow()}<br>ð ${today()}<br>ð¸ Foto saqlandi â`;
   show('pageResult');
 }
 
+// ===== NAVIGATSIYA =====
 function show(id){
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
 function goBackPin(){
   clearInterval(clkTimer);
-  buf = ''; emp = null; pendingType = null; photo = null; uLat = null; uLon = null;
-  dots();
-  resetCode();
-  show('pagePIN');
+  emp=null; pendingType=null; photo=null; uLat=null; uLon=null;
+  show('pageBranch');
 }
 </script>
 </body>
