@@ -10,9 +10,9 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 :root{
-  --g1:#004d40;--g2:#00796b;--g3:#00b894;--g4:#55efc4;
-  --r1:#b71c1c;--r2:#e94560;--r3:#ff6b6b;
-  --offwhite:#f0fdf8;
+--g1:#004d40;--g2:#00796b;--g3:#00b894;--g4:#55efc4;
+--r1:#b71c1c;--r2:#e94560;--r3:#ff6b6b;
+--offwhite:#f0fdf8;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
@@ -26,8 +26,8 @@ body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 
 /* ===== PIN ===== */
 #pagePIN{
-  align-items:center;justify-content:center;padding:24px 20px;
-  background:linear-gradient(160deg,#002b22 0%,var(--g1) 35%,var(--g2) 70%,var(--g3) 100%);
+align-items:center;justify-content:center;padding:24px 20px;
+background:linear-gradient(160deg,#002b22 0%,var(--g1) 35%,var(--g2) 70%,var(--g3) 100%);
 }
 .pin-head{text-align:center;margin-bottom:28px;animation:fadeUp .5s ease;}
 .pin-logo{width:80px;height:80px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 14px;border:2px solid rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.3);}
@@ -93,8 +93,8 @@ body{font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 
 /* Smena banner */
 .shift-banner{
-  display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbe6,#fff3cd);
-  border-radius:12px;padding:10px 14px;margin-bottom:12px;border:1px solid #ffe58f;
+display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbe6,#fff3cd);
+border-radius:12px;padding:10px 14px;margin-bottom:12px;border:1px solid #ffe58f;
 }
 .shift-banner span{font-size:12px;color:#8a6000;font-weight:600;}
 
@@ -158,452 +158,497 @@ input[type=file]{display:none;}
 
 <!-- 1. PIN -->
 <div id="pagePIN" class="page active">
-  <div class="pin-head">
-    <div class="pin-logo">&#128101;</div>
-    <div class="pin-title">HR Davomat</div>
-    <div class="pin-sub">Parus &amp; Nukus filiali</div>
-  </div>
-  <div class="pin-card">
-    <div class="pin-display" id="pinDisplay">
-      <div class="dots">
-        <div class="dot" id="d0"></div><div class="dot" id="d1"></div>
-        <div class="dot" id="d2"></div><div class="dot" id="d3"></div>
-      </div>
-      <div class="pin-hint" id="pinHint">Bot kodini kiriting</div>
-      <div class="pin-emp-name" id="pinName" style="display:none"></div>
-      <div class="pin-emp-branch" id="pinBranch" style="display:none"></div>
-    </div>
-    <div class="keypad">
-      <button class="key" onclick="kp('1')">1</button>
-      <button class="key" onclick="kp('2')">2</button>
-      <button class="key" onclick="kp('3')">3</button>
-      <button class="key" onclick="kp('4')">4</button>
-      <button class="key" onclick="kp('5')">5</button>
-      <button class="key" onclick="kp('6')">6</button>
-      <button class="key" onclick="kp('7')">7</button>
-      <button class="key" onclick="kp('8')">8</button>
-      <button class="key" onclick="kp('9')">9</button>
-      <button class="key zero" onclick="kp('0')">0</button>
-      <button class="key del" onclick="kd()">&#9003;</button>
-    </div>
-    <div class="pin-err" id="pinErr"></div>
-  </div>
+<div class="pin-head">
+<div class="pin-logo">&#128101;</div>
+<div class="pin-title">HR Davomat</div>
+<div class="pin-sub">Parus &amp; Nukus filiali</div>
+</div>
+<div class="pin-card">
+<div class="pin-display" id="pinDisplay">
+<div class="dots">
+<div class="dot" id="d0"></div><div class="dot" id="d1"></div>
+<div class="dot" id="d2"></div><div class="dot" id="d3"></div>
+</div>
+<div class="pin-hint" id="pinHint">Bot kodini kiriting</div>
+<div class="pin-emp-name" id="pinName" style="display:none"></div>
+<div class="pin-emp-branch" id="pinBranch" style="display:none"></div>
+</div>
+<div class="keypad">
+<button class="key" onclick="kp('1')">1</button>
+<button class="key" onclick="kp('2')">2</button>
+<button class="key" onclick="kp('3')">3</button>
+<button class="key" onclick="kp('4')">4</button>
+<button class="key" onclick="kp('5')">5</button>
+<button class="key" onclick="kp('6')">6</button>
+<button class="key" onclick="kp('7')">7</button>
+<button class="key" onclick="kp('8')">8</button>
+<button class="key" onclick="kp('9')">9</button>
+<button class="key zero" onclick="kp('0')">0</button>
+<button class="key del" onclick="kd()">&#9003;</button>
+</div>
+<div class="pin-err" id="pinErr"></div>
+</div>
 </div>
 
 <!-- 2. LOADING -->
 <div id="pageLoading" class="page">
-  <div class="loader"></div>
-  <div class="load-text" id="loadText">&#128205; GPS tekshirilmoqda...</div>
+<div class="loader"></div>
+<div class="load-text" id="loadText">&#128205; GPS tekshirilmoqda...</div>
 </div>
 
 <!-- 3. GPS XATO -->
 <div id="pageGpsError" class="page">
-  <div class="gps-err-card">
-    <span class="gps-err-icon">&#128683;</span>
-    <div class="gps-err-title">Siz ishxonada emassiz!</div>
-    <div class="gps-err-msg">
-      Iltimos, yolgondan qorqing!<br><br>
-      Siz hozir boshqa joydasiz. Siz qilayotgan hamma narsa rahbarga boradi!
-    </div>
-    <div class="gps-err-dist" id="gpsErrDist"></div>
-    <button class="btn-gps-back" onclick="goBackPin()">&#8592; Orqaga qaytish</button>
-  </div>
+<div class="gps-err-card">
+<span class="gps-err-icon">&#128683;</span>
+<div class="gps-err-title">Siz ishxonada emassiz!</div>
+<div class="gps-err-msg">
+Iltimos, yolgondan qorqing!<br><br>
+Siz hozir boshqa joydasiz. Siz qilayotgan hamma narsa rahbarga boradi!
+</div>
+<div class="gps-err-dist" id="gpsErrDist"></div>
+<button class="btn-gps-back" onclick="goBackPin()">&#8592; Orqaga qaytish</button>
+</div>
 </div>
 
 <!-- 4. ERTA KELISH OGOHLANTIRISH -->
 <div id="pageEarlyWarn" class="page">
-  <div class="early-card">
-    <span class="early-icon">&#9200;</span>
-    <div class="early-title">Siz erta keldingiz!</div>
-    <div class="early-msg">
-      Smena <b>14:00</b> dan boshlanadi.<br><br>
-      Hozir bosish mumkin, lekin <b>ish vaqti 14:00 dan hisoblanadi</b>.
-      Rahbarga xabar yuborildi.
-    </div>
-    <div class="early-time" id="earlyTime">&#128336; Hozir: 00:00</div>
-    <button class="btn-early-ok" onclick="earlyConfirm()">&#9989; Tushundim, qayd etish</button>
-    <button class="btn-early-back" onclick="show('pageCI')">&#8592; Orqaga</button>
-  </div>
+<div class="early-card">
+<span class="early-icon">&#9200;</span>
+<div class="early-title">Siz erta keldingiz!</div>
+<div class="early-msg">
+Smena <b>14:00</b> dan boshlanadi.<br><br>
+Hozir bosish mumkin, lekin <b>ish vaqti 14:00 dan hisoblanadi</b>.
+Rahbarga xabar yuborildi.
+</div>
+<div class="early-time" id="earlyTime">&#128336; Hozir: 00:00</div>
+<button class="btn-early-ok" onclick="earlyConfirm()">&#9989; Tushundim, qayd etish</button>
+<button class="btn-early-back" onclick="show('pageCI')">&#8592; Orqaga</button>
+</div>
 </div>
 
 <!-- 5. CHECK-IN -->
 <div id="pageCI" class="page">
-  <div class="ci-header">
-    <div class="ci-header-row">
-      <div class="ci-av" id="ciAv"></div>
-      <div class="ci-info">
-        <div class="ci-emp-name" id="ciName"></div>
-        <span class="ci-emp-branch" id="ciBranch"></span>
-      </div>
-      <button class="ci-logout" onclick="goBackPin()">&#128682;</button>
-    </div>
-  </div>
-  <div class="ci-body">
-    <div class="clock-card">
-      <div class="clock-time" id="ciClock">00:00:00</div>
-      <div class="clock-date" id="ciDate"></div>
-    </div>
-    <div class="greet-card">
-      <span class="greet-icon" id="greetIcon">&#128075;</span>
-      <div>
-        <div class="greet-text" id="greetText">Xush kelibsiz!</div>
-        <div class="greet-sub" id="greetSub"></div>
-      </div>
-    </div>
-    <div class="shift-banner">
-      <span>&#128336;</span>
-      <span>Smena: <b>14:00 &#8212; 00:30</b></span>
-    </div>
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="stat-num" id="statStatus">&#8212;</div>
-        <div class="stat-label">Bugungi holat</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" id="statHours">&#8212;</div>
-        <div class="stat-label">Bugungi ish soati</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" id="statVisits">0</div>
-        <div class="stat-label">Keldi-ketdi soni</div>
-      </div>
-    </div>
-    <div class="log-card" id="logCard" style="display:none">
-      <h4>&#128203; Bugungi qaydlar</h4>
-      <div id="logList"></div>
-    </div>
-    <div class="ci-btns">
-      <button class="ci-btn btn-in"  id="btnIn"  onclick="startCheck('in')">&#9989;&nbsp;&nbsp;KELDI</button>
-      <button class="ci-btn btn-out" id="btnOut" onclick="startCheck('out')" style="display:none">&#128682;&nbsp;&nbsp;KETDI</button>
-    </div>
-  </div>
+<div class="ci-header">
+<div class="ci-header-row">
+<div class="ci-av" id="ciAv"></div>
+<div class="ci-info">
+<div class="ci-emp-name" id="ciName"></div>
+<span class="ci-emp-branch" id="ciBranch"></span>
+</div>
+<button class="ci-logout" onclick="goBackPin()">&#128682;</button>
+</div>
+</div>
+<div class="ci-body">
+<div class="clock-card">
+<div class="clock-time" id="ciClock">00:00:00</div>
+<div class="clock-date" id="ciDate"></div>
+</div>
+<div class="greet-card">
+<span class="greet-icon" id="greetIcon">&#128075;</span>
+<div>
+<div class="greet-text" id="greetText">Xush kelibsiz!</div>
+<div class="greet-sub" id="greetSub"></div>
+</div>
+</div>
+<div class="shift-banner">
+<span>&#128336;</span>
+<span>Smena: <b>14:00 &#8212; 00:30</b></span>
+</div>
+<div class="stat-row">
+<div class="stat-box">
+<div class="stat-num" id="statStatus">&#8212;</div>
+<div class="stat-label">Bugungi holat</div>
+</div>
+<div class="stat-box">
+<div class="stat-num" id="statHours">&#8212;</div>
+<div class="stat-label">Bugungi ish soati</div>
+</div>
+<div class="stat-box">
+<div class="stat-num" id="statVisits">0</div>
+<div class="stat-label">Keldi-ketdi soni</div>
+</div>
+</div>
+<div class="log-card" id="logCard" style="display:none">
+<h4>&#128203; Bugungi qaydlar</h4>
+<div id="logList"></div>
+</div>
+<div class="ci-btns">
+<button class="ci-btn btn-in" id="btnIn" onclick="startCheck('in')">&#9989;&nbsp;&nbsp;KELDI</button>
+<button class="ci-btn btn-out" id="btnOut" onclick="startCheck('out')" style="display:none">&#128682;&nbsp;&nbsp;KETDI</button>
+</div>
+</div>
 </div>
 
 <!-- 6. FOTO -->
 <div id="pagePhoto" class="page">
-  <div class="ph-card">
-    <div class="ph-title">&#128248; Selfie tasdiqlash</div>
-    <div class="ph-sub" id="phSub">Old kamera bilan rasm oling</div>
-    <img id="phPreview" class="ph-preview" alt="selfie">
-    <div class="ph-placeholder" id="phPlaceholder">
-      <span>&#129335;</span><p>Kamera tugmasini bosing</p>
-    </div>
-    <input type="file" id="photoInput" accept="image/*" capture="user" onchange="photoTaken()">
-    <button class="btn-cam" onclick="document.getElementById('photoInput').click()">&#128247; Kamera ochish</button>
-    <button class="btn-confirm-ph" id="btnConfirmPh" onclick="confirmPhoto()">&#9989; Tasdiqlash va yuborish</button>
-    <button class="btn-retry-ph"   id="btnRetryPh"   onclick="retakePhoto()">&#128260; Qayta olish</button>
-    <button class="btn-back-ph"    onclick="show('pageCI')">&#8592; Orqaga</button>
-  </div>
+<div class="ph-card">
+<div class="ph-title">&#128248; Selfie tasdiqlash</div>
+<div class="ph-sub" id="phSub">Old kamera bilan rasm oling</div>
+<img id="phPreview" class="ph-preview" alt="selfie">
+<div class="ph-placeholder" id="phPlaceholder">
+<span>&#129335;</span><p>Kamera tugmasini bosing</p>
+</div>
+<input type="file" id="photoInput" accept="image/*" capture="user" onchange="photoTaken()">
+<button class="btn-can" onclick="document.getElementById('photoInput').click()">&#128247; Kamera ochish</button>
+<button class="btn-confirm-ph" id="btnConfirmPh" onclick="confirmPhoto()">&#9989; Tasdiqlash va yuborish</button>
+<button class="btn-retry-ph" id="btnRetryPh" onclick="retakePhoto()">&#128260; Qayta olish</button>
+<button class="btn-back-ph" onclick="show('pageCI')">&#8592; Orqaga</button>
+</div>
 </div>
 
 <!-- 7. NATIJA -->
 <div id="pageResult" class="page">
-  <div class="res-card">
-    <div class="confetti-wrap" id="confettiWrap"></div>
-    <span class="res-icon" id="resIcon"></span>
-    <div class="res-title" id="resTitle"></div>
-    <div class="res-hours" id="resHours" style="display:none"></div>
-    <div class="res-info" id="resInfo"></div>
-    <button class="res-back" onclick="goBackPin()">&#127968; Bosh sahifaga qaytish</button>
-  </div>
+<div class="res-card">
+<div class="confetti-wrap" id="confettiWrap"></div>
+<span class="res-icon" id="resIcon"></span>
+<div class="res-title" id="resTitle"></div>
+<div class="res-hours" id="resHours" style="display:none"></div>
+<div class="res-info" id="resInfo"></div>
+<button class="res-back" onclick="goBackPin()">&#127968; Bosh sahifaga qaytish</button>
+</div>
 </div>
 
 <script>
-const tg = window.Telegram && window.Telegram.WebApp;
+var tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
 // ===== KONSTANTALAR =====
-const BRANCH_COLORS = {'Parus':'#e94560','Nukus':'#1a6ea8'};
+var BRANCH_COLORS = {'Parus':'#e94560','Nukus':'#1a6ea8'};
 function empColor(b){return BRANCH_COLORS[b]||'#00b894';}
-const OFFICES = {
+var OFFICES = {
   'Parus': {lat:41.292104, lon:69.211173},
-  'Nukus': {lat:41.350782, lon:69.218418},
+  'Nukus': {lat:41.350782, lon:69.218418}
 };
-const MAX_DIST   = 20;
-const SHIFT_START = 14 * 60;
-const SHIFT_END   = 24 * 60 + 30;
+var MAX_DIST = 20;
+var SHIFT_START = 14 * 60;
+var SHIFT_END = 24 * 60 + 30;
 
 // ===== STATE =====
-var buf='', emp=null, clkTimer=null, pendingType=null, photo=null, uLat=null, uLon=null;
+var buf = '', emp = null, clkTimer = null, pendingType = null, photo = null, uLat = null, uLon = null;
 
 // ===== AUTO-LOGIN =====
 (function(){
-  try{
-    var s=localStorage.getItem('hr_emp');
-    if(s){var e=JSON.parse(s);if(e&&e.n&&e.b&&e.p){emp={n:e.n,b:e.b,p:e.p,c:empColor(e.b)};openCI();return;}}
-  }catch(ex){localStorage.removeItem('hr_emp');}
-  dots();show('pagePIN');
+  try {
+    var s = localStorage.getItem('hr_emp');
+    if (s) {
+      var e = JSON.parse(s);
+      if (e && e.n && e.b && e.p) {
+        emp = {n:e.n, b:e.b, p:e.p, c:empColor(e.b)};
+        openCI();
+        return;
+      }
+    }
+  } catch(ex) { localStorage.removeItem('hr_emp'); }
+  dots();
+  show('pagePIN');
 })();
 
 // ===== ISH SOATI =====
-function parseMin(t){var parts=t.split(':').map(Number);return parts[0]*60+parts[1];}
-function calcWorkMinutes(inTime,outTime){
-  var inMin=parseMin(inTime);
-  var outMin=parseMin(outTime);
-  if(outMin<=90) outMin+=24*60;
-  return Math.max(0,outMin-inMin);
+function parseMin(t){
+  var parts = t.split(':').map(Number);
+  return parts[0]*60 + parts[1];
+}
+function calcWorkMinutes(inTime, outTime){
+  var inMin = parseMin(inTime);
+  var outMin = parseMin(outTime);
+  if (outMin <= 90) outMin += 24*60;
+  return Math.max(0, outMin - inMin);
 }
 function fmtMin(min){
-  if(!min&&min!==0)return '--';
-  var h=Math.floor(min/60),m=min%60;
-  if(h>0)return h+'s '+m+'d';
-  return m+'d';
+  if (!min && min !== 0) return '--';
+  var h = Math.floor(min/60), m = min%60;
+  if (h > 0) return h + 's ' + m + 'd';
+  return m + 'd';
 }
 
 // ===== KOD KIRITISH =====
 function kp(d){
-  if(buf.length>=4)return;
-  buf+=d;dots();
-  if(buf.length===4)setTimeout(checkCode,200);
+  if (buf.length >= 4) return;
+  buf += d;
+  dots();
+  if (buf.length === 4) setTimeout(checkCode, 200);
 }
 function kd(){
-  if(!buf.length)return;
-  buf=buf.slice(0,-1);dots();resetCode();
+  if (!buf.length) return;
+  buf = buf.slice(0, -1);
+  dots();
+  resetCode();
 }
 function dots(){
-  for(var i=0;i<4;i++){var el=document.getElementById('d'+i);if(el)el.classList.toggle('on',i<buf.length);}
+  for (var i = 0; i < 4; i++) {
+    var el = document.getElementById('d' + i);
+    if (el) el.classList.toggle('on', i < buf.length);
+  }
 }
 function resetCode(){
-  document.getElementById('pinHint').style.display='block';
-  document.getElementById('pinName').style.display='none';
-  document.getElementById('pinBranch').style.display='none';
+  document.getElementById('pinHint').style.display = 'block';
+  document.getElementById('pinName').style.display = 'none';
+  document.getElementById('pinBranch').style.display = 'none';
   document.getElementById('pinDisplay').classList.remove('ok');
-  document.getElementById('pinErr').textContent='';
+  document.getElementById('pinErr').textContent = '';
 }
 
 async function checkCode(){
-  var code=buf;
-  var errEl=document.getElementById('pinErr');
-  if(errEl)errEl.textContent='';
-  try{
-    var r=await fetch('/verify-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:code})});
-    var data=await r.json();
-    if(data.ok){
-      emp={n:data.emp.n,b:data.emp.b,p:data.emp.p,c:empColor(data.emp.b)};
-      localStorage.setItem('hr_emp',JSON.stringify({n:emp.n,b:emp.b,p:emp.p}));
-      document.getElementById('pinName').textContent=emp.n;
-      document.getElementById('pinName').style.display='block';
-      document.getElementById('pinBranch').textContent='&#127970; '+emp.b;
-      document.getElementById('pinBranch').style.display='inline-block';
-      document.getElementById('pinHint').style.display='none';
+  var code = buf;
+  var errEl = document.getElementById('pinErr');
+  if (errEl) errEl.textContent = '';
+  try {
+    var r = await fetch('/verify-code', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({code: code})
+    });
+    var data = await r.json();
+    if (data.ok) {
+      emp = {n:data.emp.n, b:data.emp.b, p:data.emp.p, c:empColor(data.emp.b)};
+      localStorage.setItem('hr_emp', JSON.stringify({n:emp.n, b:emp.b, p:emp.p}));
+      document.getElementById('pinName').textContent = emp.n;
+      document.getElementById('pinName').style.display = 'block';
+      document.getElementById('pinBranch').textContent = 'ð  ' + emp.b;
+      document.getElementById('pinBranch').style.display = 'inline-block';
+      document.getElementById('pinHint').style.display = 'none';
       document.getElementById('pinDisplay').classList.add('ok');
-      setTimeout(function(){openCI();},600);
-    }else{
-      if(errEl){errEl.textContent=data.msg||'Kod xato';errEl.classList.remove('shake');void errEl.offsetWidth;errEl.classList.add('shake');}
-      if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('error');
-      setTimeout(function(){buf='';dots();resetCode();},1200);
+      setTimeout(function(){ openCI(); }, 600);
+    } else {
+      if (errEl) {
+        errEl.textContent = data.msg || 'Kod xato';
+        errEl.classList.remove('shake');
+        void errEl.offsetWidth;
+        errEl.classList.add('shake');
+      }
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+      setTimeout(function(){ buf = ''; dots(); resetCode(); }, 1200);
     }
-  }catch(err){
-    if(errEl)errEl.textContent='Server bilan aloqa uzildi';
-    setTimeout(function(){buf='';dots();resetCode();},1500);
+  } catch(err) {
+    if (errEl) errEl.textContent = 'Server bilan aloqa uzildi';
+    setTimeout(function(){ buf = ''; dots(); resetCode(); }, 1500);
   }
 }
 
 // ===== GPS =====
 function getOffice(){
-  var o=OFFICES[emp&&emp.b]||OFFICES['Parus'];
+  var o = OFFICES[emp && emp.b] || OFFICES['Parus'];
   return o;
 }
-function haversine(lat2,lon2){
-  var o=getOffice();
-  var R=6371000;
-  var dL=(lat2-o.lat)*Math.PI/180;
-  var dO=(lon2-o.lon)*Math.PI/180;
-  var a=Math.pow(Math.sin(dL/2),2)+Math.cos(o.lat*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.pow(Math.sin(dO/2),2);
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+function haversine(lat2, lon2){
+  var o = getOffice();
+  var R = 6371000;
+  var dL = (lat2 - o.lat) * Math.PI / 180;
+  var dO = (lon2 - o.lon) * Math.PI / 180;
+  var a = Math.pow(Math.sin(dL/2), 2) + Math.cos(o.lat*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.pow(Math.sin(dO/2), 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
 function checkGPSandProceed(){
-  document.getElementById('loadText').textContent='&#128205; Joylashuv tekshirilmoqda...';
+  document.getElementById('loadText').textContent = 'ð Joylashuv tekshirilmoqda...';
   show('pageLoading');
-  if(!navigator.geolocation){show('pageCI');alert('GPS qollab-quvvatlanmaydi!');return;}
+  if (!navigator.geolocation) { show('pageCI'); alert('GPS qollab-quvvatlanmaydi!'); return; }
   navigator.geolocation.getCurrentPosition(
     function(pos){
-      uLat=pos.coords.latitude;uLon=pos.coords.longitude;
-      var dist=haversine(uLat,uLon);
-      if(dist>MAX_DIST){
-        document.getElementById('gpsErrDist').textContent='&#128205; Siz ishxonadan taxminan '+Math.round(dist)+' metr uzoqdasiz (Ruxsat: '+MAX_DIST+' metr);
-        if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('error');
+      uLat = pos.coords.latitude;
+      uLon = pos.coords.longitude;
+      var dist = haversine(uLat, uLon);
+      if (dist > MAX_DIST) {
+        document.getElementById('gpsErrDist').textContent = 'ð Siz ishxonadan taxminan ' + Math.round(dist) + ' metr uzoqdasiz (Ruxsat: ' + MAX_DIST + ' metr)';
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
         show('pageGpsError');
-      }else{afterGPS();}
+      } else {
+        afterGPS();
+      }
     },
     function(err){
       show('pageCI');
-      if(err.code===1){alert('GPS ruxsat berilmadi! Telegram sozlamalarida joylashuvga ruxsat bering.');}
-      else{alert('GPS aniqlab bolmadi. Ochiq joyga chiqing.');}
+      if (err.code === 1) { alert('GPS ruxsat berilmadi! Telegram sozlamalarida joylashuvga ruxsat bering.'); }
+      else { alert('GPS aniqlab bolmadi. Ochiq joyga chiqing.'); }
     },
-    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+    {enableHighAccuracy:true, timeout:15000, maximumAge:0}
   );
 }
 
-// ===== CHECI-IN SAHIFASI =====
-function today(){return new Date().toISOString().split('T')[0];}
-function timeNow(){return new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});}
-function nowMin(){var n=new Date();return n.getHours()*60+n.getMinutes();}
+// ===== CHECK-IN SAHIFASI =====
+function today(){ return new Date().toISOString().split('T')[0]; }
+function timeNow(){ return new Date().toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit'}); }
+function nowMin(){ var n = new Date(); return n.getHours()*60 + n.getMinutes(); }
 
 function openCI(){
-  var av=document.getElementById('ciAv');
-  av.textContent=emp.n[0].toUpperCase();av.style.background=emp.c;
-  document.getElementById('ciName').textContent=emp.n;
-  document.getElementById('ciBranch').textContent='&#127970; '+emp.b;
-  setGreeting();startClock();loadLog();
+  var av = document.getElementById('ciAv');
+  av.textContent = emp.n[0].toUpperCase();
+  av.style.background = emp.c;
+  document.getElementById('ciName').textContent = emp.n;
+  document.getElementById('ciBranch').textContent = 'ð  ' + emp.b;
+  setGreeting();
+  startClock();
+  loadLog();
   show('pageCI');
 }
 
 function setGreeting(){
-  var h=new Date().getHours();
-  var icon,text,sub;
-  if(h<6){icon='&#127769;';text='Xayrli tun!';sub='Siz juda erta keldingiz!';}
-  else if(h<12){icon='&#127749;';text='Xayrli tong!';sub='Bugungi ishga xush kelibsiz!';}
-  else if(h<17){icon='&#9728;';text='Xayrli kun!';sub='Smena boshlanmoqda, omad!';}
-  else if(h<21){icon='&#127750;';text='Xayrli oqshom!';sub='Ish davom etmoqda!';}
-  else{icon='&#127769;';text='Xayrli kech!';sub='Bugun ham yaxshi ish qildingiz!';}
-  document.getElementById('greetIcon').innerHTML=icon;
-  document.getElementById('greetText').textContent=emp.n.split(' ')[0]+', '+text;
-  document.getElementById('greetSub').textContent=sub;
+  var h = new Date().getHours();
+  var icon, text, sub;
+  if (h < 6)       { icon = 'ð'; text = 'Xayrli tun!';    sub = 'Siz juda erta keldingiz!'; }
+  else if (h < 12) { icon = 'ð'; text = 'Xayrli tong!';   sub = 'Bugungi ishga xush kelibsiz!'; }
+  else if (h < 17) { icon = 'âï¸'; text = 'Xayrli kun!';    sub = 'Smena boshlanmoqda, omad!'; }
+  else if (h < 21) { icon = 'ð'; text = 'Xayrli oqshom!'; sub = 'Ish davom etmoqda!'; }
+  else             { icon = 'ð'; text = 'Xayrli kech!';   sub = 'Bugun ham yaxshi ish qildingiz!'; }
+  document.getElementById('greetIcon').innerHTML = icon;
+  document.getElementById('greetText').textContent = emp.n.split(' ')[0] + ', ' + text;
+  document.getElementById('greetSub').textContent = sub;
 }
 
 function startClock(){
   clearInterval(clkTimer);
-  var tick=function(){
-    document.getElementById('ciClock').textContent=new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    document.getElementById('ciDate').textContent=new Date().toLocaleDateString('uz-UZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var tick = function(){
+    document.getElementById('ciClock').textContent = new Date().toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    document.getElementById('ciDate').textContent = new Date().toLocaleDateString('uz-UZ', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
   };
-  tick();clkTimer=setInterval(tick,\000);
+  tick();
+  clkTimer = setInterval(tick, 1000);
 }
 
 async function loadLog(){
-  var log=[];
-  try{var r=await fetch('/api/log/'+emp.p+'/'+today());log=await r.json();}catch(e){}
-  var totalMin=0,lastIn=null;
-  for(var i=0;i<log.length;i++){
-    var rec=log[i];
-    if(rec.type==='in')lastIn=rec.effective_in||rec.time;
-    else if(rec.type==='out'&&lastIn){totalMin+=calcWorkMinutes(lastIn,rec.time);lastIn=null;}
+  var log = [];
+  try { var r = await fetch('/api/log/' + emp.p + '/' + today()); log = await r.json(); } catch(e) {}
+  var totalMin = 0, lastIn = null;
+  for (var i = 0; i < log.length; i++) {
+    var rec = log[i];
+    if (rec.type === 'in') lastIn = rec.effective_in || rec.time;
+    else if (rec.type === 'out' && lastIn) { totalMin += calcWorkMinutes(lastIn, rec.time); lastIn = null; }
   }
-  var lastRec=log[log.length-1];
-  document.getElementById('statStatus').textContent=!log.length?'&#9634;':(lastRec&&lastRec.type==='in'?'&#128994;':'&#128308;');
-  document.getElementById('statHours').textContent=totalMin>0?fmtMin(totalMin):'--';
-  document.getElementById('statVisits').textContent=log.filter(function(r){return r.type==='in';}).length;
-  if(log.length){
-    document.getElementById('logList').innerHTML=log.map(function(r){
-      var isEarly=r.early_arrival;
-      var badge=r.type==='in'?('<span class="log-badge '+(isEarly?'badge-early':'badge-in')+'">'+(isEarly?'&#9200; Erta keldi':'&#9989; Keldi'+)+'</span>'):'<span class="log-badge badge-out">&#128682; Ketdi</span>';
-      var hours=r.work_minutes>0?('<span class="log-hours">&#9203; '+fmtMin(r.work_minutes)+'</span>'):'';
-      return '<div class="log-item">'+badge+'<div style="display:flex;gap:6px;align-items:center"><span style="color:#6b8c7a;font-size:12px;font-weight:600">'+r.time+'</span>'+hours+'</div></div>';
+  var lastRec = log[log.length - 1];
+  document.getElementById('statStatus').textContent = !log.length ? 'â¡' : (lastRec && lastRec.type === 'in' ? 'ð¢' : 'ð´');
+  document.getElementById('statHours').textContent = totalMin > 0 ? fmtMin(totalMin) : '--';
+  document.getElementById('statVisits').textContent = log.filter(function(r){ return r.type === 'in'; }).length;
+  if (log.length) {
+    document.getElementById('logList').innerHTML = log.map(function(r){
+      var isEarly = r.early_arrival;
+      var badge = r.type === 'in'
+        ? ('<span class="log-badge ' + (isEarly ? 'badge-early' : 'badge-in') + '">' + (isEarly ? 'â° Erta keldi' : 'â Keldi') + '</span>')
+        : '<span class="log-badge badge-out">ðª Ketdi</span>';
+      var hours = r.work_minutes > 0 ? ('<span class="log-hours">â³ ' + fmtMin(r.work_minutes) + '</span>') : '';
+      return '<div class="log-item">' + badge + '<div style="display:flex;gap:6px;align-items:center"><span style="color:#6b8c7a;font-size:12px;font-weight:600">' + r.time + '</span>' + hours + '</div></div>';
     }).join('');
-    document.getElementById('logCard').style.display='block';
-  }else{
-    document.getElementById('logCard').style.display='none';
+    document.getElementById('logCard').style.display = 'block';
+  } else {
+    document.getElementById('logCard').style.display = 'none';
   }
-  document.getElementById('btnIn').style.display=(!lastRec||lastRec.type==='out')?'flex':'none';
-  document.getElementById('btnOut').style.display=(lastRec&&lastRec.type==='in')?'flex':'none';
+  document.getElementById('btnIn').style.display = (!lastRec || lastRec.type === 'out') ? 'flex' : 'none';
+  document.getElementById('btnOut').style.display = (lastRec && lastRec.type === 'in') ? 'flex' : 'none';
 }
 
-function startCheck(type){pendingType=type;photo=null;checkGPSandProceed();}
+function startCheck(type){ pendingType = type; photo = null; checkGPSandProceed(); }
 
 function afterGPS(){
-  if(pendingType==='in'&&nowMin()<SHIFT_START){
-    document.getElementById('earlyTime').textContent='&#128336; Hozir: '+timeNow();
-    show('pageEarlyWarn');return;
+  if (pendingType === 'in' && nowMin() < SHIFT_START) {
+    document.getElementById('earlyTime').textContent = 'ð Hozir: ' + timeNow();
+    show('pageEarlyWarn');
+    return;
   }
   openPhoto();
 }
 
-function earlyConfirm(){openPhoto();}
+function earlyConfirm(){ openPhoto(); }
 
 function openPhoto(){
-  document.getElementById('phSub').textContent=pendingType==='in'?'&#9989; KELDI tasdiqlash uchun selfie oling':'&#128682; KETDI tasdiqlash uchun selfie oling';
-  retakePhoto();show('pagePhoto');
+  document.getElementById('phSub').textContent = pendingType === 'in'
+    ? 'â KELDI tasdiqlash uchun selfie oling'
+    : 'ðª KETDI tasdiqlash uchun selfie oling';
+  retakePhoto();
+  show('pagePhoto');
 }
 
 function photoTaken(){
-  var file=document.getElementById('photoInput').files[0];
-  if(!file)return;
-  var canvas=document.createElement('canvas');
-  var ctx=canvas.getContext('2d');
-  var img=new Image();
-  img.onload=function(){
-    var MAX=800;
-    var w=img.width,h=img.height;
-    if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
-    canvas.width=w;canvas.height=h;
-    ctx.drawImage(img,0,0,w,h);
-    photo=canvas.toDataURL('image/jpeg',0.7);
-    var prev=document.getElementById('phPreview');
-    prev.src=photo;prev.style.display='block';
-    document.getElementById('phPlaceholder').style.display='none';
-    document.getElementById('btnConfirmPh').style.display='block';
-    document.getElementById('btnRetryPh').style.display='block';
+  var file = document.getElementById('photoInput').files[0];
+  if (!file) return;
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var img = new Image();
+  img.onload = function(){
+    var MAX = 800;
+    var w = img.width, h = img.height;
+    if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+    canvas.width = w; canvas.height = h;
+    ctx.drawImage(img, 0, 0, w, h);
+    photo = canvas.toDataURL('image/jpeg', 0.7);
+    var prev = document.getElementById('phPreview');
+    prev.src = photo; prev.style.display = 'block';
+    document.getElementById('phPlaceholder').style.display = 'none';
+    document.getElementById('btnConfirmPh').style.display = 'block';
+    document.getElementById('btnRetryPh').style.display = 'block';
   };
-  var reader=new FileReader();
-  reader.onload=function(e){img.src=e.target.result;};
+  var reader = new FileReader();
+  reader.onload = function(e){ img.src = e.target.result; };
   reader.readAsDataURL(file);
 }
 
 function retakePhoto(){
-  photo=null;
-  document.getElementById('phPreview').style.display='none';
-  document.getElementById('phPlaceholder').style.display='flex';
-  document.getElementById('btnConfirmPh').style.display='none';
-  document.getElementById('btnRetryPh').style.display='none';
-  document.getElementById('photoInput').value='';
+  photo = null;
+  document.getElementById('phPreview').style.display = 'none';
+  document.getElementById('phPlaceholder').style.display = 'flex';
+  document.getElementById('btnConfirmPh').style.display = 'none';
+  document.getElementById('btnRetryPh').style.display = 'none';
+  document.getElementById('photoInput').value = '';
 }
 
 async function confirmPhoto(){
-  if(!photo){alert('Avval selfie oling!');return;}
-  var btn=document.getElementById('btnConfirmPh');
-  btn.disabled=true;btn.textContent='&#9203; Yuborilmoqda...';
-  try{
-    var r=await fetch('/api/checkin',{
-
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:emp.n,branch:emp.b,pin:emp.p,type:pendingType,time:timeNow(),date:today(),photo:photo,lat:uLat,lon:uLon})
+  if (!photo) { alert('Avval selfie oling!'); return; }
+  var btn = document.getElementById('btnConfirmPh');
+  btn.disabled = true; btn.textContent = 'â³ Yuborilmoqda...';
+  try {
+    var r = await fetch('/api/checkin', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name:emp.n, branch:emp.b, pin:emp.p, type:pendingType, time:timeNow(), date:today(), photo:photo, lat:uLat, lon:uLon})
     });
-    var d=await r.json();
-    if(d.ok){
-      if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
-      showResult(pendingType,d.work_minutes);
-    }else{
-      if(d.error==='gps'){
-        document.getElementById('gpsErrDist').textContent='&#128205; Siz ishxonadan taxminan '+d.dist+' metr uzoqdasiz';
+    var d = await r.json();
+    if (d.ok) {
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      showResult(pendingType, d.work_minutes);
+    } else {
+      if (d.error === 'gps') {
+        document.getElementById('gpsErrDist').textContent = 'ð Siz ishxonadan taxminan ' + d.dist + ' metr uzoqdasiz';
         show('pageGpsError');
-      }else{
-        alert(d.msg||'Xatolik yuz berdi!');
-        btn.disabled=false;btn.textContent='&#9989; Tasdiqlash va yuborish';
+      } else {
+        alert(d.msg || 'Xatolik yuz berdi!');
+        btn.disabled = false; btn.textContent = 'â Tasdiqlash va yuborish';
       }
     }
-  }catch(e){
+  } catch(e) {
     alert("Server bilan aloqa yo'q. Internet ulanishini tekshiring.");
-    btn.disabled=false;btn.textContent='&#9989; Tasdiqlash va yuborish';
+    btn.disabled = false; btn.textContent = 'â Tasdiqlash va yuborish';
   }
 }
 
-function showResult(type,workMin){
-  var wrap=document.getElementById('confettiWrap');wrap.innerHTML='';
-  var colors=['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
-  for(var i=0;i<24;i++){
-    var d=document.createElement('div');d.className='c-dot';
-    d.style.cssText='left:'+Math.random()*100+'%;top:'+(Math.random()*16-8)+'px;background:%ç-olors[Math.floor(Math.random()*colors.length)]+';animation-delay:'+Math.random()*.6+'s;animation-duration:'+(1+Math.random()*.5)+'s;';
+function showResult(type, workMin){
+  var wrap = document.getElementById('confettiWrap'); wrap.innerHTML = '';
+  var colors = ['#00b894','#00796b','#55efc4','#004d40','#fff','#a0ffd8'];
+  for (var i = 0; i < 24; i++) {
+    var d = document.createElement('div'); d.className = 'c-dot';
+    d.style.cssText = 'left:' + Math.random()*100 + '%;top:' + (Math.random()*16-8) + 'px;background:' + colors[Math.floor(Math.random()*colors.length)] + ';animation-delay:' + Math.random()*.6 + 's;animation-duration:' + (1+Math.random()*.5) + 's;';
     wrap.appendChild(d);
   }
-  document.getElementById('resIcon').textContent=type==='in'?'&#9989;':'&#128682;;
-  var title=document.getElementById('resTitle');
-  title.textContent=type==='in'?'Keldi qayd etildi!':'Ketdi qayd etildi!';
-  title.className='res-title '+(type==='in'?'in':'out');
-  var hoursEl=document.getElementById('resHours');
-  if(type==='out'&&workMin>0){hoursEl.textContent='&#9203; '+fmtMin(workMin)+' ishladi';hoursEl.style.display='block';}
-  else{hoursEl.style.display='none';}
-  document.getElementById('resInfo').innerHTML='&#128100; <b>'+emp.n+'</b><br>&#127970; '+emp.b+'<br>&#128336; '+timeNow()+'<br>&#128197; '+today()+'<br>&#128248; Foto saqlandi';
+  document.getElementById('resIcon').textContent = type === 'in' ? 'â' : 'ðª';
+  var title = document.getElementById('resTitle');
+  title.textContent = type === 'in' ? 'Keldi qayd etildi!' : 'Ketdi qayd etildi!';
+  title.className = 'res-title ' + (type === 'in' ? 'in' : 'out');
+  var hoursEl = document.getElementById('resHours');
+  if (type === 'out' && workMin > 0) { hoursEl.textContent = 'â³ ' + fmtMin(workMin) + ' ishladi'; hoursEl.style.display = 'block'; }
+  else { hoursEl.style.display = 'none'; }
+  document.getElementById('resInfo').innerHTML = 'ð¤ <b>' + emp.n + '</b><br>ð  ' + emp.b + '<br>ð ' + timeNow() + '<br>ð ' + today() + '<br>ð¸ Foto saqlandi';
   show('pageResult');
 }
 
 function show(id){
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
 }
 
 function goBackPin(){
   clearInterval(clkTimer);
-  buf='';emp=null;pendingType=null
+  buf = ''; emp = null; pendingType = null; photo = null; uLat = null; uLon = null;
+  dots();
+  resetCode();
+  show('pagePIN');
+}
+</script>
+</body>
+</html>
